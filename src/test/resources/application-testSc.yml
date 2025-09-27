@@ -8,15 +8,14 @@ easyfk:
         project-name: test-cloud
         prd-type: single
         project-version: 1.0.0-SNAPSHOT
-        orm-type: MYBATIS
         project-type: MICROSERVICE
         framework-version: 3.2.12
         build-type: gradle
-        base-package: com.mcst.sc
+        base-package: com.mcst.cloud
 
 
       code:
-        module-name: sc
+        module-name: cloud
         db-short-url: 192.168.100.250:3306/test_fk
         db-pwd: 01BAI.com
         db-user: root

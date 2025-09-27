@@ -29,6 +29,7 @@ dubbo:
 
 
 <#if ormType == 'MYBATIS'>
+<#if dbType == 'MYSQL'>
 #自动生成表结构 配置
 mybatis:
   table:
@@ -41,10 +42,14 @@ mybatis:
     pack: 'com.mcst.**.persistence.model' #扫描用于创建表的对象的包名，多个包用“,”隔开
   database:
     type: mysql #数据库类型 目前只支持mysql
-
+</#if>
 #mybatis-plus 配置
 mybatis-plus:
+<#if dbType == 'MYSQL'>
   mapper-locations: classpath*:com/gitee/sunchenbin/mybatis/actable/mapping/*/*.xml,/mappings/**/*Mapper.xml
+<# else>
+  mapper-locations: classpath*:/mappings/**/*Mapper.xml
+</#if>
   global-config:
     # 数据库相关配置
     db-config:

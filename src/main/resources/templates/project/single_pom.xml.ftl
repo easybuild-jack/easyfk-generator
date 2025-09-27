@@ -95,7 +95,7 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <outputDirectory><#noparse>${project.build.directory}/lib</#noparse></outputDirectory>
                             <useRepositoryLayout>false</useRepositoryLayout>
                             <stripVersion>false</stripVersion>
                             <stripClassifier>false</stripClassifier>

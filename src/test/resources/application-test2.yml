@@ -8,10 +8,8 @@ easyfk:
         project-name: test-single
         prd-type: single
         project-version: 1.0.0-SNAPSHOT
-        orm-type: MYBATIS
         project-type: single
         framework-version: 3.2.12
-        gradle-version: 8.7
         build-type: maven
         base-package: com.mcst.single
 

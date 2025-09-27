@@ -12,11 +12,11 @@ easyfk:
         project-type: MICROSERVICE
         rpc-type: dubbo
         framework-version: 3.2.12
-        base-package: com.mcst.microservice
+        base-package: com.mcst.dubbo
         #create-prd-project: false
 
       code:
-        module-name: microservice
+        module-name: dubbo
         db-short-url: 192.168.100.250:3306/test_fk
         db-pwd: 01BAI.com
         db-user: root

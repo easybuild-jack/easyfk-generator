@@ -4,7 +4,6 @@ import com.mcst.easyfk.core.utils.common.EmptyUtil;
 import com.mcst.easyfk.core.utils.common.StringUtil;
 import com.mcst.easyfk.generator.enums.PrdType;
 import com.mcst.easyfk.generator.enums.ProjectType;
-import com.mcst.easyfk.generator.enums.RpcType;
 import com.mcst.easyfk.generator.properties.CodeProperties;
 import com.mcst.easyfk.generator.properties.ProjectProperties;
 import com.mcst.easyfk.generator.util.CreateFileUtil;
@@ -47,7 +46,7 @@ public class ConfigGenerator {
             if (createServer) {
                 this.createServerConfig(projectRootDir, paramMap);
             }
-            boolean createRemote = !ProjectType.SINGLE.equals(projectProperties.getProjectType());
+            boolean createRemote = ProjectType.SMART.equals(projectProperties.getProjectType());
             if (createRemote) {
                 this.createRemoteConfig(projectRootDir, paramMap);
             }
@@ -170,8 +169,7 @@ public class ConfigGenerator {
             CreateFileUtil.delAndCreateFile("dubbo/dubboProviderConfig.java.ftl", dubboProviderCodePath, paramMap, BASE_TEMPLATE_PATH);
             String dubboProviderFactoriesPath = dubboRemoteProviderOutputDir + RESOURCE_DIR_PRE + "META-INF" + File.separator + "spring" + File.separator + "org.springframework.boot.autoconfigure.AutoConfiguration.imports";
             CreateFileUtil.delAndCreateFile("dubbo/dubboProviderConfig.factories.ftl", dubboProviderFactoriesPath, paramMap, BASE_TEMPLATE_PATH);
-
-        } else if (ProjectType.MICROSERVICE.equals(projectProperties.getProjectType())) {
+        } /*else if (ProjectType.MICROSERVICE.equals(projectProperties.getProjectType())) {
             // 处理新的remote项目结构
             String remoteParentDir = projectRootDir + File.separator + projectProperties.getProjectName() + "-remote";
 
@@ -202,7 +200,7 @@ public class ConfigGenerator {
                 String dubboClientFactoriesPath = dubboApiDir + RESOURCE_DIR_PRE + "META-INF" + File.separator + "spring" + File.separator + "org.springframework.boot.autoconfigure.AutoConfiguration.imports";
                 CreateFileUtil.delAndCreateFile("dubbo/dubboApiConfig.factories.ftl", dubboClientFactoriesPath, paramMap, BASE_TEMPLATE_PATH);
             }
-        }
+        }*/
     }
 
     private void createPrdConfig(String projectRootDir, Map<String, Object> paramMap) throws Exception {
@@ -258,17 +256,7 @@ public class ConfigGenerator {
                             baseName = fileName.substring(0, dotIndex);
                         }
                         if (EmptyUtil.isNotEmpty(baseName)) {
-                            String cleaned = baseName
-                                    .replace("BmsController", "")
-                                    .replace("Controller", "")
-                                    .replace("ApiScImpl", "")
-                                    .replace("ApiServerImpl", "")
-                                    .replace("ApiDubboImpl", "")
-                                    .replace("RemoteImpl", "")
-                                    .replace("ServerImpl", "")
-                                    .replace("ServiceImpl", "")
-                                    .replace("RepositoryImpl", "")
-                                    .replace("Repository", "");
+                            String cleaned = baseName.replace("BmsController", "").replace("Controller", "").replace("ApiScImpl", "").replace("ApiServerImpl", "").replace("ApiDubboImpl", "").replace("RemoteImpl", "").replace("ServerImpl", "").replace("ServiceImpl", "").replace("RepositoryImpl", "").replace("Repository", "");
                             fileNames.add(cleaned);
                         }
                     }
