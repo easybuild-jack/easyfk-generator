@@ -1,0 +1,41 @@
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\codespace\module-project\3.2.12
+        group-id: com.mcst
+        artifact-id: module-auth
+        project-name: module-auth
+        prd-type: single
+        project-version: 3.2.12.3-SNAPSHOT
+        orm-type: MYBATIS
+        project-type: smart
+        framework-version: 3.2.12
+        gradle-version: 8.7
+        build-type: gradle
+        base-package: com.mcst.module.auth
+        #create-prd-project: false
+
+      code:
+        module-name: auth
+        db-short-url: 192.168.100.250:3306/mcst_common
+        db-pwd: 01BAI.com
+        db-user: root
+        model-list:
+          - model-name: Role
+            model-desc: 角色
+          - model-name: Department
+            model-desc: 部门
+          - model-name: Employee
+            model-desc: 员工信息
+          - model-name: RoleResource
+            model-desc: 角色资源
+            only-repository: true
+
+
+
+
+
+
+
+

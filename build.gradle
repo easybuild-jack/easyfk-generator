@@ -1,0 +1,34 @@
+//指定项目版本号和group
+version = '3.2.12'
+group = 'com.mcst'
+description = '易架构代码生成器'
+apply plugin: 'java-library'
+apply plugin: 'maven-publish'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+    withSourcesJar()
+}
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+dependencies {
+    implementation platform(libs.easyfkDependencies)
+    compileOnly libs.lombok
+    testCompileOnly libs.lombok
+    annotationProcessor(libs.lombok, libs.processor)
+    testAnnotationProcessor(libs.lombok, libs.processor)
+    api('com.mcst:easyfk-core')
+    api('com.mysql:mysql-connector-j')
+    api('org.postgresql:postgresql')
+    testImplementation('com.mcst:log-logback')
+    api('org.freemarker:freemarker:2.3.31')
+}
+
+
+test {
+    enabled(false)
+}
+
+

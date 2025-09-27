@@ -1,0 +1,1 @@
+${remoteProviderConfigPackage}.${moduleName?cap_first}ProviderConfig

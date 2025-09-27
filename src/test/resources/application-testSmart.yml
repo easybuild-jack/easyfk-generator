@@ -1,0 +1,29 @@
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\codespace\test\generator\3.2.12
+        group-id: com.mcst
+        artifact-id: test-smart
+        project-name: test-smart
+        prd-type: single
+        project-version: 1.0.0-SNAPSHOT
+        orm-type: MYBATIS
+        project-type: smart
+        framework-version: 3.2.12
+        build-type: gradle
+        base-package: com.mcst.smart
+
+      code:
+        module-name: smart
+        db-short-url: 192.168.100.250:3306/test_fk
+        db-pwd: 01BAI.com
+        db-user: root
+        model-list:
+          - model-name: ProductInfo
+            model-desc: 产品信息
+
+
+
+
+

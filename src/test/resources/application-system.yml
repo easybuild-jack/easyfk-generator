@@ -1,0 +1,48 @@
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\codespace\module-project\3.2.12
+        group-id: com.mcst
+        artifact-id: system
+        project-name: system
+        prd-type: separation
+        project-version: 3.2.12.3
+        orm-type: MYBATIS
+        project-type: smart
+        framework-version: 3.2.12
+        gradle-version: 8.7
+        build-type: gradle
+        base-package: com.mcst.system
+        #create-prd-project: false
+
+      code:
+        module-name: system
+        db-short-url: 192.168.100.250:3306/mcst_common
+        db-pwd: 01BAI.com
+        db-user: root
+        create-resource-annotation: true
+        resource-group: systemSetting
+        resource-id: systemSetting
+        resource-name: 系统设置
+        resource-path: /system
+        resource-sort: 99000
+        table-prefix: system_
+        model-list:
+#          - model-name: MediaInfo
+#            model-desc: 媒体信息
+#          - model-name: Dict
+#            model-resource-sort: 99400
+#            model-desc: 字典
+#          - model-name: DictItem
+#            model-desc: 字典项
+        from-db-tables: system_dict2
+
+
+
+
+
+
+
+
+

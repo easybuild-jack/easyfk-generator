@@ -1,0 +1,31 @@
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\codespace\test\module-auth\3.2.12
+        group-id: com.mcst
+        artifact-id: auth-single
+        project-name: auth-single
+        prd-type: single
+        project-version: 1.0.0-SNAPSHOT
+        orm-type: MYBATIS
+        project-type: single
+        framework-version: 3.2.12
+        gradle-version: 8.7
+        build-type: gradle
+        base-package: com.mcst.auth
+        #create-prd-project: false
+
+      code:
+        module-name: auth
+        db-short-url: 192.168.100.250:3306/mcst_common
+        db-pwd: 01BAI.com
+        db-user: root
+
+
+
+
+
+
+
+

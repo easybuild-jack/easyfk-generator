@@ -1,0 +1,57 @@
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\codespace\module-project\3.2.12
+        group-id: com.mcst
+        artifact-id: goods
+        project-name: goods
+        prd-type: separation
+        project-version: 3.2.12.3
+        orm-type: MYBATIS
+        project-type: smart
+        framework-version: 3.2.12
+        gradle-version: 8.7
+        build-type: gradle
+        base-package: com.mcst.goods
+        #create-prd-project: false
+
+      code:
+        module-name: goods
+        db-short-url: 192.168.100.250:3306/mcst_common
+        db-pwd: 01BAI.com
+        db-user: root
+        create-resource-annotation: true
+        resource-group: operationSetting
+        resource-id: operationSetting
+        resource-name: 运营管理
+        resource-path: /operation
+        resource-sort: 81000
+        module-resource-sort: 11000
+        #table-prefix: base_
+        model-list:
+          - model-name: GoodsInfo
+            model-desc: 商品信息
+          - model-name: GoodsSku
+            model-desc: 商品SKU
+            only-repository: true
+          - model-name: GoodsSpu
+            model-desc: 商品SPU
+            only-repository: true
+          - model-name: GoodsExplain
+            model-desc: 商品说明
+            only-repository: true
+          - model-name: GoodsSpuConfig
+            model-desc: SPU配置
+          - model-name: GoodsDetail
+            model-desc: 商品详情
+            only-repository: true
+
+
+
+
+
+
+
+
+

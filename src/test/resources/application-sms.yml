@@ -1,0 +1,51 @@
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\codespace\module-project\3.2.12
+        group-id: com.mcst
+        artifact-id: sms
+        project-name: sms
+        prd-type: separation
+        project-version: 3.2.12.3
+        orm-type: MYBATIS
+        project-type: smart
+        framework-version: 3.2.12
+        gradle-version: 8.7
+        build-type: gradle
+        base-package: com.mcst.base
+        #create-prd-project: false
+
+      code:
+        module-name: base
+        db-short-url: 192.168.100.250:3306/mcst_common
+        db-pwd: 01BAI.com
+        db-user: root
+        create-resource-annotation: true
+        resource-group: baseSetting
+        resource-id: baseSetting
+        resource-name: 基础设置
+        resource-path: /base
+        resource-sort: 98000
+        table-prefix: base_
+        model-list:
+#          - model-name: Brand
+#            model-desc: 品牌
+#            model-resource-sort: 98200
+#          - model-name: Banner
+#            model-desc: Banner
+#            model-resource-sort: 98100
+          - model-name: Group
+            model-desc: 分组
+            model-resource-sort: 98300
+#          - model-name: Tag
+#            model-desc: 标签
+#            model-resource-sort: 98500
+
+
+
+
+
+
+
+

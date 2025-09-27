@@ -1,0 +1,33 @@
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\codespace\test\generator\3.2.12\maven
+        group-id: com.mcst
+        artifact-id: test-sc
+        project-name: test-sc
+        prd-type: single
+        project-version: 1.0.0-SNAPSHOT
+        orm-type: MYBATIS
+        project-type: MICROSERVICE
+        framework-version: 3.2.12
+        build-type: maven
+        base-package: com.mcst.sc
+
+      code:
+        module-name: sc
+        db-short-url: 192.168.100.250:3306/test_fk
+        db-pwd: 01BAI.com
+        db-user: root
+        model-list:
+          - model-name: UserInfo
+            model-desc: 用户
+          - model-name: Address
+            model-desc: 地址
+          - model-name: UserAddress
+            model-desc: 用户地址
+            only-repository: true
+            super-class: BaseMyBatisPlusSimpleEntity
+
+
+

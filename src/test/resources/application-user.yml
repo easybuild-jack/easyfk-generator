@@ -1,0 +1,51 @@
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\codespace\module-project\3.2.12
+        group-id: com.mcst
+        artifact-id: user
+        project-name: user
+        prd-type: separation
+        project-version: 3.2.12.3
+        orm-type: MYBATIS
+        project-type: smart
+        framework-version: 3.2.12
+        gradle-version: 8.7
+        build-type: gradle
+        base-package: com.mcst.user
+        #create-prd-project: false
+
+      code:
+        module-name: user
+        db-short-url: 192.168.100.250:3306/mcst_common
+        db-pwd: 01BAI.com
+        db-user: root
+        create-resource-annotation: true
+        resource-group: operationSetting
+        resource-id: operationSetting
+        resource-name: 运营管理
+        resource-path: /operation
+        resource-sort: 81000
+        #table-prefix: base_
+        model-list:
+          - model-name: UserInfo
+            model-desc: 会员
+          - model-name: UserDetail
+            model-desc: 会员详情
+          - model-name: UserAddress
+            model-desc: 收货地址
+          - model-name: UserAccount
+            model-desc: 账号
+          - model-name: UserValue
+            model-desc: 会员价值
+          - model-name: UserValueLog
+            model-desc: 价值变更记录
+
+
+
+
+
+
+
+

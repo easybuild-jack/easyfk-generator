@@ -1,0 +1,35 @@
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\codeSpace\testProject\3.2.12
+        group-id: com.mcst
+        artifact-id: test-flux
+        project-name: test-flux
+        prd-type: SINGLE
+        project-version: 1.0.0-SNAPSHOT
+        orm-type: MYBATIS
+        project-type: single
+        framework-version: 3.2.12
+        #gradle-version: 8.7
+        build-type: maven
+        base-package: com.mcst.flux
+        #create-prd-project: false
+        #是否包含 influx-db
+        influx-db: true
+
+      code:
+        module-name: flux
+        db-short-url: 127.0.0.1:3306/flopotech
+        db-pwd: 123456
+        db-user: root
+        #是否生成权限资源注解
+        #create-resource-annotation: false
+        model-list:
+          - model-name: PositionInfo
+            model-desc: 位置信息
+            table-name: position_info
+            # influx-db: 标识
+            influx-db: true
+            # 是否创建controller
+            create-controller: true

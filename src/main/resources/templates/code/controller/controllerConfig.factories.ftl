@@ -1,0 +1,1 @@
+${prdConfigPackage}.${configJavaName}

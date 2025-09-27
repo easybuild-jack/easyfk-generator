@@ -1,0 +1,29 @@
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\codeSpace\outProject\siyuyun
+        group-id: com.mcst
+        artifact-id: upload-api
+        project-name: upload-api
+        prd-type: single
+        project-version: 1.0.0-SNAPSHOT
+        orm-type: MYBATIS
+        project-type: single
+        framework-version: 3.2.12
+        gradle-version: 8.7
+        build-type: gradle
+        base-package: com.mcst.upload
+
+      code:
+        module-name: upload
+        db-short-url: 192.168.100.88:3306/siyuyun
+        db-pwd: 01BAI.com
+        db-user: root
+        model-list:
+          - model-name: UploadRecord
+            model-desc: 上传记录
+
+
+
+
