@@ -12,8 +12,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>${artifactId!projectName }-sc-api</module>
-        <module>${artifactId!projectName }-sc-provider</module>
+        <module>${artifactId!projectName }-cloud-api</module>
+        <module>${artifactId!projectName }-cloud-provider</module>
         <module>${artifactId!projectName }-dubbo-api</module>
         <module>${artifactId!projectName }-dubbo-provider</module>
     </modules>

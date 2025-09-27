@@ -311,7 +311,7 @@ public class ProjectGenerator {
      */
     private void createSpringCloudProjects(Map<String, String> rootConfigFile, String projectName, String remoteParentProjectRoot) throws Exception {
         // 创建SC API项目
-        String scApiProjectName = projectName + "-sc-api";
+        String scApiProjectName = projectName + "-cloud-api";
         String scApiProjectRoot = remoteParentProjectRoot + File.separator + scApiProjectName;
         createCodeDir(scApiProjectRoot, true, false);
 
@@ -332,7 +332,7 @@ public class ProjectGenerator {
         this.createConfigFile(rootConfigFile);
 
         // 创建SC Provider项目
-        String scProviderProjectName = projectName + "-sc-provider";
+        String scProviderProjectName = projectName + "-cloud-provider";
         String scProviderProjectRoot = remoteParentProjectRoot + File.separator + scProviderProjectName;
         createCodeDir(scProviderProjectRoot, true, false);
 

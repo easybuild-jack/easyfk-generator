@@ -1,5 +1,5 @@
 # Gradle 相关
-/gradle
+
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !gradle/wrapper/gradle-wrapper.properties
@@ -42,5 +42,4 @@ local.properties
 *.swp
 *~
 ./gradle
-gradle/
 bin

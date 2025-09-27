@@ -132,8 +132,8 @@ public class ConfigGenerator {
 
         private void createRemoteConfig(String projectRootDir, Map<String, Object> paramMap) throws Exception {
                 if (ProjectType.SMART.equals(projectProperties.getProjectType())) {
-                        String remoteBasePackage = projectProperties.getBasePackage() + ".sc";
-                        String remoteApiPackage = projectProperties.getBasePackage() + ".api.remote";
+                        String remoteBasePackage = projectProperties.getBasePackage() + ".remote";
+                        String remoteApiPackage = projectProperties.getBasePackage() + ".remote";
                         String remoteClientImplPackage = remoteBasePackage + ".impl";
                         String remoteProviderPackage = remoteBasePackage + ".provider.impl";
                         String remoteConfigPackage = remoteBasePackage + ".config";
@@ -148,7 +148,7 @@ public class ConfigGenerator {
                         Map<String, Set<String>> fileMap = new HashMap<>();
                         String remoteClientOutputDir = projectRootDir + File.separator
                                         + projectProperties.getProjectName() + "-remote"
-                                        + File.separator + projectProperties.getProjectName() + "-sc-api";
+                                        + File.separator + projectProperties.getProjectName() + "-cloud-api";
                         Set<String> remoteImplFileSet = this.getFolderSubFileName(
                                         remoteClientOutputDir + CODE_DIR_PRE
                                                         + remoteClientImplPackage.replace(".", "/"));
@@ -176,7 +176,8 @@ public class ConfigGenerator {
 
                         String remoteProviderOutputDir = projectRootDir + File.separator
                                         + projectProperties.getProjectName()
-                                        + "-sc" + File.separator + projectProperties.getProjectName() + "-sc-provider";
+                                        + "-cloud" + File.separator + projectProperties.getProjectName()
+                                        + "-cloud-provider";
                         Set<String> remoteProviderFileSet = this.getFolderSubFileName(
                                         remoteProviderOutputDir + CODE_DIR_PRE
                                                         + remoteProviderPackage.replace(".", "/"));
@@ -209,7 +210,7 @@ public class ConfigGenerator {
                         if (projectProperties.getRpcType().equals(com.mcst.easyfk.generator.enums.RpcType.CLOUD)) {
                                 // 处理SpringCloud API项目
                                 String scApiDir = remoteParentDir + File.separator + projectProperties.getProjectName()
-                                                + "-sc-api";
+                                                + "-cloud-api";
                                 String apiPackage = projectProperties.getBasePackage() + ".api";
                                 String apiConfigPackage = apiPackage + ".config";
                                 String apiPropertyPackage = apiPackage + ".properties";

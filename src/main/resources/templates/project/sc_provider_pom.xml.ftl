@@ -8,10 +8,10 @@
         <artifactId>${artifactId!projectName }-remote</artifactId>
         <version>${projectVersion }</version>
     </parent>
-    <artifactId>${artifactId!projectName }-sc-provider</artifactId>
+    <artifactId>${artifactId!projectName }-cloud-provider</artifactId>
     <packaging>jar</packaging>
 
-    <name>${artifactId!projectName }-sc-provider</name>
+    <name>${artifactId!projectName }-cloud-provider</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
 
@@ -23,7 +23,7 @@
         </dependency>
         <dependency>
             <groupId>${groupId }</groupId>
-            <artifactId>${artifactId!projectName }-sc-api</artifactId>
+            <artifactId>${artifactId!projectName }-cloud-api</artifactId>
             <version><#noparse>${project.parent.version}</#noparse></version>
         </dependency>
         <dependency>

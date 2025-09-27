@@ -174,12 +174,10 @@ public class CodeGenerator {
                         createApi(apiProjectOutputDir, apiBasePackage, paramMap, modelInfo);
                         if (ProjectType.MICROSERVICE.equals(projectProperties.getProjectType())) {
                             if (RpcType.DUBBO.equals(projectProperties.getRpcType())) {
-                                /*
-                                 * createDubbo(apiProjectOutputDir, serverProjectOutputDir, remotePackage,
-                                 * remoteImplPackage, remotePropertyPackage, remoteApiImplPackage, paramMap,
-                                 * modelInfo,
-                                 * false);
-                                 */
+                                // 生成 Dubbo Remote/API（不生成 API 实现）
+                                paramMap.put("dubboApiImplPackage", remoteApiImplPackage);
+                                createDubbo(apiProjectOutputDir, serverProjectOutputDir, remotePackage,
+                                        remoteImplPackage, remoteApiImplPackage, paramMap, modelInfo, false);
                             } else {
                                 createSpringCloud(apiProjectOutputDir, serverProjectOutputDir, remotePackage,
                                         remoteImplPackage, remotePropertyPackage, remoteApiImplPackage, paramMap,
@@ -188,9 +186,9 @@ public class CodeGenerator {
                             }
                         } else if (ProjectType.SMART.equals(projectProperties.getProjectType())) {
                             String scApiProjectOutputDir = scProjectOutputDir + File.separator
-                                    + projectProperties.getProjectName() + "-sc-api";
+                                    + projectProperties.getProjectName() + "-cloud-api";
                             String scApiImplProjectOutputDir = scProjectOutputDir + File.separator
-                                    + projectProperties.getProjectName() + "-sc-provider";
+                                    + projectProperties.getProjectName() + "-cloud-provider";
                             createSpringCloud(scApiProjectOutputDir, scApiImplProjectOutputDir, remotePackage,
                                     remoteImplPackage, remotePropertyPackage, remoteApiImplPackage, paramMap, modelInfo,
                                     true);
@@ -198,12 +196,10 @@ public class CodeGenerator {
                                     + projectProperties.getProjectName() + "-dubbo-api";
                             String dubboApiImplProjectOutputDir = scProjectOutputDir + File.separator
                                     + projectProperties.getProjectName() + "-dubbo-provider";
-                            /*
-                             * createDubbo(apiProjectOutputDir, serverProjectOutputDir, remotePackage,
-                             * remoteImplPackage, remotePropertyPackage, remoteApiImplPackage, paramMap,
-                             * modelInfo,
-                             * false);
-                             */
+                            // 生成 Dubbo Remote/API/Provider，实现 API Dubbo 实现类
+                            paramMap.put("dubboApiImplPackage", remoteApiImplPackage);
+                            createDubbo(dubboApiProjectOutputDir, dubboApiImplProjectOutputDir, remotePackage,
+                                    remoteImplPackage, remoteApiImplPackage, paramMap, modelInfo, true);
                             String apiImplPath = serverProjectOutputDir + CODE_DIR_PRE
                                     + serverApiImplPackage.replace(".", File.separator) + File.separator
                                     + StringUtil.upperFirstChar(modelInfo.getModelName()) + "ApiServerImpl.java";
@@ -345,6 +341,52 @@ public class CodeGenerator {
             }
         } catch (Exception e) {
             log.error("生成SpringCloud模块失败：{}", e.getMessage());
+        }
+    }
+
+    private void createDubbo(String apiProjectOutputDir, String serverProjectCodeOutputDir, String remotePackage,
+            String remoteImplPackage, String apiImplPackage, Map<String, Object> paramMap, ModelInfo modelInfo,
+            boolean createApiDubboImpl) {
+        try {
+            // Remote API
+            String remoteApiPath = apiProjectOutputDir + CODE_DIR_PRE + remotePackage.replace(".", File.separator)
+                    + File.separator + "I" + StringUtil.upperFirstChar(modelInfo.getModelName()) + "Remote.java";
+            boolean isInfluxDb = Optional.ofNullable(modelInfo.getInfluxDb()).orElse(Boolean.FALSE);
+            if (isInfluxDb) {
+                CreateFileUtil.createOnNotExistFile("dubbo/dubboFluxRemote.java.ftl", remoteApiPath, paramMap,
+                        BASE_TEMPLATE_PATH);
+            } else {
+                CreateFileUtil.createOnNotExistFile("dubbo/dubboRemote.java.ftl", remoteApiPath, paramMap,
+                        BASE_TEMPLATE_PATH);
+            }
+
+            // Remote Impl
+            String remoteImplPath = serverProjectCodeOutputDir + CODE_DIR_PRE
+                    + remoteImplPackage.replace(".", File.separator) + File.separator
+                    + StringUtil.upperFirstChar(modelInfo.getModelName()) + "RemoteImpl.java";
+            if (isInfluxDb) {
+                CreateFileUtil.createOnNotExistFile("dubbo/dubboFluxRemoteImpl.java.ftl", remoteImplPath, paramMap,
+                        BASE_TEMPLATE_PATH);
+            } else {
+                CreateFileUtil.createOnNotExistFile("dubbo/dubboRemoteImpl.java.ftl", remoteImplPath, paramMap,
+                        BASE_TEMPLATE_PATH);
+            }
+
+            // Api Dubbo Impl (optional)
+            if (createApiDubboImpl) {
+                String apiDubboImplPath = apiProjectOutputDir + CODE_DIR_PRE
+                        + apiImplPackage.replace(".", File.separator) + File.separator
+                        + StringUtil.upperFirstChar(modelInfo.getModelName()) + "ApiDubboImpl.java";
+                if (isInfluxDb) {
+                    CreateFileUtil.createOnNotExistFile("dubbo/dubboFluxApiImpl.java.ftl", apiDubboImplPath, paramMap,
+                            BASE_TEMPLATE_PATH);
+                } else {
+                    CreateFileUtil.createOnNotExistFile("dubbo/dubboApiImpl.java.ftl", apiDubboImplPath, paramMap,
+                            BASE_TEMPLATE_PATH);
+                }
+            }
+        } catch (Exception e) {
+            log.error("生成Dubbo模块失败：{}", e.getMessage());
         }
     }
 

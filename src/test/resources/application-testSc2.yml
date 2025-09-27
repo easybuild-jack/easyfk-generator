@@ -4,8 +4,8 @@ easyfk:
       project:
         project-dir: D:\codespace\test\generator\3.2.12\maven
         group-id: com.mcst
-        artifact-id: test-sc
-        project-name: test-sc
+        artifact-id: test-cloud
+        project-name: test-cloud
         prd-type: single
         project-version: 1.0.0-SNAPSHOT
         orm-type: MYBATIS
