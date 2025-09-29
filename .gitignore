@@ -43,3 +43,6 @@ local.properties
 *~
 ./gradle
 bin
+gradlew
+gradlew.bat
+.gradle
