@@ -7,14 +7,13 @@ easyfk:
         artifact-id: order
         project-name: order
         prd-type: separation
-        project-version: 3.2.12.3
+        project-version: 3.2.12
         orm-type: MYBATIS
         project-type: smart
         framework-version: 3.2.12
         gradle-version: 8.7
         build-type: gradle
         base-package: com.mcst.order
-        #create-prd-project: false
 
       code:
         module-name: order
@@ -29,31 +28,10 @@ easyfk:
         resource-sort: 71000
         #table-prefix: base_
         model-list:
-          - model-name: OrderPickup
-            model-desc: 订单提货
-          - model-name: PickupLocation
-            model-desc: 提货点信息
-#           only-repository: true
-#          - model-name: OrderGoods
-#            model-desc: 订单商品
-#            only-repository: true
-#          - model-name: OrderDiscount
-#            model-desc: 订单优惠
-#            only-repository: true
-#          - model-name: OrderDeliver
-#            model-desc: 订单发货
-#          - model-name: OrderDeliverGoods
-#            model-desc: 订单发货商品
-#          - model-name: OrderRefund
-#            model-desc: 订单退款
-#          - model-name: OrderRefundGoods
-#            model-desc: 订单退款商品
-#            only-repository: true
-#          - model-name: OrderPay
-#            model-desc: 订单支付
-#            only-repository: true
-#          - model-name: OrderPickup
-#            model-desc: 订单提货
+          - model-name: OrderAmount
+            model-desc: 订单金额
+            only-repository: true
+
 
 
 
