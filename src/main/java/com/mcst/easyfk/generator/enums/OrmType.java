@@ -6,23 +6,11 @@ package com.mcst.easyfk.generator.enums;
 
 public enum OrmType {
     /**
-     * ALL
-     */
-    ALL,
-    /**
      * MYBATIS
      */
     MYBATIS,
     /**
-     * MONGO
+     * MYBATIS_FLEX
      */
-    MONGO,
-    /**
-     * ALL_PROVIDER
-     */
-    ALL_PROVIDER,
-    /**
-     * NONE
-     */
-    NONE
+    MYBATIS_FLEX
 }

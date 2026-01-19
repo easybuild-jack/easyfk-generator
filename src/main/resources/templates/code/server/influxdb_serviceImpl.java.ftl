@@ -64,7 +64,7 @@ public class ${modelInfo.modelName}ServiceImpl  implements I${modelInfo.modelNam
         if (EmptyUtil.isEmpty(influxPositions)) {
             return Collections.emptyList();
         }
-        return TransformUtil.transformListByStream(influxPositions, ${modelInfo.modelName}Resp.class);
+        return TransformUtil.transformList(influxPositions, ${modelInfo.modelName}Resp.class);
     }
 
     @Override

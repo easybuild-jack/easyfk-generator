@@ -45,7 +45,7 @@ public class ${modelInfo.modelName}ServiceImpl  implements I${modelInfo.modelNam
 
     @Override
     public List<${modelInfo.modelName}Resp> queryList(SearchRequest<${modelInfo.modelName}Req> param) {
-        return TransformUtil.transformListByStream(this.${modelInfo.modelName?uncap_first}Repository.queryByCondition(ConditionUtil.conditionByRequest(param)), ${modelInfo.modelName}Resp.class);
+        return TransformUtil.transformList(this.${modelInfo.modelName?uncap_first}Repository.queryByCondition(ConditionUtil.conditionByRequest(param)), ${modelInfo.modelName}Resp.class);
     }
 
     @Override

@@ -51,3 +51,7 @@ tasks.named('jar') {
         )
     }
 }
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ['-Amapstruct.plus.nullValuePropertyMappingStrategy=IGNORE']
+}

@@ -5,6 +5,8 @@ import com.mcst.easyfk.core.annotation.PrimaryKey;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import lombok.experimental.Accessors;
 import com.mcst.easyfk.core.dto.BaseDto;
 <#list modelInfo.basicPackages as pkg>
@@ -26,6 +28,8 @@ ${pkg.packageName}
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @Schema(description="${modelInfo.modelDesc!}数据对象")
+@SuperBuilder
+@NoArgsConstructor
 public class ${modelInfo.modelName}Dto extends BaseDto {
 
 <#list modelInfo.fieldList as field>

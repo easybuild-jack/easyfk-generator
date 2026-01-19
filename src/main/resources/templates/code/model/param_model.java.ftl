@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.mcst.easyfk.core.dto.request.BasicParam;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 <#list modelInfo.basicPackages as pkg>
 ${pkg.packageName}
 </#list>
@@ -21,6 +23,8 @@ ${pkg.packageName}
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @Schema(description="${modelInfo.modelDesc!}数据参数对象")
+@SuperBuilder
+@NoArgsConstructor
 public class ${modelInfo.modelName}Param extends BasicParam {
 
 

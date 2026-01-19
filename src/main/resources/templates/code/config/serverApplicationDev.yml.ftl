@@ -47,7 +47,7 @@ mybatis:
 mybatis-plus:
 <#if dbType == 'MYSQL'>
   mapper-locations: classpath*:com/gitee/sunchenbin/mybatis/actable/mapping/*/*.xml,/mappings/**/*Mapper.xml
-<# else>
+<#else>
   mapper-locations: classpath*:/mappings/**/*Mapper.xml
 </#if>
   global-config:

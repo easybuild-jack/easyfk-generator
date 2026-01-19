@@ -36,7 +36,7 @@ public class ProjectProperties {
     /**
      * 框架版本
      */
-    private String frameworkVersion = "2.3.12.6-SNAPSHOT";
+    private String frameworkVersion = "3.2.12";
 
     private String projectVersion = "1.0.0-SNAPSHOT";
 

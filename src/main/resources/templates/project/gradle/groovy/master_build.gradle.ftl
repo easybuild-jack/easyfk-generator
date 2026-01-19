@@ -22,4 +22,7 @@ subprojects {
         annotationProcessor(libs.lombok, libs.processor)
         testAnnotationProcessor(libs.lombok, libs.processor)
     }
+    tasks.withType(JavaCompile).configureEach {
+        options.compilerArgs += ['-Amapstruct.plus.nullValuePropertyMappingStrategy=IGNORE']
+    }
 }

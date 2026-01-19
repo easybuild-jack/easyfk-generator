@@ -47,8 +47,7 @@ public class GeneratorUtil {
             String[] tables = fromDbTables.split(",");
             for (String table : tables) {
                 ModelInfo modelInfo = new ModelInfo();
-                String modelName = EmptyUtil.isEmpty(codeProperties.getTablePrefix()) ? table
-                        : table.replace(codeProperties.getTablePrefix(), "");
+                String modelName = EmptyUtil.isEmpty(codeProperties.getTablePrefix()) ? table : table.replace(codeProperties.getTablePrefix(), "");
                 // 转驼峰 并首字母大写
                 modelInfo.setModelName(StringUtil.upperFirstChar(StringUtil.underlineToCamel(modelName)));
                 if (modelInfoMap.containsKey(modelInfo.getModelName())) {
@@ -74,8 +73,7 @@ public class GeneratorUtil {
         AtomicInteger sort = new AtomicInteger(codeProperties.getIncrementStar());
         modelList.forEach(modelInfo -> {
             if (EmptyUtil.isEmpty(modelInfo.getTableName())) {
-                String tablePrefix = Optional.ofNullable(modelInfo.getTablePrefix())
-                        .orElse(codeProperties.getTablePrefix());
+                String tablePrefix = Optional.ofNullable(modelInfo.getTablePrefix()).orElse(codeProperties.getTablePrefix());
                 if (EmptyUtil.isNotEmpty(tablePrefix)) {
                     if (!tablePrefix.endsWith("_")) {
                         tablePrefix = tablePrefix + "_";
@@ -129,8 +127,7 @@ public class GeneratorUtil {
         return paramMap;
     }
 
-    public static void getModelInfoFromDatabase(CodeProperties codeProperties, String tableName, ModelInfo modelInfo)
-            throws SQLException {
+    public static void getModelInfoFromDatabase(CodeProperties codeProperties, String tableName, ModelInfo modelInfo) throws SQLException {
         List<FieldInfo> fieldInfoList = new ArrayList<>();
 
         String jdbcUrl = codeProperties.getDbShortUrl();
@@ -146,17 +143,15 @@ public class GeneratorUtil {
         } else if (DbType.POSTGRE_SQL.equals(codeProperties.getDbType())) {
             jdbcUrl = String.format(POSTGRESQL_URL_TEMPLATE, codeProperties.getDbShortUrl());
 
-        } else if (DbType.ORACLE_12C.equals(codeProperties.getDbType())
-                || DbType.ORACLE.equals(codeProperties.getDbType())) {
+        } else if (DbType.ORACLE_12C.equals(codeProperties.getDbType()) || DbType.ORACLE.equals(codeProperties.getDbType())) {
             jdbcUrl = String.format(ORACLE_URL_TEMPLATE, codeProperties.getDbShortUrl());
         }
-        Connection connection = DriverManager.getConnection(jdbcUrl, codeProperties.getDbUser(),
-                codeProperties.getDbPwd());
+        Connection connection = DriverManager.getConnection(jdbcUrl, codeProperties.getDbUser(), codeProperties.getDbPwd());
         DatabaseMetaData metaData = connection.getMetaData();
 
         if (EmptyUtil.isEmpty(modelInfo.getModelDesc())) {
             // 获取 表注释，明确指定catalog
-            ResultSet tables = metaData.getTables(databaseName, null, tableName, new String[] { "TABLE" });
+            ResultSet tables = metaData.getTables(databaseName, null, tableName, new String[]{"TABLE"});
             if (tables.next()) {
                 String tableComment = tables.getString("REMARKS");
                 if (EmptyUtil.isNotEmpty(tableComment)) {
@@ -219,23 +214,21 @@ public class GeneratorUtil {
             return;
         }
         fieldInfo.setName(fieldName);
-        String fieldType = columns.getString("TYPE_NAME");
-        if ("DATETIME".equals(fieldType) || "TIMESTAMP".equals(fieldType)) {
-            fieldInfo.setType("LocalDateTime");
-        } else if ("DATE".equals(fieldType)) {
-            fieldInfo.setType("LocalDate");
-        } else if ("TIME".equals(fieldType)) {
-            fieldInfo.setType("LocalTime");
-        } else if ("DECIMAL".equals(fieldType)) {
-            fieldInfo.setType("BigDecimal");
-        } else if ("TINYINT".equals(fieldType)) {
-            fieldInfo.setType("Boolean");
-        } else if ("INT".equals(fieldType)) {
-            fieldInfo.setType("Integer");
-        } else if ("BIGINT".equals(fieldType)) {
-            fieldInfo.setType("Long");
-        } else {
-            fieldInfo.setType("String");
+        String fieldType = columns.getString("TYPE_NAME").toUpperCase();
+        switch (fieldType) {
+            case "DATETIME", "TIMESTAMP", "TIMESTAMPTZ", "TIMESTAMP WITH TIME ZONE" ->
+                    fieldInfo.setType("LocalDateTime");
+            case "DATE" -> fieldInfo.setType("LocalDate");
+            case "TIME" -> fieldInfo.setType("LocalTime");
+            case "DECIMAL", "NUMERIC" -> fieldInfo.setType("BigDecimal");
+            case "TINYINT", "BOOLEAN", "BOOL", "BIT" -> fieldInfo.setType("Boolean");
+            case "INT", "INT4", "INTEGER", "SMALLINT", "INT2", "SERIAL", "SMALLSERIAL" -> fieldInfo.setType("Integer");
+            case "BIGINT", "NUMBER", "BIGSERIAL", "IDENTITY", "INT8" -> fieldInfo.setType("Long");
+            case "REAL", "FLOAT4" -> fieldInfo.setType("Float");
+            case "DOUBLE", "DOUBLE PRECISION", "FLOAT", "FLOAT8" -> fieldInfo.setType("Double");
+            case "BYTEA", "BLOB", "VARBINARY", "BINARY" -> fieldInfo.setType("byte[]");
+            case "UUID" -> fieldInfo.setType("UUID");
+            default -> fieldInfo.setType("String");
         }
         fieldInfo.setLength(columns.getInt("COLUMN_SIZE"));
         fieldInfo.setDesc(columns.getString("REMARKS"));

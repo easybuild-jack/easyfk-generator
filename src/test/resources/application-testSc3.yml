@@ -1,0 +1,25 @@
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\codespace\mcst
+        group-id: com.mcst
+        artifact-id: demo-bms2
+        project-name: demo-bms2
+        prd-type: single
+        project-version: 1.0.0-SNAPSHOT
+        orm-type: MYBATIS
+        project-type: MICROSERVICE
+        framework-version: 3.2.12
+        build-type: maven
+        base-package: com.mcst.demo.bms
+
+      code:
+        module-name: sc
+        db-short-url: 192.168.100.250:3306/test_fk
+        db-pwd: 01BAI.com
+        db-user: root
+
+
+
+
