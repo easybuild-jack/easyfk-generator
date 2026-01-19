@@ -12,6 +12,7 @@ import com.mybatisflex.annotation.Table;
 import io.github.linpeilie.annotations.AutoMapper;
 import com.mcst.easyfk.service.flex.persistence.BaseFlexEntity;
 import ${dtoPackage}.${modelInfo.modelName}Dto;
+import com.mcst.easyfk.service.mybatisplus.annotation.Column;
 /**
 * 作者: ${author}
 * 日期: ${date}
@@ -32,7 +33,7 @@ public class ${modelInfo.modelName} extends ${modelInfo.superClass?keep_after_la
     <#else >
     @Id(type = KeyType.Generator)
     </#if>
-    @Column(comment = "${field.desc!}")
+    @Column(comment = "${modelInfo.modelDesc!}ID")
     private ${field.type} ${field.name};
     <#else>
 
@@ -48,7 +49,7 @@ public class ${modelInfo.modelName} extends ${modelInfo.superClass?keep_after_la
     <#else >
     @Id(type = KeyType.Generator)
     </#if>
-    @Column(comment = "${modelInfo.modelName}Id")
+    @Column(comment = "${modelInfo.modelDesc!}Id")
     private ${modelInfo.idType} ${modelInfo.modelName?uncap_first}Id;
     </#if>
 }

@@ -2,8 +2,6 @@ package com.mcst.easyfk.generator;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ReUtil;
-import jakarta.annotation.Resource;
-
 import com.mcst.easyfk.core.exception.BusinessException;
 import com.mcst.easyfk.core.utils.common.EmptyUtil;
 import com.mcst.easyfk.core.utils.common.StringUtil;
@@ -15,10 +13,12 @@ import com.mcst.easyfk.generator.util.GeneratorUtil;
 import com.mcst.easyfk.generator.vo.FieldInfo;
 import com.mcst.easyfk.generator.vo.ImportPackage;
 import com.mcst.easyfk.generator.vo.ModelInfo;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.*;
+
 import static com.mcst.easyfk.generator.util.GeneratorUtil.*;
 
 /**
@@ -228,7 +228,7 @@ public class CodeGenerator {
     }
 
     private void createController(String controllerProjectOutputDir, String controllerBasePackage,
-            Map<String, Object> paramMap, ModelInfo modelInfo) {
+                                  Map<String, Object> paramMap, ModelInfo modelInfo) {
         if (modelInfo.getOnlyRepository()) {
             return;
         }
@@ -297,8 +297,8 @@ public class CodeGenerator {
     }
 
     private void createSpringCloud(String apiProjectOutputDir, String serverProjectCodeOutputDir, String remotePackage,
-            String remoteImplPackage, String propertyPackage, String remoteApiImplPackage, Map<String, Object> paramMap,
-            ModelInfo modelInfo, boolean createApiScImpl) {
+                                   String remoteImplPackage, String propertyPackage, String remoteApiImplPackage, Map<String, Object> paramMap,
+                                   ModelInfo modelInfo, boolean createApiScImpl) {
         try {
             // Remote API
             String remoteApiPath = apiProjectOutputDir + CODE_DIR_PRE + remotePackage.replace(".", File.separator)
@@ -345,8 +345,8 @@ public class CodeGenerator {
     }
 
     private void createDubbo(String apiProjectOutputDir, String serverProjectCodeOutputDir, String remotePackage,
-            String remoteImplPackage, String apiImplPackage, Map<String, Object> paramMap, ModelInfo modelInfo,
-            boolean createApiDubboImpl) {
+                             String remoteImplPackage, String apiImplPackage, Map<String, Object> paramMap, ModelInfo modelInfo,
+                             boolean createApiDubboImpl) {
         try {
             // Remote API
             String remoteApiPath = apiProjectOutputDir + CODE_DIR_PRE + remotePackage.replace(".", File.separator)
@@ -402,7 +402,7 @@ public class CodeGenerator {
     }
 
     private void createApi(String apiProjectOutputDir, String apiBasePackage, Map<String, Object> paramMap,
-            ModelInfo modelInfo) {
+                           ModelInfo modelInfo) {
         try {
             if (ProjectType.SMART.equals(projectProperties.getProjectType()) && !modelInfo.getOnlyRepository()) {
                 String apiPath = apiProjectOutputDir + CODE_DIR_PRE + apiBasePackage.replace(".", File.separator)
@@ -422,7 +422,7 @@ public class CodeGenerator {
     }
 
     private void createDtoParamReq(String apiProjectOutputDir, String dtoPackage, String paramPackage,
-            String reqPackage, String respPackage, Map<String, Object> paramMap, ModelInfo modelInfo) {
+                                   String reqPackage, String respPackage, Map<String, Object> paramMap, ModelInfo modelInfo) {
         String dtoPath = apiProjectOutputDir + CODE_DIR_PRE + dtoPackage.replace(".", File.separator) + File.separator
                 + StringUtil.upperFirstChar(modelInfo.getModelName()) + "Dto.java";
         String paramPath = apiProjectOutputDir + CODE_DIR_PRE + paramPackage.replace(".", File.separator)
@@ -452,7 +452,7 @@ public class CodeGenerator {
      * 生成 repository
      */
     private void createService(String serverProjectOutputDir, String serverPackage, String serviceImplPackage,
-            Map<String, Object> paramMap, ModelInfo modelInfo) {
+                               Map<String, Object> paramMap, ModelInfo modelInfo) {
         String path = serverProjectOutputDir + CODE_DIR_PRE + serverPackage.replace(".", File.separator)
                 + File.separator + "I" + StringUtil.upperFirstChar(modelInfo.getModelName()) + "Service.java";
         String implPath = serverProjectOutputDir + CODE_DIR_PRE + serviceImplPackage.replace(".", File.separator)
@@ -476,7 +476,7 @@ public class CodeGenerator {
     }
 
     private void createRepository(String serverProjectOutputDir, String repositoryPackage, String repositoryImpPackage,
-            Map<String, Object> paramMap, ModelInfo modelInfo) {
+                                  Map<String, Object> paramMap, ModelInfo modelInfo) {
         String path = serverProjectOutputDir + CODE_DIR_PRE + repositoryPackage.replace(".", File.separator)
                 + File.separator + "I" + StringUtil.upperFirstChar(modelInfo.getModelName()) + "Repository.java";
         String implPath = serverProjectOutputDir + CODE_DIR_PRE + repositoryImpPackage.replace(".", File.separator)
@@ -540,9 +540,6 @@ public class CodeGenerator {
                     fieldInfo = fieldList.getLast();
                 }
                 fieldInfo.setDesc(desc);
-                if (fileLine.contains("isKey = true")) {
-                    fieldInfo.setKeyFlag(true);
-                }
             } else if (fileLine.contains("private")) {
                 String[] split = fileLine.trim().split(" ");
                 FieldInfo fieldInfo = null;
@@ -554,7 +551,7 @@ public class CodeGenerator {
                 }
                 fieldInfo.setName(split[2].replace(";", "")).setType(split[1]);
                 newField = true;
-            } else if (fileLine.contains("@IsKey")) {
+            } else if (fileLine.contains("@TableId") || fileLine.contains("@Id")) {
                 FieldInfo fieldInfo = null;
                 if (newField) {
                     fieldInfo = new FieldInfo();

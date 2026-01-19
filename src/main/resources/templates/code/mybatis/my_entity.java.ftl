@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.linpeilie.annotations.AutoMapper;
+import com.mcst.easyfk.service.mybatisplus.annotation.Column;
 
 /**
 * 作者: ${author}
@@ -34,9 +35,11 @@ public class ${modelInfo.modelName} extends ${modelInfo.superClass?keep_after_la
     <#else >
     @TableId(type = IdType.ASSIGN_UUID)
     </#if>
+    @Column(comment = "${modelInfo.modelDesc!}ID")
     private ${field.type} ${field.name};
     <#else>
 
+    @Column(comment = "${field.desc}")
     private ${field.type} ${field.name};
     </#if>
     </#list>
@@ -48,6 +51,7 @@ public class ${modelInfo.modelName} extends ${modelInfo.superClass?keep_after_la
     <#else >
     @TableId(type = IdType.ASSIGN_UUID)
     </#if>
+    @Column(comment = "${modelInfo.modelDesc!}ID")
     private ${modelInfo.idType} ${modelInfo.modelName?uncap_first}Id;
     </#if>
 }
