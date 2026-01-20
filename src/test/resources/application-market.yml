@@ -1,0 +1,35 @@
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\codespace\module-project\3.2.12
+        group-id: com.mcst
+        artifact-id: market
+        project-name: market
+        prd-type: separation
+        project-version: 3.2.12
+        orm-type: MYBATIS
+        project-type: smart
+        framework-version: 3.2.12
+        build-type: gradle
+        base-package: com.mcst.market
+
+      code:
+        module-name: market
+        db-short-url: 192.168.100.250:3306/mcst_common
+        db-pwd: 01BAI.com
+        db-user: root
+        #table-prefix: base_
+        model-list:
+          - model-name: MerchantContainer
+            model-desc: 超市和货柜关联信息
+
+
+
+
+
+
+
+
+
+

@@ -27,7 +27,6 @@ ${pkg.packageName}
 @NoArgsConstructor
 public class ${modelInfo.modelName}Param extends BasicParam {
 
-
 <#list modelInfo.fieldList as field>
 
     <#if field.desc!?length gt 0>
@@ -51,13 +50,12 @@ public class ${modelInfo.modelName}Param extends BasicParam {
 
     <#if field.desc!?length gt 0>
     /**
-    * ${field.desc}结束
+    * ${field.desc}
     */
     </#if>
     @Schema(description= "${field.desc!}结束")
     private ${field.type} ${field.name}End;
     </#if>
+
 </#list>
-
-
 }
