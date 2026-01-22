@@ -574,7 +574,7 @@ public class CodeGenerator {
                 String repetitionMsg = extractRepetitionMsg(fileLine);
                 fieldInfo.setRepetitionMsg(repetitionMsg);
                 otherPackageList.add(new ImportPackage()
-                        .setPackageName("import com.flopotech.framework.core.annotation.SingleUniqueField;"));
+                        .setPackageName("import com.mcst.easyfk.core.annotation.SingleUniqueField;"));
             } else if (fileLine.contains("@CombUniqueField")) {
                 FieldInfo fieldInfo = null;
                 if (newField) {
@@ -590,7 +590,7 @@ public class CodeGenerator {
                 String repetitionMsg = extractRepetitionMsg(fileLine);
                 fieldInfo.setRepetitionMsg(repetitionMsg);
                 otherPackageList.add(new ImportPackage()
-                        .setPackageName("import com.flopotech.framework.core.annotation.CombUniqueField;"));
+                        .setPackageName("import com.mcst.easyfk.core.annotation.CombUniqueField;"));
             } else if (fileLine.contains("@BetweenConditionField")) {
                 FieldInfo fieldInfo = null;
                 if (newField) {

@@ -21,8 +21,10 @@ easyfk:
         db-user: root
         #table-prefix: base_
         model-list:
-          - model-name: ContainerInfo
-            model-desc: 货柜信息
+          #- model-name: ContainerInfo
+          #model-desc: 货柜信息
+          - model-name: ContainerMerchant
+            model-desc: 货柜和商户关联信息
 
 
 

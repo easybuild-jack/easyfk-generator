@@ -17,8 +17,8 @@ dependencies {
     implementation platform(libs.dependencies)
     compileOnly libs.lombok
     testCompileOnly libs.lombok
-    annotationProcessor(libs.lombok, libs.processor)
-    testAnnotationProcessor(libs.lombok, libs.processor)
+    annotationProcessor(libs.lombok, libs.processor,libs.lombokMapstruct,libs.mapstructProcessor)
+    testAnnotationProcessor(libs.lombok, libs.processor,libs.lombokMapstruct,libs.mapstructProcessor)
     implementation ('com.mcst:orm-${ormType?lower_case}')
     implementation ('com.mcst:log-${logType?lower_case}')
 <#if projectType == "SINGLE" || projectType == "MICROSERVICE">

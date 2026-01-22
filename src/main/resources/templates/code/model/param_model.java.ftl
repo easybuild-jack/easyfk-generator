@@ -28,34 +28,28 @@ ${pkg.packageName}
 public class ${modelInfo.modelName}Param extends BasicParam {
 
 <#list modelInfo.fieldList as field>
-
-    <#if field.desc!?length gt 0>
+<#if field.desc!?length gt 0>
     /**
     * ${field.desc}
     */
-    </#if>
+</#if>
     @Schema(description= "${field.desc!}")
     private ${field.type} ${field.name};
 </#list>
-<#list modelInfo.fieldList as field>
-
-    <#if field.betweenField>
-    <#if field.desc!?length gt 0>
+<#list modelInfo.fieldList as field><#if field.betweenField>
+<#if field.desc!?length gt 0>
     /**
     * ${field.desc}开始
     */
-    </#if>
+</#if>
     @Schema(description= "${field.desc!}开始")
     private ${field.type} ${field.name}Start;
-
-    <#if field.desc!?length gt 0>
+<#if field.desc!?length gt 0>
     /**
     * ${field.desc}
     */
-    </#if>
+</#if>
     @Schema(description= "${field.desc!}结束")
     private ${field.type} ${field.name}End;
-    </#if>
-
-</#list>
+</#if></#list>
 }

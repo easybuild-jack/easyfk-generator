@@ -1,0 +1,34 @@
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\codespace\module-project\3.2.12
+        group-id: com.mcst
+        artifact-id: banner
+        project-name: banner
+        prd-type: separation
+        project-version: 3.2.12
+        orm-type: MYBATIS
+        project-type: smart
+        framework-version: 3.2.12
+        build-type: gradle
+        base-package: com.mcst.banner
+
+      code:
+        module-name: banner
+        db-short-url: 192.168.100.250:3306/mcst_common
+        db-pwd: 01BAI.com
+        db-user: root
+        #table-prefix: base_
+        model-list:
+          - model-name: Banner
+            model-desc: 轮播
+
+
+
+
+
+
+
+
+

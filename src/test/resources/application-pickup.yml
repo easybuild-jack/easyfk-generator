@@ -21,8 +21,10 @@ easyfk:
         db-user: root
         #table-prefix: base_
         model-list:
-          - model-name: PickupLocation
-            model-desc: 提货点信息
+#          - model-name: PickupLocation
+#            model-desc: 提货点信息
+          - model-name: PickupMerchant
+            model-desc: 提货点和商户关联信息
 
 
 
