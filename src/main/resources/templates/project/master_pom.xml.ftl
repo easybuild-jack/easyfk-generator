@@ -53,4 +53,37 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
+    <build>
+      <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.13.0</version>
+            <configuration>
+                <source>${maven.compiler.source}</source>
+                <target>21</target>
+                <annotationProcessorPaths>
+                    <path>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok</artifactId>
+                        <version>1.18.32</version>
+                    </path>
+                    <path>
+                        <groupId>io.github.linpeilie</groupId>
+                        <artifactId>mapstruct-plus-processor</artifactId>
+                        <version>1.5.0</version>
+                    </path>
+                    <path>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok-mapstruct-binding</artifactId>
+                        <version>0.2.0</version>
+                    </path>
+                </annotationProcessorPaths>
+                <compilerArgs>
+                    <arg>-Amapstruct.plus.nullValuePropertyMappingStrategy=IGNORE</arg>
+                </compilerArgs>
+            </configuration>
+        </plugin>
+      </plugins>
+    </build>
 </project>
