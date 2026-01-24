@@ -68,7 +68,7 @@ public class CodeGenerator {
         String paramPackage = apiBasePackage + ".param";
         String reqPackage = apiBasePackage + ".request";
         String respPackage = apiBasePackage + ".response";
-        String defaultRemoteId = codeProperties.getModuleName() + "-server";
+        String defaultRemoteId = "server";
         String remotePackage = basePackage + ".remote";
         String remoteImplPackage = ProjectType.MICROSERVICE.equals(projectProperties.getProjectType())
                 ? serverBasePackage + ".impl"
