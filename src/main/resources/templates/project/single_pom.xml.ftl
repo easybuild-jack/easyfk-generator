@@ -29,6 +29,13 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>com.mcst</groupId>
+                <artifactId>module-dependencies</artifactId>
+                <version><#noparse>${framework.version}</#noparse></version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>

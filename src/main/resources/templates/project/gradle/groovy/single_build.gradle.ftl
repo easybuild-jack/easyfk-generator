@@ -15,6 +15,7 @@ java {
 
 dependencies {
     implementation platform(libs.dependencies)
+    implementation platform(libs.moduleDependencies)
     compileOnly libs.lombok
     testCompileOnly libs.lombok
     annotationProcessor(libs.lombok, libs.processor,libs.lombokMapstruct,libs.mapstructProcessor)

@@ -1,0 +1,32 @@
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\codespace\mcst
+        group-id: com.mcst
+        artifact-id: super-market
+        project-name: super-market
+        prd-type: separation
+        project-version: 1.0.0-SNAPSHOT
+        project-type: single
+        framework-version: 3.2.12
+        build-type: maven
+        base-package: com.mcst.market
+
+      code:
+        module-name: market
+        db-short-url: 192.168.100.250:3306/test_fk
+        db-pwd: 01BAI.com
+        db-user: root
+        model-list:
+          - model-name: UserInfo
+            model-desc: 用户
+          - model-name: Address
+            model-desc: 地址
+          - model-name: UserAddress
+            model-desc: 用户地址
+            only-repository: true
+            super-class: BaseMyBatisPlusSimpleEntity
+
+
+

@@ -1,0 +1,35 @@
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\codespace\module-project\3.2.12
+        group-id: com.mcst
+        artifact-id: payment
+        project-name: payment
+        prd-type: separation
+        project-version: 3.2.12
+        orm-type: MYBATIS
+        project-type: smart
+        framework-version: 3.2.12
+        build-type: gradle
+        base-package: com.mcst.trading
+        create-prd-project: false
+
+      code:
+        module-name: payment
+        db-short-url: 192.168.100.250:3306/mcst_common
+        db-pwd: 01BAI.com
+        db-user: root
+        #table-prefix: base_
+        model-list:
+          - model-name: Banner
+            model-desc: 轮播
+
+
+
+
+
+
+
+
+
