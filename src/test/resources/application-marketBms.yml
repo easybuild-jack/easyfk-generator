@@ -4,9 +4,9 @@ easyfk:
       project:
         project-dir: D:\codespace\mcst
         group-id: com.mcst
-        artifact-id: super-market
-        project-name: super-market
-        prd-type: separation
+        artifact-id: market-bms
+        project-name: market-bms
+        prd-type: single
         project-version: 1.0.0-SNAPSHOT
         project-type: single
         framework-version: 3.2.12
@@ -21,12 +21,7 @@ easyfk:
         model-list:
           - model-name: UserInfo
             model-desc: 用户
-          - model-name: Address
-            model-desc: 地址
-          - model-name: UserAddress
-            model-desc: 用户地址
-            only-repository: true
-            super-class: BaseMyBatisPlusSimpleEntity
+
 
 
 
