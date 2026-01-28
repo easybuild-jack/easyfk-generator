@@ -1,0 +1,40 @@
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\codespace\module-project\3.2.12
+        group-id: com.mcst
+        artifact-id: vip
+        project-name: vip
+        prd-type: separation
+        project-version: 3.2.12
+        orm-type: MYBATIS
+        project-type: smart
+        framework-version: 3.2.12
+        build-type: gradle
+        base-package: com.mcst.vip
+
+      code:
+        module-name: vip
+        db-short-url: 192.168.100.250:3306/mcst_common
+        db-pwd: 01BAI.com
+        db-user: root
+        #table-prefix: base_
+        model-list:
+          - model-name: VipInfo
+            model-desc: VIP信息
+          - model-name: VipOrder
+            model-desc: VIP订单
+          - model-name: VipPlan
+            model-desc: VIP套餐
+
+
+
+
+
+
+
+
+
+
+

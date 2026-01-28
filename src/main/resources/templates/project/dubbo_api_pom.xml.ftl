@@ -20,9 +20,8 @@
             <artifactId>remote-dubbo</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.dubbo</groupId>
+            <groupId>com.mcst</groupId>
             <artifactId>dubbo</artifactId>
-            <version>3.3.5</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

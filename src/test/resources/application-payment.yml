@@ -22,8 +22,8 @@ easyfk:
         db-user: root
         #table-prefix: base_
         model-list:
-          - model-name: Banner
-            model-desc: 轮播
+          - model-name: PayRecord
+            model-desc: 支付记录
 
 
 

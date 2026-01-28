@@ -28,9 +28,8 @@ easyfk:
         resource-sort: 71000
         #table-prefix: base_
         model-list:
-          - model-name: OrderAmount
-            model-desc: 订单金额
-            only-repository: true
+          - model-name: OrderInfo
+            model-desc: 订单信息
 
 
 

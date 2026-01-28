@@ -32,20 +32,8 @@ easyfk:
         model-list:
           - model-name: GoodsInfo
             model-desc: 商品信息
-          - model-name: GoodsSku
-            model-desc: 商品SKU
-            only-repository: true
-          - model-name: GoodsSpu
-            model-desc: 商品SPU
-            only-repository: true
-          - model-name: GoodsExplain
-            model-desc: 商品说明
-            only-repository: true
           - model-name: GoodsSpuConfig
             model-desc: SPU配置
-          - model-name: GoodsDetail
-            model-desc: 商品详情
-            only-repository: true
 
 
 

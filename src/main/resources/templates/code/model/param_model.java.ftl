@@ -35,7 +35,9 @@ public class ${modelInfo.modelName}Param extends BasicParam {
 </#if>
     @Schema(description= "${field.desc!}")
     private ${field.type} ${field.name};
+
 </#list>
+
 <#list modelInfo.fieldList as field><#if field.betweenField>
 <#if field.desc!?length gt 0>
     /**
@@ -44,6 +46,7 @@ public class ${modelInfo.modelName}Param extends BasicParam {
 </#if>
     @Schema(description= "${field.desc!}开始")
     private ${field.type} ${field.name}Start;
+
 <#if field.desc!?length gt 0>
     /**
     * ${field.desc}
@@ -51,5 +54,7 @@ public class ${modelInfo.modelName}Param extends BasicParam {
 </#if>
     @Schema(description= "${field.desc!}结束")
     private ${field.type} ${field.name}End;
-</#if></#list>
+
+</#if>
+</#list>
 }

@@ -22,7 +22,7 @@ easyfk:
         db-user: root
         #table-prefix: base_
         model-list:
-          - model-name: Banner
+          - model-name: MallTrade
             model-desc: 轮播
 
 
