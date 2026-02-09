@@ -21,7 +21,7 @@ easyfk:
         db-short-url: 192.168.100.250:3306/mcst_common
         db-pwd: 01BAI.com
         db-user: root
-        create-resource-annotation: true
+        create-resource-annotation: false
         resource-group: operationSetting
         resource-id: operationSetting
         resource-name: 运营管理
@@ -30,10 +30,10 @@ easyfk:
         module-resource-sort: 11000
         #table-prefix: base_
         model-list:
-          - model-name: GoodsInfo
-            model-desc: 商品信息
           - model-name: GoodsSpuConfig
             model-desc: SPU配置
+          - model-name: GoodsInfo
+            model-desc: 商品
 
 
 

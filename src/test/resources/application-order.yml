@@ -20,16 +20,29 @@ easyfk:
         db-short-url: 192.168.100.250:3306/mcst_common
         db-pwd: 01BAI.com
         db-user: root
-        create-resource-annotation: true
-        resource-group: operationSetting
-        resource-id: operationSetting
-        resource-name: 运营管理
-        resource-path: /operation
-        resource-sort: 71000
         #table-prefix: base_
         model-list:
-          - model-name: OrderInfo
-            model-desc: 订单信息
+          - model-name: OrderAmount
+            model-desc: 订单金额
+#          - model-name: OrderContainer
+#            model-desc: 订单货柜
+#          - model-name: OrderDeliver
+#            model-desc: 订单发货
+#          - model-name: OrderDiscount
+#            model-desc: 订单优惠券
+#          - model-name: OrderGoods
+#            model-desc: 订单商品
+#          - model-name: OrderInfo
+#            model-desc: 订单
+#          - model-name: OrderPay
+#            model-desc: 订单支付
+#          - model-name: OrderPickup
+#            model-desc: 订单提货
+#          - model-name: OrderRefund
+#            model-desc: 订单退款
+#          - model-name: OrderRefundGoods
+#            model-desc: 退款商品
+
 
 
 

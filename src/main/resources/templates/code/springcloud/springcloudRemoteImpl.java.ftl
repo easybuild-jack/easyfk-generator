@@ -5,8 +5,7 @@ import ${reqPackage}.${modelInfo.modelName}Req;
 import ${servicePackage}.I${modelInfo.modelName}Service;
 import ${remotePackage}.I${modelInfo.modelName}Remote;
 import com.mcst.easyfk.remote.sc.BaseRemoteImpl;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
 * <p>
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 *
 * @author ${author}
 */
-@RestController
+@ResponseBody
 @RequestMapping("${scApiBasePath}<#if moduleName??>/${moduleName}/${modelInfo.modelName?uncap_first}<#else>/${modelInfo.modelName?uncap_first}</#if>")
 public class ${modelInfo.modelName}RemoteImpl extends BaseRemoteImpl<I${modelInfo.modelName}Service, ${modelInfo.modelName}Resp,${modelInfo.idType},${modelInfo.modelName}Req> implements I${modelInfo.modelName}Remote {
 

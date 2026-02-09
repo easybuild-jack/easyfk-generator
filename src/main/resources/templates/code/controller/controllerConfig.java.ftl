@@ -2,14 +2,14 @@ package ${prdConfigPackage};
 
 import ${prdControllerPackage}.*;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 /**
 *
 * @author ${author}
 */
-@Configuration
+@AutoConfiguration
 @EnableConfigurationProperties
 public class ${configJavaName} {
 

@@ -1,0 +1,36 @@
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\codespace\mcst\super-market
+        group-id: com.mcst
+        artifact-id: market-coordinator
+        project-name: market-coordinator
+        prd-type: separation
+        project-version: 3.2.12
+        orm-type: MYBATIS
+        project-type: smart
+        framework-version: 3.2.12
+        gradle-version: 8.7
+        build-type: gradle
+        base-package: com.mcst.market.coordinator
+        #create-prd-project: false
+
+      code:
+        module-name: coordinator
+        db-short-url: 192.168.100.250:3306/mcst_common
+        db-pwd: 01BAI.com
+        db-user: root
+        #table-prefix: base_
+        model-list:
+          - model-name: Media
+            model-desc: 媒体
+
+
+
+
+
+
+
+
+

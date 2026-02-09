@@ -2,12 +2,12 @@ easyfk:
   config:
     generator:
       project:
-        project-dir: D:\codespace\module-project\3.2.12
+        project-dir: D:\codespace\mcst\super-market\api
         group-id: com.mcst
         artifact-id: market
         project-name: market
         prd-type: separation
-        project-version: 3.2.12
+        project-version: 1.0.0
         orm-type: MYBATIS
         project-type: smart
         framework-version: 3.2.12
@@ -21,8 +21,10 @@ easyfk:
         db-user: root
         #table-prefix: base_
         model-list:
-          - model-name: MerchantContainer
-            model-desc: 超市和货柜关联信息
+          - model-name: AppIndexData
+            model-desc: App首页数据
+          - model-name: ShopIndexData
+            model-desc: 门店首页数据
 
 
 

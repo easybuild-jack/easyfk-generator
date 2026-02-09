@@ -15,13 +15,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import ${apiPropertyPackage}.${moduleName?cap_first}ApiProperties;
 </#if>
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 
 /**
 *
 * @author ${author}
 */
-@Configuration
+@AutoConfiguration
 @EnableConfigurationProperties(${moduleName?cap_first}ApiProperties.class)
 public class ${moduleName?cap_first}ApiConfig {
 <#if projectType == 'SMART'>

@@ -11,13 +11,13 @@ import ${remoteClientImplPackage}.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 </#if>
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 
 /**
 *
 * @author ${author}
 */
-@Configuration
+@AutoConfiguration
 public class ${moduleName?cap_first}ApiConfig {
 <#if projectType == 'SMART'>
 <#if fileMap.dubboRemoteImplFileSet??>
