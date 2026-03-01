@@ -12,5 +12,9 @@ public enum OrmType {
     /**
      * MYBATIS_FLEX
      */
-    MYBATIS_FLEX
+    MYBATIS_FLEX,
+    /**
+     * HIBERNATE
+     */
+    HIBERNATE
 }
