@@ -33,6 +33,13 @@ public class ConfigGenerator {
     @Resource
     private CodeProperties codeProperties;
 
+    public ConfigGenerator() {}
+
+    public ConfigGenerator(ProjectProperties projectProperties, CodeProperties codeProperties) {
+        this.projectProperties = projectProperties;
+        this.codeProperties = codeProperties;
+    }
+
     public void create() {
         String projectRootDir = projectProperties.getProjectDir() + File.separator + projectProperties.getProjectName();
         String auth = codeProperties.getAuthor();

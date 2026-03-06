@@ -1,5 +1,7 @@
 package com.mcst.easyfk.generator;
 
+import com.mcst.easyfk.generator.properties.CodeProperties;
+import com.mcst.easyfk.generator.properties.ProjectProperties;
 import jakarta.annotation.Resource;
 
 /**
@@ -18,6 +20,15 @@ public class EasyfkGenerator {
 
     @Resource
     private ConfigGenerator configGenerator;
+
+    public EasyfkGenerator() {}
+
+    public EasyfkGenerator(ProjectProperties projectProperties, CodeProperties codeProperties) {
+        this.projectGenerator = new ProjectGenerator(projectProperties);
+        this.modelGenerator = new ModelGenerator(projectProperties, codeProperties);
+        this.codeGenerator = new CodeGenerator(projectProperties, codeProperties);
+        this.configGenerator = new ConfigGenerator(projectProperties, codeProperties);
+    }
 
     /**
      * 生成项目

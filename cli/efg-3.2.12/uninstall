@@ -1,0 +1,5 @@
+#!/bin/sh
+# EasyFK Generator 卸载入口（macOS / Linux）
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+chmod +x "$SCRIPT_DIR/uninstall.sh"
+exec "$SCRIPT_DIR/uninstall.sh" "$@"

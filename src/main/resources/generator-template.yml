@@ -1,0 +1,107 @@
+# ============================================================
+#  EasyFK Generator 配置文件
+#  使用方式：efg (在 generator.yml 所在目录执行)
+# ============================================================
+
+easyfk:
+  config:
+    generator:
+
+      # ==================== 项目配置 ====================
+      project:
+        # [必填] 项目输出目录
+        project-dir: D:\workspace\projects
+        # [必填] Maven groupId
+        group-id: com.example
+        # [必填] 项目名称
+        project-name: my-app
+        # [必填] 项目包根路径
+        base-package: com.example.myapp
+
+        # 项目类型: single(单体) / microservice(微服务) / smart(多栈微服务)
+        project-type: smart
+        # RPC 类型 (微服务时生效): cloud / dubbo
+        rpc-type: cloud
+        # 构建工具: maven / gradle
+        build-type: maven
+        # Gradle DSL 类型 (Gradle 构建时生效): groovy / kotlin
+        gradle-type: groovy
+        # ORM 框架: MYBATIS / MYBATIS_FLEX / HIBERNATE
+        orm-type: MYBATIS
+        # PRD 层策略: none(不生成) / single(单一) / separation(分离: client + bms)
+        prd-type: separation
+        # 日志框架: LOGBACK / LOG4J2
+        log-type: LOGBACK
+
+        # 框架版本
+        framework-version: 3.2.12
+        # 项目版本
+        project-version: 1.0.0-SNAPSHOT
+        # 是否生成 PRD 项目
+        create-prd-project: true
+        # 是否生成独立 Repository 项目
+        create-repository: false
+        # 是否生成 PRD 自动装配配置
+        controller-auto-config: false
+        # 是否包含 InfluxDB 支持
+        influx-db: false
+
+      # ==================== 代码配置 ====================
+      code:
+        # [必填] 模块名称
+        module-name: myapp
+        # 作者信息
+        author: liu yijun
+
+        # ---------- 数据库连接 ----------
+        # 数据库类型: MYSQL / POSTGRE_SQL / ORACLE / ORACLE_12C 等
+        db-type: MYSQL
+        # [必填] 数据库短连接 (host:port/database)
+        db-short-url: localhost:3306/my_database
+        # 数据库用户名
+        db-user: root
+        # 数据库密码
+        db-pwd: your_password
+
+        # ---------- 表配置 ----------
+        # 表前缀 (生成类名时自动去除)
+        table-prefix: base_
+        # ORM 类型: MYBATIS / MYBATIS_FLEX / HIBERNATE
+        orm-type: MYBATIS
+        # 从数据库读取的表名 (逗号分隔，会自动解析表结构)
+        from-db-tables: product,order
+
+        # ---------- 代码控制 ----------
+        # 是否使用 Spring 注解
+        spring-annotation: true
+        # 是否生成 Controller 层
+        create-controller: true
+        # 是否继承框架基类
+        extends-supper-class: true
+
+        # ---------- 资源权限 (可选) ----------
+        create-resource-annotation: false
+        # resource-group: 资源分组
+        # resource-name: 资源名称
+        # resource-id: 资源ID
+        # resource-path: 前端路由路径
+        # resource-sort: 10000
+        # module-resource-sort: 10000
+        # increment-star: 100
+
+        # ---------- 手动定义 Model (可选) ----------
+        # 除 from-db-tables 自动解析外，也可手动定义
+        # model-list:
+        #   - model-name: Product
+        #     model-desc: 商品信息
+        #     # id-type: String
+        #     # only-repository: false
+        #     # create-controller: true
+        #   - model-name: Order
+        #     model-desc: 订单信息
+
+        # ---------- InfluxDB (可选) ----------
+        # influx-db-url: http://localhost:8086
+        # influx-token: your-token
+        # influx-org: your-org
+        # influx-bucket: your-bucket

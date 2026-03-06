@@ -35,6 +35,13 @@ public class ModelGenerator {
     @Resource
     private CodeProperties codeProperties;
 
+    public ModelGenerator() {}
+
+    public ModelGenerator(ProjectProperties projectProperties, CodeProperties codeProperties) {
+        this.projectProperties = projectProperties;
+        this.codeProperties = codeProperties;
+    }
+
     public void create() {
         try {
             String basePackage = projectProperties.getBasePackage();

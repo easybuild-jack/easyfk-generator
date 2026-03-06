@@ -24,11 +24,30 @@ dependencies {
     api('org.postgresql:postgresql')
     testImplementation('com.mcst:log-logback')
     api('org.freemarker:freemarker:2.3.31')
+    implementation('info.picocli:picocli:4.7.6')
+    implementation('org.yaml:snakeyaml:2.2')
 }
 
+apply plugin: 'application'
+
+application {
+    mainClass = 'com.mcst.easyfk.generator.cli.GeneratorCli'
+}
 
 test {
     enabled(false)
+}
+
+tasks.register('fatJar', Jar) {
+    archiveClassifier.set('cli')
+    manifest {
+        attributes 'Main-Class': 'com.mcst.easyfk.generator.cli.GeneratorCli'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 

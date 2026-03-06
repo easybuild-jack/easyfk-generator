@@ -36,6 +36,13 @@ public class CodeGenerator {
     private CodeProperties codeProperties;
     private String basePackage;
 
+    public CodeGenerator() {}
+
+    public CodeGenerator(ProjectProperties projectProperties, CodeProperties codeProperties) {
+        this.projectProperties = projectProperties;
+        this.codeProperties = codeProperties;
+    }
+
     public void create(boolean onlyUpdateDtoAndParam) {
         basePackage = projectProperties.getBasePackage();
         if (EmptyUtil.isEmpty(basePackage)) {

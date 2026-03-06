@@ -32,6 +32,12 @@ public class ProjectGenerator {
     @Resource
     private ProjectProperties projectProperties;
 
+    public ProjectGenerator() {}
+
+    public ProjectGenerator(ProjectProperties projectProperties) {
+        this.projectProperties = projectProperties;
+    }
+
     public void create() {
         if (EmptyUtil.isEmpty(projectProperties.getGroupId())) {
             throw new BusinessException("groupId不可为空");
