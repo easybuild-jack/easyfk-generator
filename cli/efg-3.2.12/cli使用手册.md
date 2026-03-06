@@ -111,30 +111,148 @@ Flag 可以组合，按需选择：
 
 ## 配置文件说明
 
-`generator.yml` 配置结构如下（`efg init` 生成的模板包含完整注释）：
+执行 `efg init` 生成的 `generator.yml` 分为两大部分：**项目配置（project）** 和 **代码配置（code）**。
+
+### 项目配置（project）
+
+```yaml
+easyfk.config.generator.project:
+```
+
+| 配置项 | 必填 | 默认值 | 说明 |
+|--------|------|--------|------|
+| `project-dir` | **是** | - | 项目输出目录，生成的项目会放在该目录下。例：`D:\workspace\projects` 或 `/home/user/projects` |
+| `group-id` | **是** | - | Maven groupId，例：`com.example` |
+| `project-name` | **是** | - | 项目名称，会作为项目根目录名和各子模块名的前缀。例：`my-app` |
+| `base-package` | **是** | - | Java 包根路径，所有生成的代码都在此包下。例：`com.example.myapp` |
+| `project-type` | 否 | `smart` | 项目架构类型，决定生成的项目结构 |
+| | | | `single` — 单体项目，所有代码在一个工程中 |
+| | | | `microservice` — 微服务，生成 API + Server + PRD 模块，支持一种 RPC |
+| | | | `smart` — 多栈微服务，同时生成 Spring Cloud 和 Dubbo 两套 RPC 通道 |
+| `rpc-type` | 否 | `cloud` | RPC 类型，仅 `microservice` 架构时生效 |
+| | | | `cloud` — Spring Cloud Feign |
+| | | | `dubbo` — Apache Dubbo |
+| `build-type` | 否 | `maven` | 构建工具类型 |
+| | | | `maven` — 生成 pom.xml |
+| | | | `gradle` — 生成 build.gradle / settings.gradle |
+| `gradle-type` | 否 | `groovy` | Gradle DSL 类型，仅 `build-type: gradle` 时生效 |
+| | | | `groovy` — Groovy DSL (build.gradle) |
+| | | | `kotlin` — Kotlin DSL (build.gradle.kts) |
+| `orm-type` | 否 | `MYBATIS` | ORM 框架类型 |
+| | | | `MYBATIS` — MyBatis-Plus |
+| | | | `MYBATIS_FLEX` — MyBatis-Flex |
+| | | | `HIBERNATE` — Hibernate (JPA) |
+| `prd-type` | 否 | `none` | 前端对接层（Controller）策略 |
+| | | | `none` — 不生成 Controller 层 |
+| | | | `single` — 生成单一 PRD 项目，所有 Controller 集中 |
+| | | | `separation` — 分离式：prd-client（C端）+ prd-bms（B端管理后台） |
+| `log-type` | 否 | `LOGBACK` | 日志框架：`LOGBACK` 或 `LOG4J2` |
+| `framework-version` | 否 | `3.2.12` | EasyFK 框架版本号 |
+| `project-version` | 否 | `1.0.0-SNAPSHOT` | 生成项目的版本号 |
+| `create-prd-project` | 否 | `true` | 是否生成 PRD（Controller）项目 |
+| `create-repository` | 否 | `false` | 是否生成独立的 Repository 子项目 |
+| `controller-auto-config` | 否 | `false` | 是否为 Controller 层生成 Spring Boot AutoConfiguration |
+| `influx-db` | 否 | `false` | 项目是否包含 InfluxDB 时序数据库支持 |
+
+### 代码配置（code）
+
+```yaml
+easyfk.config.generator.code:
+```
+
+#### 基本配置
+
+| 配置项 | 必填 | 默认值 | 说明 |
+|--------|------|--------|------|
+| `module-name` | **是** | - | 模块名称，用于生成配置类名、远程调用 serviceId 等。例：`myapp` |
+| `author` | 否 | `liu yijun` | 代码注释中的作者信息 |
+| `orm-type` | 否 | `MYBATIS` | ORM 类型（同 project 中的 orm-type） |
+| `spring-annotation` | 否 | `true` | 是否在生成的类上添加 Spring 注解（如 `@Repository`、`@Service`） |
+| `create-controller` | 否 | `true` | 是否生成 Controller 层代码 |
+| `extends-supper-class` | 否 | `true` | Entity 是否继承框架基类（基类提供 deleted、insertTime、lastUpdateTime 字段） |
+
+#### 数据库连接
+
+| 配置项 | 必填 | 默认值 | 说明 |
+|--------|------|--------|------|
+| `db-type` | 否 | `MYSQL` | 数据库类型。可选值：`MYSQL`、`POSTGRE_SQL`、`ORACLE`、`ORACLE_12C`、`MARIADB`、`SQL_SERVER`、`DM`（达梦）、`KINGBASE_ES`（人大金仓）、`GAUSS`、`OCEAN_BASE`、`CLICK_HOUSE` 等 |
+| `db-short-url` | **是**★ | - | 数据库短连接地址，格式：`host:port/database`。例：`localhost:3306/my_db`。★ 仅在使用 `from-db-tables` 时必填 |
+| `db-user` | 否 | `root` | 数据库用户名 |
+| `db-pwd` | **是**★ | - | 数据库密码。★ 仅在使用 `from-db-tables` 时必填 |
+
+#### 表配置
+
+| 配置项 | 必填 | 默认值 | 说明 |
+|--------|------|--------|------|
+| `table-prefix` | 否 | - | 表名前缀，生成类名时自动去除。例：配置 `base_`，表 `base_product` → 类 `Product` |
+| `from-db-tables` | 否 | - | 需要从数据库读取结构的表名，逗号分隔。例：`product,order,user_info`。配置后会自动连接数据库解析字段 |
+
+#### 手动定义 Model（可选）
+
+除了 `from-db-tables` 自动解析，也可以手动定义模型：
+
+```yaml
+model-list:
+  - model-name: Product         # [必填] 模型名称（大驼峰），对应生成的类名
+    model-desc: 商品信息         # 模型描述，用于代码注释
+    table-name: base_product    # 数据库表名（不填则自动根据 model-name + table-prefix 推导）
+    id-type: String             # 主键类型：String（默认）或 Long
+    id-is-auto: false           # 主键是否自增（默认 false，使用 UUID）
+    super-class: com.mcst...    # Entity 父类全路径（有默认值，一般不用改）
+    only-repository: false      # 是否只生成 Repository 层，不生成 Service/Controller
+    create-controller: true     # 是否为该 Model 生成 Controller
+    influx-db: false            # 是否是 InfluxDB 时序数据模型
+    table-prefix: base_         # 单独指定该 Model 的表前缀（覆盖全局 table-prefix）
+```
+
+> `from-db-tables` 和 `model-list` 可以同时使用。如果同一个 Model 在两边都有定义，`model-list` 中的配置优先（可用于覆盖自动解析的默认值）。
+
+#### 资源权限配置（可选）
+
+用于在 Controller 接口上自动生成资源权限注解，与 EasyFK 框架权限体系对接：
+
+| 配置项 | 必填 | 默认值 | 说明 |
+|--------|------|--------|------|
+| `create-resource-annotation` | 否 | `false` | 是否生成资源权限注解 |
+| `resource-group` | 否 | - | 资源所属分组名称 |
+| `resource-name` | 否 | - | 资源权限名称 |
+| `resource-id` | 否 | - | 资源权限 ID |
+| `resource-path` | 否 | - | 资源权限指向的前端路由路径 |
+| `resource-sort` | 否 | `10000` | 资源组权限排序值 |
+| `module-resource-sort` | 否 | `10000` | 当前模块资源排序基础值 |
+| `increment-star` | 否 | `100` | 多个 Model 排序时的自增步长 |
+
+> 以上资源权限配置也可以在 `model-list` 中为每个 Model 单独指定（字段名相同），单独指定的值优先于全局配置。
+
+#### InfluxDB 配置（可选）
+
+仅在使用 InfluxDB 时序数据库时需要配置：
+
+| 配置项 | 必填 | 默认值 | 说明 |
+|--------|------|--------|------|
+| `influx-db-url` | 否 | - | InfluxDB 连接地址。例：`http://localhost:8086` |
+| `influx-token` | 否 | - | InfluxDB 认证令牌 |
+| `influx-org` | 否 | - | InfluxDB 组织名 |
+| `influx-bucket` | 否 | - | InfluxDB 数据桶名 |
+
+### 最小配置示例
+
+只需填必填项即可运行：
 
 ```yaml
 easyfk:
   config:
     generator:
-      project:                  # 项目配置
-        project-dir: ...        # [必填] 项目输出目录
-        group-id: ...           # [必填] Maven groupId
-        project-name: ...       # [必填] 项目名称
-        base-package: ...       # [必填] 包根路径
-        project-type: smart     # single / microservice / smart
-        build-type: maven       # maven / gradle
-        orm-type: MYBATIS       # MYBATIS / MYBATIS_FLEX / HIBERNATE
-        prd-type: separation    # none / single / separation
-        # ... 更多配置见模板文件
-
-      code:                     # 代码配置
-        module-name: ...        # [必填] 模块名称
-        db-short-url: ...       # [必填] 数据库连接 (host:port/database)
-        db-user: root           # 数据库用户名
-        db-pwd: ...             # 数据库密码
-        from-db-tables: ...     # 从数据库读取的表名（逗号分隔）
-        # ... 更多配置见模板文件
+      project:
+        project-dir: D:\workspace\projects
+        group-id: com.example
+        project-name: my-app
+        base-package: com.example.myapp
+      code:
+        module-name: myapp
+        db-short-url: localhost:3306/my_database
+        db-pwd: 123456
+        from-db-tables: product,order
 ```
 
 ---
