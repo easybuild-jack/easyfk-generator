@@ -152,7 +152,6 @@ easyfk.config.generator.project:
 | `create-prd-project` | 否 | `true` | 是否生成 PRD（Controller）项目 |
 | `create-repository` | 否 | `false` | 是否生成独立的 Repository 子项目 |
 | `controller-auto-config` | 否 | `false` | 是否为 Controller 层生成 Spring Boot AutoConfiguration |
-| `influx-db` | 否 | `false` | 项目是否包含 InfluxDB 时序数据库支持 |
 
 ### 代码配置（code）
 
@@ -201,7 +200,6 @@ model-list:
     super-class: com.mcst...    # Entity 父类全路径（有默认值，一般不用改）
     only-repository: false      # 是否只生成 Repository 层，不生成 Service/Controller
     create-controller: true     # 是否为该 Model 生成 Controller
-    influx-db: false            # 是否是 InfluxDB 时序数据模型
     table-prefix: base_         # 单独指定该 Model 的表前缀（覆盖全局 table-prefix）
 ```
 
@@ -223,17 +221,6 @@ model-list:
 | `increment-star` | 否 | `100` | 多个 Model 排序时的自增步长 |
 
 > 以上资源权限配置也可以在 `model-list` 中为每个 Model 单独指定（字段名相同），单独指定的值优先于全局配置。
-
-#### InfluxDB 配置（可选）
-
-仅在使用 InfluxDB 时序数据库时需要配置：
-
-| 配置项 | 必填 | 默认值 | 说明 |
-|--------|------|--------|------|
-| `influx-db-url` | 否 | - | InfluxDB 连接地址。例：`http://localhost:8086` |
-| `influx-token` | 否 | - | InfluxDB 认证令牌 |
-| `influx-org` | 否 | - | InfluxDB 组织名 |
-| `influx-bucket` | 否 | - | InfluxDB 数据桶名 |
 
 ### 最小配置示例
 

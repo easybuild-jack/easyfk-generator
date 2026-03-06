@@ -110,24 +110,4 @@ public class CodeProperties {
     private String fromDbTables;
 
 
-    /**
-     * influxdb 地址
-     */
-    private String influxDbUrl;
-
-    /**
-     * influxdb 令牌
-     */
-    private String influxToken;
-
-    /**
-     * influxdb 组织
-     */
-    private String influxOrg;
-
-    /**
-     * influxdb 数据库
-     */
-    private String influxBucket;
-
 }

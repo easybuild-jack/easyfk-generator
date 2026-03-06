@@ -96,9 +96,4 @@ public class ProjectProperties {
     private Boolean createPrdProject = Boolean.TRUE;
 
 
-    /**
-     * 是否包含influxdb
-     */
-    private Boolean influxDb = Boolean.FALSE;
-
 }

@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * @author liu yijun
@@ -74,25 +73,20 @@ public class ModelGenerator {
             for (ModelInfo modelInfo : modelList) {
                 try {
                     paramMap.put("modelInfo", modelInfo);
-                    boolean isInfluxDb = Optional.ofNullable(modelInfo.getInfluxDb()).orElse(Boolean.FALSE);
                     String modelPath = serverProjectOutputDir + CODE_DIR_PRE + entityPackage.replace(".", File.separator) + File.separator + StringUtil.upperFirstChar(modelInfo.getModelName()) + ".java";
-                    if (isInfluxDb) {
-                        CreateFileUtil.delAndCreateFile("model/influxdb_model.java.ftl", modelPath, paramMap, BASE_TEMPLATE_PATH);
+                    if (codeProperties.getOrmType().equals(OrmType.MYBATIS)) {
+                        CreateFileUtil.delAndCreateFile("mybatis/my_entity.java.ftl", modelPath, paramMap, BASE_TEMPLATE_PATH);
+                    } else if (codeProperties.getOrmType().equals(OrmType.MYBATIS_FLEX)) {
+                        CreateFileUtil.delAndCreateFile("mybatis/flex_entity.java.ftl", modelPath, paramMap, BASE_TEMPLATE_PATH);
+                    } else if (codeProperties.getOrmType().equals(OrmType.HIBERNATE)) {
+                        CreateFileUtil.delAndCreateFile("mybatis/hibernate_entity.java.ftl", modelPath, paramMap, BASE_TEMPLATE_PATH);
                     } else {
-                        if (codeProperties.getOrmType().equals(OrmType.MYBATIS)) {
-                            CreateFileUtil.delAndCreateFile("mybatis/my_entity.java.ftl", modelPath, paramMap, BASE_TEMPLATE_PATH);
-                        } else if (codeProperties.getOrmType().equals(OrmType.MYBATIS_FLEX)) {
-                            CreateFileUtil.delAndCreateFile("mybatis/flex_entity.java.ftl", modelPath, paramMap, BASE_TEMPLATE_PATH);
-                        } else if (codeProperties.getOrmType().equals(OrmType.HIBERNATE)) {
-                            CreateFileUtil.delAndCreateFile("mybatis/hibernate_entity.java.ftl", modelPath, paramMap, BASE_TEMPLATE_PATH);
-                        } else {
-                            CreateFileUtil.delAndCreateFile("mybatis/my_entity.java.ftl", modelPath, paramMap, BASE_TEMPLATE_PATH);
-                        }
-                        String mapperXmlPath = mapperXMLOutputDir + File.separator + StringUtil.upperFirstChar(modelInfo.getModelName()) + "Mapper.xml";
-                        CreateFileUtil.createOnNotExistFile("mybatis/myMapper.xml.ftl", mapperXmlPath, paramMap, BASE_TEMPLATE_PATH);
-                        String mapperPath = serverProjectOutputDir + CODE_DIR_PRE + mapperPackage.replace(".", File.separator) + File.separator + StringUtil.upperFirstChar(modelInfo.getModelName()) + "Mapper.java";
-                        CreateFileUtil.createOnNotExistFile("mybatis/mapper.java.ftl", mapperPath, paramMap, BASE_TEMPLATE_PATH);
+                        CreateFileUtil.delAndCreateFile("mybatis/my_entity.java.ftl", modelPath, paramMap, BASE_TEMPLATE_PATH);
                     }
+                    String mapperXmlPath = mapperXMLOutputDir + File.separator + StringUtil.upperFirstChar(modelInfo.getModelName()) + "Mapper.xml";
+                    CreateFileUtil.createOnNotExistFile("mybatis/myMapper.xml.ftl", mapperXmlPath, paramMap, BASE_TEMPLATE_PATH);
+                    String mapperPath = serverProjectOutputDir + CODE_DIR_PRE + mapperPackage.replace(".", File.separator) + File.separator + StringUtil.upperFirstChar(modelInfo.getModelName()) + "Mapper.java";
+                    CreateFileUtil.createOnNotExistFile("mybatis/mapper.java.ftl", mapperPath, paramMap, BASE_TEMPLATE_PATH);
                 } catch (Exception ex) {
                     log.error("生成模型失败：{}，原因：{}", modelInfo.getModelName(), ex.getMessage());
                 }

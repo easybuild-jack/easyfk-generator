@@ -25,9 +25,6 @@ dependencies {
 <#if projectType == "SINGLE" || projectType == "MICROSERVICE">
     implementation ('com.mcst:web-prd')
 </#if >
-<#if influxDb>
-    implementation ('com.mcst:orm-influxdb')
-</#if>
 }
 
 // 将依赖包复制到lib目录

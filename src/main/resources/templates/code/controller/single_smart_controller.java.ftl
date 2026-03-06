@@ -51,13 +51,11 @@ public class ${modelInfo.modelName}Controller {
     private I${modelInfo.modelName}Api ${modelInfo.modelName?uncap_first}Api;
 
 
-   <#if !modelInfo.influxDb>
     @Operation(summary = "详情")
     @GetMapping("/detail")
     public ResponseResult<${modelInfo.modelName}Resp> detail(${modelInfo.idType} id) {
         return RRBuilder.buildSuccessBody(this.${modelInfo.modelName?uncap_first}Api.queryById(id));
     }
-    </#if>
 
     @Operation(summary = "分页查询", description = "分页查询")
     @GetMapping("/queryPage")
@@ -81,7 +79,6 @@ public class ${modelInfo.modelName}Controller {
         return RRBuilder.buildBodyByBaseResult(this.${modelInfo.modelName?uncap_first}Api.save(requestParam));
     }
 
-    <#if !modelInfo.influxDb>
     @Operation(summary = "批量删除", description = "批量删除")
     @PostMapping("/delete")
     <#if createResourceAnnotation>
@@ -111,6 +108,5 @@ public class ${modelInfo.modelName}Controller {
         ModifyRequest<${modelInfo.modelName}Req> requestParam = MRPBuilder.<${modelInfo.modelName}Req>builder().paramList(list).build();
         return RRBuilder.buildBodyByBaseResult(this.${modelInfo.modelName?uncap_first}Api.save(requestParam));
     }
-    </#if>
     </#if>
 }

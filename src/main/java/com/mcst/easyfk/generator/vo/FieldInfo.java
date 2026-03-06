@@ -74,14 +74,4 @@ public class FieldInfo {
      * 默认值
      */
     private Object defaultValue;
-
-    /**
-     * 是否是influxdb的tag
-     */
-    private Boolean influxdbTag = Boolean.FALSE;
-
-    /**
-     * 是否是influxdb的时间戳
-     */
-    private Boolean influxdbTimestamp = Boolean.FALSE;
 }

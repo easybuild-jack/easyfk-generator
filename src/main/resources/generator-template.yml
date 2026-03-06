@@ -43,8 +43,6 @@ easyfk:
         create-repository: false
         # 是否生成 PRD 自动装配配置
         controller-auto-config: false
-        # 是否包含 InfluxDB 支持
-        influx-db: false
 
       # ==================== 代码配置 ====================
       code:
@@ -99,9 +97,3 @@ easyfk:
         #     # create-controller: true
         #   - model-name: Order
         #     model-desc: 订单信息
-
-        # ---------- InfluxDB (可选) ----------
-        # influx-db-url: http://localhost:8086
-        # influx-token: your-token
-        # influx-org: your-org
-        # influx-bucket: your-bucket

@@ -11,9 +11,6 @@ dependencies {
 <#if projectType != "SMART" >
     implementation ('com.mcst:log-${logType?lower_case}')
 </#if>
-<#if influxDb>
-    implementation ('com.mcst:orm-influxdb')
-</#if>
 }
 
 <#if projectType != "SMART" >

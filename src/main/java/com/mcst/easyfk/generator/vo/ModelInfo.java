@@ -102,11 +102,6 @@ public class ModelInfo {
 
 
     /**
-     * 是否是influxdb
-     */
-    private Boolean influxDb = Boolean.FALSE;
-
-    /**
      * 是否创建controller，控制当前model是否生成controller层
      */
     private Boolean createController = Boolean.TRUE;

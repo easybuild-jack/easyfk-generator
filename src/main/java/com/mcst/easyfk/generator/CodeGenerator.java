@@ -210,15 +210,8 @@ public class CodeGenerator {
                             String apiImplPath = serverProjectOutputDir + CODE_DIR_PRE
                                     + serverApiImplPackage.replace(".", File.separator) + File.separator
                                     + StringUtil.upperFirstChar(modelInfo.getModelName()) + "ApiServerImpl.java";
-                            // 根据是否为influxdb选择不同的模板
-                            boolean isInfluxDb = Optional.ofNullable(modelInfo.getInfluxDb()).orElse(Boolean.FALSE);
-                            if (isInfluxDb) {
-                                CreateFileUtil.createOnNotExistFile("server/serverFluxApiImpl.java.ftl", apiImplPath,
-                                        paramMap, BASE_TEMPLATE_PATH);
-                            } else {
-                                CreateFileUtil.createOnNotExistFile("server/serverApiImpl.java.ftl", apiImplPath,
-                                        paramMap, BASE_TEMPLATE_PATH);
-                            }
+                            CreateFileUtil.createOnNotExistFile("server/serverApiImpl.java.ftl", apiImplPath,
+                                    paramMap, BASE_TEMPLATE_PATH);
 
                         }
                         // controller
@@ -310,25 +303,14 @@ public class CodeGenerator {
             // Remote API
             String remoteApiPath = apiProjectOutputDir + CODE_DIR_PRE + remotePackage.replace(".", File.separator)
                     + File.separator + "I" + StringUtil.upperFirstChar(modelInfo.getModelName()) + "Remote.java";
-            boolean isInfluxDb = Optional.ofNullable(modelInfo.getInfluxDb()).orElse(Boolean.FALSE);
-            if (isInfluxDb) {
-                CreateFileUtil.createOnNotExistFile("springcloud/springcloudFluxRemote.java.ftl", remoteApiPath,
-                        paramMap, BASE_TEMPLATE_PATH);
-            } else {
-                CreateFileUtil.createOnNotExistFile("springcloud/springcloudRemote.java.ftl", remoteApiPath, paramMap,
-                        BASE_TEMPLATE_PATH);
-            }
+            CreateFileUtil.createOnNotExistFile("springcloud/springcloudRemote.java.ftl", remoteApiPath, paramMap,
+                    BASE_TEMPLATE_PATH);
             // Remote Impl
             String remoteImplPath = serverProjectCodeOutputDir + CODE_DIR_PRE
                     + remoteImplPackage.replace(".", File.separator) + File.separator
                     + StringUtil.upperFirstChar(modelInfo.getModelName()) + "RemoteImpl.java";
-            if (isInfluxDb) {
-                CreateFileUtil.createOnNotExistFile("springcloud/springcloudFluxRemoteImpl.java.ftl", remoteImplPath,
-                        paramMap, BASE_TEMPLATE_PATH);
-            } else {
-                CreateFileUtil.createOnNotExistFile("springcloud/springcloudRemoteImpl.java.ftl", remoteImplPath,
-                        paramMap, BASE_TEMPLATE_PATH);
-            }
+            CreateFileUtil.createOnNotExistFile("springcloud/springcloudRemoteImpl.java.ftl", remoteImplPath,
+                    paramMap, BASE_TEMPLATE_PATH);
             // SC Property
             String propertyPath = apiProjectOutputDir + CODE_DIR_PRE + propertyPackage.replace(".", File.separator)
                     + File.separator + StringUtil.upperFirstChar(codeProperties.getModuleName()) + "ApiProperties.java";
@@ -338,13 +320,8 @@ public class CodeGenerator {
                 String apiScImplPath = apiProjectOutputDir + CODE_DIR_PRE
                         + remoteApiImplPackage.replace(".", File.separator) + File.separator
                         + StringUtil.upperFirstChar(modelInfo.getModelName()) + "ApiScImpl.java";
-                if (isInfluxDb) {
-                    CreateFileUtil.createOnNotExistFile("springcloud/springcloudFluxApiImpl.java.ftl", apiScImplPath,
-                            paramMap, BASE_TEMPLATE_PATH);
-                } else {
-                    CreateFileUtil.createOnNotExistFile("springcloud/springcloudApiImpl.java.ftl", apiScImplPath,
-                            paramMap, BASE_TEMPLATE_PATH);
-                }
+                CreateFileUtil.createOnNotExistFile("springcloud/springcloudApiImpl.java.ftl", apiScImplPath,
+                        paramMap, BASE_TEMPLATE_PATH);
             }
         } catch (Exception e) {
             log.error("生成SpringCloud模块失败：{}", e.getMessage());
@@ -358,39 +335,23 @@ public class CodeGenerator {
             // Remote API
             String remoteApiPath = apiProjectOutputDir + CODE_DIR_PRE + remotePackage.replace(".", File.separator)
                     + File.separator + "I" + StringUtil.upperFirstChar(modelInfo.getModelName()) + "Remote.java";
-            boolean isInfluxDb = Optional.ofNullable(modelInfo.getInfluxDb()).orElse(Boolean.FALSE);
-            if (isInfluxDb) {
-                CreateFileUtil.createOnNotExistFile("dubbo/dubboFluxRemote.java.ftl", remoteApiPath, paramMap,
-                        BASE_TEMPLATE_PATH);
-            } else {
-                CreateFileUtil.createOnNotExistFile("dubbo/dubboRemote.java.ftl", remoteApiPath, paramMap,
-                        BASE_TEMPLATE_PATH);
-            }
+            CreateFileUtil.createOnNotExistFile("dubbo/dubboRemote.java.ftl", remoteApiPath, paramMap,
+                    BASE_TEMPLATE_PATH);
 
             // Remote Impl
             String remoteImplPath = serverProjectCodeOutputDir + CODE_DIR_PRE
                     + remoteImplPackage.replace(".", File.separator) + File.separator
                     + StringUtil.upperFirstChar(modelInfo.getModelName()) + "RemoteImpl.java";
-            if (isInfluxDb) {
-                CreateFileUtil.createOnNotExistFile("dubbo/dubboFluxRemoteImpl.java.ftl", remoteImplPath, paramMap,
-                        BASE_TEMPLATE_PATH);
-            } else {
-                CreateFileUtil.createOnNotExistFile("dubbo/dubboRemoteImpl.java.ftl", remoteImplPath, paramMap,
-                        BASE_TEMPLATE_PATH);
-            }
+            CreateFileUtil.createOnNotExistFile("dubbo/dubboRemoteImpl.java.ftl", remoteImplPath, paramMap,
+                    BASE_TEMPLATE_PATH);
 
             // Api Dubbo Impl (optional)
             if (createApiDubboImpl) {
                 String apiDubboImplPath = apiProjectOutputDir + CODE_DIR_PRE
                         + apiImplPackage.replace(".", File.separator) + File.separator
                         + StringUtil.upperFirstChar(modelInfo.getModelName()) + "ApiDubboImpl.java";
-                if (isInfluxDb) {
-                    CreateFileUtil.createOnNotExistFile("dubbo/dubboFluxApiImpl.java.ftl", apiDubboImplPath, paramMap,
-                            BASE_TEMPLATE_PATH);
-                } else {
-                    CreateFileUtil.createOnNotExistFile("dubbo/dubboApiImpl.java.ftl", apiDubboImplPath, paramMap,
-                            BASE_TEMPLATE_PATH);
-                }
+                CreateFileUtil.createOnNotExistFile("dubbo/dubboApiImpl.java.ftl", apiDubboImplPath, paramMap,
+                        BASE_TEMPLATE_PATH);
             }
         } catch (Exception e) {
             log.error("生成Dubbo模块失败：{}", e.getMessage());
@@ -414,14 +375,7 @@ public class CodeGenerator {
             if (ProjectType.SMART.equals(projectProperties.getProjectType()) && !modelInfo.getOnlyRepository()) {
                 String apiPath = apiProjectOutputDir + CODE_DIR_PRE + apiBasePackage.replace(".", File.separator)
                         + File.separator + "I" + StringUtil.upperFirstChar(modelInfo.getModelName()) + "Api.java";
-                // 根据是否为influxdb选择不同的模板
-                boolean isInfluxDb = Optional.ofNullable(modelInfo.getInfluxDb()).orElse(Boolean.FALSE);
-                if (isInfluxDb) {
-                    CreateFileUtil.createOnNotExistFile("api/base_influxdb_api.java.ftl", apiPath, paramMap,
-                            BASE_TEMPLATE_PATH);
-                } else {
-                    CreateFileUtil.createOnNotExistFile("api/base_api.java.ftl", apiPath, paramMap, BASE_TEMPLATE_PATH);
-                }
+                CreateFileUtil.createOnNotExistFile("api/base_api.java.ftl", apiPath, paramMap, BASE_TEMPLATE_PATH);
             }
         } catch (Exception e) {
             log.error("生成Api模块失败：{}", e.getMessage());
@@ -465,18 +419,9 @@ public class CodeGenerator {
         String implPath = serverProjectOutputDir + CODE_DIR_PRE + serviceImplPackage.replace(".", File.separator)
                 + File.separator + StringUtil.upperFirstChar(modelInfo.getModelName()) + "ServiceImpl.java";
         try {
-            // 根据是否为influxdb选择不同的模板
-            boolean isInfluxDb = Optional.ofNullable(modelInfo.getInfluxDb()).orElse(Boolean.FALSE);
-            if (isInfluxDb) {
-                CreateFileUtil.createOnNotExistFile("server/influxdb_service.java.ftl", path, paramMap,
-                        BASE_TEMPLATE_PATH);
-                CreateFileUtil.createOnNotExistFile("server/influxdb_serviceImpl.java.ftl", implPath, paramMap,
-                        BASE_TEMPLATE_PATH);
-            } else {
-                CreateFileUtil.createOnNotExistFile("server/my_service.java.ftl", path, paramMap, BASE_TEMPLATE_PATH);
-                CreateFileUtil.createOnNotExistFile("server/my_serviceImpl.java.ftl", implPath, paramMap,
-                        BASE_TEMPLATE_PATH);
-            }
+            CreateFileUtil.createOnNotExistFile("server/my_service.java.ftl", path, paramMap, BASE_TEMPLATE_PATH);
+            CreateFileUtil.createOnNotExistFile("server/my_serviceImpl.java.ftl", implPath, paramMap,
+                    BASE_TEMPLATE_PATH);
         } catch (Exception e) {
             log.error("生成Service模块失败：{}", e.getMessage());
         }
@@ -489,19 +434,10 @@ public class CodeGenerator {
         String implPath = serverProjectOutputDir + CODE_DIR_PRE + repositoryImpPackage.replace(".", File.separator)
                 + File.separator + StringUtil.upperFirstChar(modelInfo.getModelName()) + "RepositoryImpl.java";
         try {
-            // 根据是否为influxdb选择不同的模板
-            boolean isInfluxDb = Optional.ofNullable(modelInfo.getInfluxDb()).orElse(Boolean.FALSE);
-            if (isInfluxDb) {
-                CreateFileUtil.createOnNotExistFile("repository/influxdb_repository.java.ftl", path, paramMap,
-                        BASE_TEMPLATE_PATH);
-                CreateFileUtil.createOnNotExistFile("repository/influxdb_repositoryImpl.java.ftl", implPath, paramMap,
-                        BASE_TEMPLATE_PATH);
-            } else {
-                CreateFileUtil.createOnNotExistFile("repository/repository.java.ftl", path, paramMap,
-                        BASE_TEMPLATE_PATH);
-                CreateFileUtil.createOnNotExistFile("repository/repositoryImpl.java.ftl", implPath, paramMap,
-                        BASE_TEMPLATE_PATH);
-            }
+            CreateFileUtil.createOnNotExistFile("repository/repository.java.ftl", path, paramMap,
+                    BASE_TEMPLATE_PATH);
+            CreateFileUtil.createOnNotExistFile("repository/repositoryImpl.java.ftl", implPath, paramMap,
+                    BASE_TEMPLATE_PATH);
         } catch (Exception e) {
             log.error("生成Repository模块失败：{}", e.getMessage());
         }

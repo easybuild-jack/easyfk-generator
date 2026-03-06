@@ -137,7 +137,6 @@ public class CliConfigLoader {
         if ((b = getBoolean(map, "create-repository")) != null) pp.setCreateRepository(b);
         if ((b = getBoolean(map, "controller-auto-config")) != null) pp.setControllerAutoConfig(b);
         if ((b = getBoolean(map, "create-prd-project")) != null) pp.setCreatePrdProject(b);
-        if ((b = getBoolean(map, "influx-db")) != null) pp.setInfluxDb(b);
 
         return pp;
     }
@@ -161,11 +160,6 @@ public class CliConfigLoader {
         if ((v = getString(map, "resource-name")) != null) cp.setResourceName(v);
         if ((v = getString(map, "resource-id")) != null) cp.setResourceId(v);
         if ((v = getString(map, "resource-path")) != null) cp.setResourcePath(v);
-        if ((v = getString(map, "influx-db-url")) != null) cp.setInfluxDbUrl(v);
-        if ((v = getString(map, "influx-token")) != null) cp.setInfluxToken(v);
-        if ((v = getString(map, "influx-org")) != null) cp.setInfluxOrg(v);
-        if ((v = getString(map, "influx-bucket")) != null) cp.setInfluxBucket(v);
-
         OrmType ormType = getEnum(map, "orm-type", OrmType.class);
         if (ormType != null) cp.setOrmType(ormType);
 
@@ -204,7 +198,6 @@ public class CliConfigLoader {
                     Integer mi2;
                     if ((mb = getBoolean(m, "id-is-auto")) != null) mi.setIdIsAuto(mb);
                     if ((mb = getBoolean(m, "only-repository")) != null) mi.setOnlyRepository(mb);
-                    if ((mb = getBoolean(m, "influx-db")) != null) mi.setInfluxDb(mb);
                     if ((mb = getBoolean(m, "create-controller")) != null) mi.setCreateController(mb);
                     if ((mi2 = getInteger(m, "resource-sort")) != null) mi.setResourceSort(mi2);
                     if ((mi2 = getInteger(m, "model-resource-sort")) != null) mi.setModelResourceSort(mi2);

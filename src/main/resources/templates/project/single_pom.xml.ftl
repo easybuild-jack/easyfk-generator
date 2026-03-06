@@ -61,12 +61,6 @@
             <groupId>com.mcst</groupId>
             <artifactId>log-${logType?lower_case}</artifactId>
         </dependency>
-        <#if influxDb>
-        <dependency>
-            <groupId>com.mcst</groupId>
-            <artifactId>orm-influxdb</artifactId>
-        </dependency>
-        </#if>
     </dependencies>
 
     <build>

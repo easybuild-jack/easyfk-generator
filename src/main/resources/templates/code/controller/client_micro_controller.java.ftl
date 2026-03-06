@@ -38,13 +38,11 @@ public class ${modelInfo.modelName}Controller {
 </#if>
     private I${modelInfo.modelName}Remote ${modelInfo.modelName?uncap_first}Remote;
 
-   <#if !modelInfo.influxDb>
     @Operation(summary = "详情")
     @GetMapping("/detail")
     public ResponseResult<${modelInfo.modelName}Resp> detail(${modelInfo.idType} id) {
         return RRBuilder.buildSuccessBody(this.${modelInfo.modelName?uncap_first}Remote.queryById(id));
     }
-    </#if>
 
     @Operation(summary = "分页查询", description = "分页查询")
     @GetMapping("/queryPage")
@@ -68,7 +66,6 @@ public class ${modelInfo.modelName}Controller {
     }
 
 
-    <#if !modelInfo.influxDb>
     @Operation(summary = "批量删除", description = "批量删除")
     @PostMapping("/delete")
     public ResponseResult<?> delete(@Validated @RequestBody BatchBasicReq<${modelInfo.idType}> batchBase) {
@@ -76,6 +73,5 @@ public class ${modelInfo.modelName}Controller {
         ModifyRequest<${modelInfo.modelName}Req> requestParam = MRPBuilder.<${modelInfo.modelName}Req>builder().ids(idArray).build();
         return RRBuilder.buildBodyByBaseResult(this.${modelInfo.modelName?uncap_first}Remote.delete(requestParam));
     }
-    </#if>
 
 }

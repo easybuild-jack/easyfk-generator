@@ -43,12 +43,6 @@
             <groupId>com.mcst</groupId>
             <artifactId>orm-${ormType?lower_case}</artifactId>
         </dependency>
-    <#if influxDb>
-        <dependency>
-            <groupId>com.mcst</groupId>
-            <artifactId>orm-influxdb</artifactId>
-        </dependency>
-    </#if>
     <#if projectType != "SMART" >
         <dependency>
             <groupId>com.mcst</groupId>
