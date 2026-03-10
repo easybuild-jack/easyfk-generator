@@ -1,4 +1,4 @@
-# ============================================================
+﻿# ============================================================
 #  EasyFK Generator 一键安装脚本 (Windows PowerShell)
 #
 #  使用方式（管理员终端或普通终端均可）：
@@ -33,7 +33,7 @@ if (-not $javaCmd) {
     Write-Host "  下载地址: https://adoptium.net/zh-CN/" -ForegroundColor Gray
     exit 1
 }
-$javaVersion = & java -version 2>&1 | Select-Object -First 1
+$javaVersion = cmd /c "java -version 2>&1" | Select-Object -First 1
 Write-Host "  Java: $javaVersion" -ForegroundColor Gray
 
 # ---- 2. 创建安装目录 ----
