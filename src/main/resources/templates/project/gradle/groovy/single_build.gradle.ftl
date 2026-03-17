@@ -25,6 +25,23 @@ dependencies {
 <#if projectType == "SINGLE" || projectType == "MICROSERVICE">
     implementation ('com.mcst:web-prd')
 </#if >
+<#if modules?has_content>
+<#list modules as module>
+<#if module.hasPrd>
+<#if module.prdSplit>
+    implementation ('com.mcst:${module.name}-prd-${appType?lower_case}')
+<#else>
+    implementation ('com.mcst:${module.name}-prd')
+</#if>
+</#if>
+<#if module.hasServer>
+    implementation ('com.mcst:${module.name}-server')
+</#if>
+<#if module.hasOrm>
+    implementation ('com.mcst:${module.name}-orm-${ormModuleSuffix}')
+</#if>
+</#list>
+</#if>
 }
 
 // 将依赖包复制到lib目录

@@ -11,6 +11,16 @@ dependencies {
 <#if projectType != "SMART" >
     implementation ('com.mcst:log-${logType?lower_case}')
 </#if>
+<#if modules?has_content>
+<#list modules as module>
+<#if module.hasServer>
+    implementation ('com.mcst:${module.name}-server')
+</#if>
+<#if module.hasOrm>
+    implementation ('com.mcst:${module.name}-orm-${ormModuleSuffix}')
+</#if>
+</#list>
+</#if>
 }
 
 <#if projectType != "SMART" >

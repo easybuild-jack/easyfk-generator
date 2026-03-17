@@ -152,6 +152,44 @@ easyfk.config.generator.project:
 | `create-prd-project` | 否 | `true` | 是否生成 PRD（Controller）项目 |
 | `create-repository` | 否 | `false` | 是否生成独立的 Repository 子项目 |
 | `controller-auto-config` | 否 | `false` | 是否为 Controller 层生成 Spring Boot AutoConfiguration |
+| `app-type` | **是** | - | 应用类型，决定模块 PRD 依赖的变体。`BMS` — 后台管理端；`CLIENT` — 面向 C 端 |
+| `modules` | 否 | - | 业务模块列表，配置后自动在生成的项目中引入对应模块依赖。详见下方「模块配置」 |
+
+#### 模块配置（modules）
+
+用于声明项目需要引入的业务模块（如权限模块、交易模块、支付模块等）。生成器会根据项目类型自动将模块依赖分配到对应的子项目中。
+
+```yaml
+modules:
+  - name: auth           # [必填] 模块名称
+    prd-split: false     # auth 只有后台 prd，不区分 bms/client
+  - name: trading
+    has-orm: false        # trading 不需要持久化层
+  - name: payment         # 使用全部默认值
+```
+
+每个模块支持以下配置项：
+
+| 配置项 | 默认值 | 说明 |
+|--------|--------|------|
+| `name` | - | **必填**。模块名称，如 `auth`、`trading`、`payment` |
+| `has-prd` | `true` | 是否引入 PRD 子依赖 |
+| `prd-split` | `true` | PRD 是否区分 bms/client。`true` — 根据 `app-type` 或子项目类型自动选择 `{module}-prd-bms` / `{module}-prd-client`；`false` — 统一使用 `{module}-prd` |
+| `has-server` | `true` | 是否引入 Server 子依赖（`{module}-server`） |
+| `has-orm` | `true` | 是否引入 ORM 子依赖。具体 artifactId 由 `orm-type` 决定：MYBATIS → `{module}-orm-plus`，MYBATIS_FLEX → `{module}-orm-flex`，HIBERNATE → `{module}-orm-hibernate` |
+
+**依赖分配规则：**
+
+| 项目类型 | 子项目 | 引入的模块依赖 |
+|----------|--------|----------------|
+| **单体项目** | 主 pom / build.gradle | prd + server + orm 全部引入 |
+| **微服务 / Smart** | server | server + orm |
+| **微服务 / Smart** | prd-single | prd（根据 `app-type` + `prd-split` 决定变体） |
+| **微服务 / Smart** | prd-parent | 仅非拆分模块的 prd（如 `auth-prd`） |
+| **微服务 / Smart** | prd-bms | 拆分模块的 `{module}-prd-bms` |
+| **微服务 / Smart** | prd-client | 拆分模块的 `{module}-prd-client` |
+| **Smart** | cloud-api / cloud-provider | `{module}-cloud-api` / `{module}-cloud-provider` |
+| **Smart** | dubbo-api / dubbo-provider | `{module}-dubbo-api` / `{module}-dubbo-provider` |
 
 ### 代码配置（code）
 
@@ -235,6 +273,7 @@ easyfk:
         group-id: com.example
         project-name: my-app
         base-package: com.example.myapp
+        app-type: BMS
       code:
         module-name: myapp
         db-short-url: localhost:3306/my_database

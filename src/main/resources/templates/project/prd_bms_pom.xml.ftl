@@ -14,6 +14,20 @@
     <name>${artifactId!projectName }-prd-bms</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
+<#if modules?has_content>
+    <dependencies>
+<#list modules as module>
+<#if module.hasPrd>
+<#if module.prdSplit>
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>${module.name}-prd-bms</artifactId>
+        </dependency>
+</#if>
+</#if>
+</#list>
+    </dependencies>
+</#if>
     <#if projectType == "MICROSERVICE">
     <build>
         <finalName>${projectName}-prd-bms</finalName>

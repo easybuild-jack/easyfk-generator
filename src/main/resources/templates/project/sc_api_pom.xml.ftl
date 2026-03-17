@@ -29,5 +29,13 @@
             <artifactId>rpc-cloud</artifactId>
             <scope>provided</scope>
         </dependency>
+<#if modules?has_content>
+<#list modules as module>
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>${module.name}-cloud-api</artifactId>
+        </dependency>
+</#list>
+</#if>
     </dependencies>
 </project>

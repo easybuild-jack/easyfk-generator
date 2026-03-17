@@ -61,6 +61,35 @@
             <groupId>com.mcst</groupId>
             <artifactId>log-${logType?lower_case}</artifactId>
         </dependency>
+<#if modules?has_content>
+<#list modules as module>
+<#if module.hasPrd>
+<#if module.prdSplit>
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>${module.name}-prd-${appType?lower_case}</artifactId>
+        </dependency>
+<#else>
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>${module.name}-prd</artifactId>
+        </dependency>
+</#if>
+</#if>
+<#if module.hasServer>
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>${module.name}-server</artifactId>
+        </dependency>
+</#if>
+<#if module.hasOrm>
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>${module.name}-orm-${ormModuleSuffix}</artifactId>
+        </dependency>
+</#if>
+</#list>
+</#if>
     </dependencies>
 
     <build>

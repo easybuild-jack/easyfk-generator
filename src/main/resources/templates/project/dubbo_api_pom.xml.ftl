@@ -24,5 +24,13 @@
             <artifactId>dubbo</artifactId>
             <scope>provided</scope>
         </dependency>
+<#if modules?has_content>
+<#list modules as module>
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>${module.name}-dubbo-api</artifactId>
+        </dependency>
+</#list>
+</#if>
     </dependencies>
 </project>

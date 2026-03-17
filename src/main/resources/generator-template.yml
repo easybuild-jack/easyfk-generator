@@ -31,6 +31,15 @@ easyfk:
         framework-version: 3.2.12
         # 项目版本
         project-version: 1.0.0-SNAPSHOT
+        # [必填] 应用类型: BMS(后台管理端) / CLIENT(面向C端)
+        app-type:
+        # 业务模块列表 (可选)
+        # modules:
+        #   - name: auth
+        #     prd-split: false    # auth 不区分 bms/client，统一使用 auth-prd
+        #   - name: trading
+        #     has-orm: false      # trading 不需要持久化
+        #   - name: payment       # 默认: has-prd=true, prd-split=true, has-server=true, has-orm=true
 
       # ==================== 代码配置 ====================
       code:

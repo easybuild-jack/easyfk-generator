@@ -9,5 +9,12 @@ subprojects {
         <#if projectType != "SMART" >
         implementation ('com.mcst:log-${logType?lower_case}')
         </#if>
+<#if modules?has_content>
+<#list modules as module>
+<#if module.hasPrd && !module.prdSplit>
+        implementation ('com.mcst:${module.name}-prd')
+</#if>
+</#list>
+</#if>
     }
 }

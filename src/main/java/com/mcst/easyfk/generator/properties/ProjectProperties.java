@@ -4,6 +4,8 @@ import com.mcst.easyfk.generator.enums.*;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.List;
+
 /**
  * 创建项目配置
  *
@@ -95,5 +97,26 @@ public class ProjectProperties {
      */
     private Boolean createPrdProject = Boolean.TRUE;
 
+    /**
+     * 应用类型，BMS(后台管理端) / CLIENT(面向C端)，必填
+     */
+    private AppType appType;
+
+    /**
+     * 业务模块列表
+     */
+    private List<ModuleInfo> modules;
+
+    /**
+     * 获取模块 ORM 子依赖的 artifactId 后缀
+     * MYBATIS -> plus, MYBATIS_FLEX -> flex, HIBERNATE -> hibernate
+     */
+    public String getOrmModuleSuffix() {
+        return switch (ormType) {
+            case MYBATIS -> "plus";
+            case MYBATIS_FLEX -> "flex";
+            case HIBERNATE -> "hibernate";
+        };
+    }
 
 }

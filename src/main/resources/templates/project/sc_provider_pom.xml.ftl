@@ -35,5 +35,13 @@
             <groupId>com.mcst</groupId>
             <artifactId>remote-cloud</artifactId>
         </dependency>
+<#if modules?has_content>
+<#list modules as module>
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>${module.name}-cloud-provider</artifactId>
+        </dependency>
+</#list>
+</#if>
     </dependencies>
 </project>

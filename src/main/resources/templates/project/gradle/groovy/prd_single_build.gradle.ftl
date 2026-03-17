@@ -8,6 +8,17 @@ dependencies {
 <#if projectType != "SMART" >
     implementation ('com.mcst:log-${logType?lower_case}')
 </#if>
+<#if modules?has_content>
+<#list modules as module>
+<#if module.hasPrd>
+<#if module.prdSplit>
+    implementation ('com.mcst:${module.name}-prd-${appType?lower_case}')
+<#else>
+    implementation ('com.mcst:${module.name}-prd')
+</#if>
+</#if>
+</#list>
+</#if>
 }
 <#if projectType == "MICROSERVICE">
 // 将依赖包复制到lib目录

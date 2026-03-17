@@ -1,3 +1,12 @@
+<#if modules?has_content>
+dependencies {
+<#list modules as module>
+<#if module.hasPrd && module.prdSplit>
+    implementation ('com.mcst:${module.name}-prd-bms')
+</#if>
+</#list>
+}
+</#if>
 <#if projectType == "MICROSERVICE">
 
 // 将依赖包复制到lib目录

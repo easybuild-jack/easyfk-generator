@@ -14,7 +14,20 @@
     <name>${artifactId!projectName }-prd-client</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
-
+<#if modules?has_content>
+    <dependencies>
+<#list modules as module>
+<#if module.hasPrd>
+<#if module.prdSplit>
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>${module.name}-prd-client</artifactId>
+        </dependency>
+</#if>
+</#if>
+</#list>
+    </dependencies>
+</#if>
 
     <#if projectType == "MICROSERVICE">
     <build>

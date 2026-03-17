@@ -49,6 +49,22 @@
             <artifactId>log-${logType?lower_case}</artifactId>
         </dependency>
     </#if>
+<#if modules?has_content>
+<#list modules as module>
+<#if module.hasServer>
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>${module.name}-server</artifactId>
+        </dependency>
+</#if>
+<#if module.hasOrm>
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>${module.name}-orm-${ormModuleSuffix}</artifactId>
+        </dependency>
+</#if>
+</#list>
+</#if>
     </dependencies>
     <#if projectType != "SMART" >
     <build>
