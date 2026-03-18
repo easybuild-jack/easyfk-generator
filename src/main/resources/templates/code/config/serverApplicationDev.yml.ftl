@@ -28,28 +28,10 @@ dubbo:
 </#if>
 
 
-<#if ormType == 'MYBATIS'>
-<#if dbType == 'MYSQL'>
-#自动生成表结构 配置
-mybatis:
-  table:
-    #create 系统启动后，会将所有的表删除掉，然后根据model中配置的结构重新建表，该操作会破坏原有数据。
-    #update 系统会自动判断哪些表是新建的，哪些字段要修改类型等，哪些字段要删除，哪些字段要新增，该操作不会破坏原有数据。
-    #none 不做任何操作
-    #add 新增表/新增字段/新增索引/新增唯一约束的功能，不做修改和删除 (只在版本1.0.9.RELEASE及以上支持)。
-    auto: update
-  model:
-    pack: 'com.mcst.**.persistence.model' #扫描用于创建表的对象的包名，多个包用“,”隔开
-  database:
-    type: mysql #数据库类型 目前只支持mysql
-</#if>
+<#if ormType == 'MYBATIS' || ormType == 'MYBATIS_FLEX'>
 #mybatis-plus 配置
 mybatis-plus:
-<#if dbType == 'MYSQL'>
-  mapper-locations: classpath*:com/gitee/sunchenbin/mybatis/actable/mapping/*/*.xml,/mappings/**/*Mapper.xml
-<#else>
   mapper-locations: classpath*:/mappings/**/*Mapper.xml
-</#if>
   global-config:
     # 数据库相关配置
     db-config:

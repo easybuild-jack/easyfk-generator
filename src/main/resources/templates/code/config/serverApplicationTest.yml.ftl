@@ -27,14 +27,10 @@ dubbo:
   scan:
     base-packages: ${groupId }.**.service.impl
 </#if>
-<#if ormType == 'MYBATIS'>
+<#if ormType == 'MYBATIS' || ormType == 'MYBATIS_FLEX'>
 #mybatis-plus 配置
 mybatis-plus:
-<#if dbType == 'MYSQL'>
-  mapper-locations: classpath*:com/gitee/sunchenbin/mybatis/actable/mapping/*/*.xml,/mappings/**/*Mapper.xml
-<#else>
   mapper-locations: classpath*:/mappings/**/*Mapper.xml
-</#if>
   global-config:
     # 数据库相关配置
     db-config:
