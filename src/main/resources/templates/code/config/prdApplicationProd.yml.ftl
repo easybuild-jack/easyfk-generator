@@ -18,9 +18,22 @@ dubbo:
     retries: 2
 </#if>
 
-#开启CORS 配置
+#跨域配置  
 easyfk:
   config:
     web:
       cors:
-        open: true
+        open: true  
+  <#if appType == 'BMS'>
+  #资源初始化
+    resource:
+      init:
+        open: false
+        #group: orderManager       
+   </#if>
+#knife4j配置
+knife4j:
+  #是否启用增强设置
+  enable: true
+  #开启生产环境屏蔽
+  production: false

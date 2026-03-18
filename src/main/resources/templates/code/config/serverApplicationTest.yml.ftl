@@ -51,3 +51,28 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 </#if>
 
+<#if projectType == 'SINGLE' && appType == 'BMS'>
+easyfk:
+  config:
+    #跨域配置  
+    web:
+      cors:
+        open: true  
+
+    #系统用户初始化
+    auth:
+      init: false
+    #资源初始化
+    resource:
+      init:
+        open: false
+        #group: orderManager
+
+  
+#knife4j配置
+knife4j:
+  #是否启用增强设置
+  enable: true
+  #开启生产环境屏蔽
+  production: false
+</#if>
