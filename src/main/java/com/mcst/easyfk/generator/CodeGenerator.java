@@ -22,7 +22,7 @@ import java.util.*;
 import static com.mcst.easyfk.generator.util.GeneratorUtil.*;
 
 /**
- * @author liuyijun
+ * @author eb-jack
  */
 @Slf4j
 public class CodeGenerator {
@@ -111,6 +111,7 @@ public class CodeGenerator {
         paramMap.put("logName", projectProperties.getLogType().name().toLowerCase());
         paramMap.put("moduleName", codeProperties.getModuleName());
         paramMap.put("projectType", projectProperties.getProjectType());
+        paramMap.put("appType", projectProperties.getAppType());
         paramMap.put("ormType", codeProperties.getOrmType());
         paramMap.put("rpcType", projectProperties.getRpcType());
         paramMap.put("logType", projectProperties.getLogType());

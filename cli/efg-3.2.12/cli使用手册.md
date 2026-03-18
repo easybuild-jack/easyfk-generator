@@ -202,7 +202,7 @@ easyfk.config.generator.code:
 | 配置项 | 必填 | 默认值 | 说明 |
 |--------|------|--------|------|
 | `module-name` | **是** | - | 模块名称，用于生成配置类名、远程调用 serviceId 等。例：`myapp` |
-| `author` | 否 | `liu yijun` | 代码注释中的作者信息 |
+| `author` | 否 | `eb-jack` | 代码注释中的作者信息 |
 | `orm-type` | 否 | `MYBATIS` | ORM 类型（同 project 中的 orm-type） |
 | `spring-annotation` | 否 | `true` | 是否在生成的类上添加 Spring 注解（如 `@Repository`、`@Service`） |
 | `create-controller` | 否 | `true` | 是否生成 Controller 层代码 |

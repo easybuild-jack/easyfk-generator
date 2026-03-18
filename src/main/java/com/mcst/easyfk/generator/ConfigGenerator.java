@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author liu yijun
+ * @author eb-jack
  */
 @Slf4j
 public class ConfigGenerator {

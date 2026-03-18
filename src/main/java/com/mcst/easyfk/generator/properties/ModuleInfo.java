@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * 业务模块配置
  *
- * @author liu yijun
+ * @author eb-jack
  */
 @Data
 public class ModuleInfo {

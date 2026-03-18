@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 创建项目配置
  *
- * @author liu yijun
+ * @author eb-jack
  */
 @ConfigurationProperties(prefix = "easyfk.config.generator.project")
 @Data

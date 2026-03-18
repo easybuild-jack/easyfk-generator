@@ -3,7 +3,7 @@ package com.mcst.easyfk.generator.enums;
 /**
  * 应用类型
  *
- * @author liu yijun
+ * @author eb-jack
  */
 
 public enum AppType {

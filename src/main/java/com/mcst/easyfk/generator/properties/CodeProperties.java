@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 创建项目配置
  *
- * @author liu yijun
+ * @author eb-jack
  */
 @ConfigurationProperties(prefix = "easyfk.config.generator.code")
 @Data
@@ -40,7 +40,7 @@ public class CodeProperties {
     /**
      * 作者信息
      */
-    private String author = "liu yijun";
+    private String author = "eb-jack";
 
     private Boolean extendsSupperClass = Boolean.TRUE;
 

@@ -9,7 +9,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @author liu yijun
+ * @author eb-jack
  * @version 1.0
  */
 public class CreateFileUtil {

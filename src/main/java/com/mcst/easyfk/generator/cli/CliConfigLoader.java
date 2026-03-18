@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * CLI 配置加载器，从 YAML 文件解析生成器配置
  *
- * @author liu yijun
+ * @author eb-jack
  */
 public class CliConfigLoader {
 

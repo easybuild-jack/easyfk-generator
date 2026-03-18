@@ -1,7 +1,7 @@
 package com.mcst.easyfk.generator.enums;
 
 /**
- * @author liu yijun
+ * @author eb-jack
  */
 
 public enum ProjectType {

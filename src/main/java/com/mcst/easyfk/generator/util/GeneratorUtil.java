@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author liu yijun
+ * @author eb-jack
  * @version 1.0
  */
 public class GeneratorUtil {

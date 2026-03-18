@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * @author liu yijun
+ * @author eb-jack
  * @version 1.0
  */
 @Data

@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
 /**
  * EasyFK Generator CLI 入口
  *
- * @author liu yijun
+ * @author eb-jack
  */
 @Command(name = "efg",
         mixinStandardHelpOptions = true,

@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author liu yijun
+ * @author eb-jack
  */
 @Slf4j
 public class ProjectGenerator {

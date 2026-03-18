@@ -46,7 +46,7 @@ easyfk:
         # [必填] 模块名称
         module-name: myapp
         # 作者信息
-        author: liu yijun
+        author: eb-jack
         # [必填] 数据库短连接 (host:port/database)
         db-short-url: localhost:3306/my_database
         # 数据库用户名

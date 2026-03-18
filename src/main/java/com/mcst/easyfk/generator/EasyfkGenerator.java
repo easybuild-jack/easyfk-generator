@@ -7,7 +7,7 @@ import jakarta.annotation.Resource;
 /**
  * easyfk 代码生成器
  *
- * @author liuyijun
+ * @author eb-jack
  */
 public class EasyfkGenerator {
 
