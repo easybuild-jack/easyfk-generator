@@ -74,11 +74,11 @@ public class ModelGenerator {
                 try {
                     paramMap.put("modelInfo", modelInfo);
                     String modelPath = serverProjectOutputDir + CODE_DIR_PRE + entityPackage.replace(".", File.separator) + File.separator + StringUtil.upperFirstChar(modelInfo.getModelName()) + ".java";
-                    if (codeProperties.getOrmType().equals(OrmType.MYBATIS)) {
+                    if (projectProperties.getOrmType().equals(OrmType.MYBATIS)) {
                         CreateFileUtil.delAndCreateFile("mybatis/my_entity.java.ftl", modelPath, paramMap, BASE_TEMPLATE_PATH);
-                    } else if (codeProperties.getOrmType().equals(OrmType.MYBATIS_FLEX)) {
+                    } else if (projectProperties.getOrmType().equals(OrmType.MYBATIS_FLEX)) {
                         CreateFileUtil.delAndCreateFile("mybatis/flex_entity.java.ftl", modelPath, paramMap, BASE_TEMPLATE_PATH);
-                    } else if (codeProperties.getOrmType().equals(OrmType.HIBERNATE)) {
+                    } else if (projectProperties.getOrmType().equals(OrmType.HIBERNATE)) {
                         CreateFileUtil.delAndCreateFile("mybatis/hibernate_entity.java.ftl", modelPath, paramMap, BASE_TEMPLATE_PATH);
                     } else {
                         CreateFileUtil.delAndCreateFile("mybatis/my_entity.java.ftl", modelPath, paramMap, BASE_TEMPLATE_PATH);

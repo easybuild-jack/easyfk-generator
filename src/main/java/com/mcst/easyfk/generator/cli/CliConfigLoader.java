@@ -160,8 +160,6 @@ public class CliConfigLoader {
         if ((v = getString(map, "resource-name")) != null) cp.setResourceName(v);
         if ((v = getString(map, "resource-id")) != null) cp.setResourceId(v);
         if ((v = getString(map, "resource-path")) != null) cp.setResourcePath(v);
-        OrmType ormType = getEnum(map, "orm-type", OrmType.class);
-        if (ormType != null) cp.setOrmType(ormType);
 
         DbType dbType = getEnum(map, "db-type", DbType.class);
         if (dbType != null) cp.setDbType(dbType);

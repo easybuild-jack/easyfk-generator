@@ -1,7 +1,6 @@
 package com.mcst.easyfk.generator.properties;
 
 import com.mcst.easyfk.generator.enums.DbType;
-import com.mcst.easyfk.generator.enums.OrmType;
 import com.mcst.easyfk.generator.vo.ModelInfo;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -40,11 +39,6 @@ public class CodeProperties {
      * 表前缀
      */
     private String tablePrefix;
-
-    /**
-     * ORM类型
-     */
-    private OrmType ormType = OrmType.MYBATIS;
 
     private String dbShortUrl;
 

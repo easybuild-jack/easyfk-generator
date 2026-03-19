@@ -56,8 +56,6 @@ easyfk:
         # ---------- 表配置 ----------
         # 表前缀 (生成类名时自动去除)
         # table-prefix: base_
-        # ORM 类型: MYBATIS / MYBATIS_FLEX / HIBERNATE
-        orm-type: MYBATIS
         # 从数据库读取的表名 (逗号分隔，会自动解析表结构)
         from-db-tables: product,order
 

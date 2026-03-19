@@ -117,7 +117,7 @@ public class CodeGenerator {
         paramMap.put("moduleName", codeProperties.getModuleName());
         paramMap.put("projectType", projectProperties.getProjectType());
         paramMap.put("appType", projectProperties.getAppType());
-        paramMap.put("ormType", codeProperties.getOrmType());
+        paramMap.put("ormType", projectProperties.getOrmType());
         paramMap.put("rpcType", projectProperties.getRpcType());
         paramMap.put("logType", projectProperties.getLogType());
         paramMap.put("groupId", projectProperties.getGroupId());
