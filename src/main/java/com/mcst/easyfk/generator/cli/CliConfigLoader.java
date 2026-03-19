@@ -137,7 +137,6 @@ public class CliConfigLoader {
 
         if ((b = getBoolean(map, "create-repository")) != null) pp.setCreateRepository(b);
         if ((b = getBoolean(map, "controller-auto-config")) != null) pp.setControllerAutoConfig(b);
-        if ((b = getBoolean(map, "create-prd-project")) != null) pp.setCreatePrdProject(b);
 
         return pp;
     }
@@ -168,7 +167,6 @@ public class CliConfigLoader {
         if (dbType != null) cp.setDbType(dbType);
 
         if ((b = getBoolean(map, "spring-annotation")) != null) cp.setSpringAnnotation(b);
-        if ((b = getBoolean(map, "create-controller")) != null) cp.setCreateController(b);
         if ((b = getBoolean(map, "extends-supper-class")) != null) cp.setExtendsSupperClass(b);
         if ((b = getBoolean(map, "create-resource-annotation")) != null) cp.setCreateResourceAnnotation(b);
 

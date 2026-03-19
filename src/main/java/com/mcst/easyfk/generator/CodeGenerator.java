@@ -148,13 +148,13 @@ public class CodeGenerator {
             paramMap.put("remotePropertyPackage", remotePropertyPackage);
             paramMap.put("remoteApiImplPackage", remoteApiImplPackage);
         }
-        if (projectProperties.getCreatePrdProject() && codeProperties.getCreateController()) {
+        if (!PrdType.NONE.equals(projectProperties.getPrdType())) {
             paramMap.put("controllerBasePackage", controllerBasePackage);
         }
         if (!projectProperties.getProjectType().equals(ProjectType.SMART)) {
             createServerBaseCode(serverProjectOutputDir, paramMap);
             if (ProjectType.MICROSERVICE.equals(projectProperties.getProjectType())) {
-                if (projectProperties.getCreatePrdProject() && codeProperties.getCreateController()) {
+                if (!PrdType.NONE.equals(projectProperties.getPrdType())) {
                     createPrdBaseCode(controllerProjectOutputDir, paramMap);
                 }
             }
@@ -221,7 +221,7 @@ public class CodeGenerator {
 
                         }
                         // controller
-                        if (projectProperties.getCreatePrdProject() && codeProperties.getCreateController()) {
+                        if (!PrdType.NONE.equals(projectProperties.getPrdType())) {
                             createController(controllerProjectOutputDir, controllerBasePackage, paramMap, modelInfo);
                         }
                     }

@@ -157,9 +157,6 @@ public class ProjectGenerator {
         this.createConfigFile(rootConfigFile);
 
         //生成PRD层项目
-        if (!projectProperties.getCreatePrdProject()) {
-            return;
-        }
         if (!PrdType.NONE.equals(projectProperties.getPrdType())) {
             if (PrdType.SINGLE.equals(projectProperties.getPrdType())) {
                 //创建PRD Single项目

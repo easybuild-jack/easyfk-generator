@@ -93,11 +93,6 @@ public class ProjectProperties {
     private LogType logType = LogType.LOGBACK;
 
     /**
-     * 是否生成PRD项目
-     */
-    private Boolean createPrdProject = Boolean.TRUE;
-
-    /**
      * 应用类型，BMS(后台管理端) / CLIENT(面向C端)，必填
      */
     private AppType appType;

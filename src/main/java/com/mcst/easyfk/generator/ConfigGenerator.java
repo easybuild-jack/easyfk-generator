@@ -57,7 +57,7 @@ public class ConfigGenerator {
             if (createRemote) {
                 this.createRemoteConfig(projectRootDir, paramMap);
             }
-            boolean createPrd = projectProperties.getCreatePrdProject() && createRemote && projectProperties.getControllerAutoConfig();
+            boolean createPrd = !PrdType.NONE.equals(projectProperties.getPrdType()) && createRemote && projectProperties.getControllerAutoConfig();
             if (createPrd) {
                 this.createPrdConfig(projectRootDir, paramMap);
             }

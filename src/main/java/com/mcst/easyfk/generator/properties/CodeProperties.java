@@ -28,16 +28,6 @@ public class CodeProperties {
     private Boolean springAnnotation = Boolean.TRUE;
 
     /**
-     * 是否生成Controller层项目
-     */
-    private Boolean createController = Boolean.TRUE;
-
-    /**
-     * springcloud 默认serviceId配置
-     */
-    //private String defaultRemoteId = "server-all";
-
-    /**
      * 作者信息
      */
     private String author = "eb-jack";
@@ -108,6 +98,5 @@ public class CodeProperties {
      * 需要从数据库初始化生成Model的表
      */
     private String fromDbTables;
-
 
 }
