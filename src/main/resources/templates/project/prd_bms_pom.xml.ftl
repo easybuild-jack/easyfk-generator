@@ -5,7 +5,7 @@
 
     <parent>
         <groupId>${groupId }</groupId>
-        <artifactId>${artifactId!projectName }-prd</artifactId>
+        <artifactId>${artifactId!projectName }</artifactId>
         <version>${projectVersion }</version>
     </parent>
     <artifactId>${artifactId!projectName }-prd-bms</artifactId>
@@ -14,8 +14,32 @@
     <name>${artifactId!projectName }-prd-bms</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
-<#if modules?has_content>
+
     <dependencies>
+        <dependency>
+            <groupId>${groupId }</groupId>
+            <artifactId>${artifactId!projectName }-api</artifactId>
+            <version><#noparse>${project.parent.version}</#noparse></version>
+        </dependency>
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>web-prd</artifactId>
+        </dependency>
+        <#if projectType == "MICROSERVICE">
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>registry-nacos</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>rpc-${rpcType?lower_case}</artifactId>
+        </dependency>
+        </#if>
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>log-${logType?lower_case}</artifactId>
+        </dependency>
+<#if modules?has_content>
 <#list modules as module>
 <#if module.hasPrd>
 <#if module.prdSplit>
@@ -23,11 +47,16 @@
             <groupId>com.mcst</groupId>
             <artifactId>${module.name}-prd-bms</artifactId>
         </dependency>
+<#else>
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>${module.name}-prd</artifactId>
+        </dependency>
 </#if>
 </#if>
 </#list>
-    </dependencies>
 </#if>
+    </dependencies>
     <#if projectType == "MICROSERVICE">
     <build>
         <finalName>${projectName}-prd-bms</finalName>

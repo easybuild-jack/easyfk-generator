@@ -28,6 +28,9 @@ chmod +x install && ./install
 easyfk-generator 3.2.12
 ```
 
+> **安装位置**：Windows — `%USERPROFILE%\.easyfk-gen`；macOS / Linux — `~/.easyfk-gen`。
+> 安装脚本会自动将该目录加入用户 PATH，并在目录中放置 `efg` 启动脚本和 `easyfk-generator-3.2.12-cli.jar`。
+
 ---
 
 ## 卸载
@@ -107,6 +110,81 @@ Flag 可以组合，按需选择：
 | `efg init` | 在当前目录生成 `generator.yml` 配置模板 |
 | `efg init -o my-config.yml` | 指定输出文件名 |
 
+> 如果目标文件已存在，`efg init` 会提示警告并退出，不会覆盖已有文件。
+
+`efg init` 生成的模板内容如下：
+
+```yaml
+# ============================================================
+#  EasyFK Generator 配置文件
+#  使用方式：efg (在 generator.yml 所在目录执行)
+# ============================================================
+
+easyfk:
+  config:
+    generator:
+      # ==================== 项目配置 ====================
+      project:
+        # [必填] 项目输出目录
+        project-dir: D:\workspace\projects
+        # [必填] Maven groupId
+        group-id: com.example
+        # [必填] 项目名称
+        project-name: my-app
+        # [必填] 项目包根路径
+        base-package: com.example.myapp
+
+        # 项目类型: single(单体) / microservice(微服务) / smart(多栈微服务)
+        project-type: single
+        # 构建工具: maven / gradle
+        build-type: maven
+        # ORM 框架: MYBATIS / MYBATIS_FLEX / HIBERNATE
+        orm-type: MYBATIS
+        # PRD 层策略: none(不生成) / single(单一) / separation(分离: client + bms)
+        prd-type: single
+        # 日志框架: LOGBACK / LOG4J2
+        log-type: LOGBACK
+        # 框架版本
+        framework-version: 3.2.12
+        # 项目版本
+        project-version: 1.0.0-SNAPSHOT
+        # [必填] 应用类型: BMS(后台管理端) / CLIENT(面向C端)
+        app-type:
+        # 业务模块列表 (可选)
+        # modules:
+        #   - name: auth
+        #     prd-split: false
+        #   - name: trading
+        #     has-orm: false
+        #   - name: payment
+
+      # ==================== 代码配置 ====================
+      code:
+        # [必填] 模块名称
+        module-name: myapp
+        # 作者信息
+        author: eb-jack
+        # [必填] 数据库短连接 (host:port/database)
+        db-short-url: localhost:3306/my_database
+        # 数据库用户名
+        db-user: root
+        # 数据库密码
+        db-pwd: your_password
+        # ---------- 表配置 ----------
+        # table-prefix: base_
+        # ORM 类型: MYBATIS / MYBATIS_FLEX / HIBERNATE
+        orm-type: MYBATIS
+        # 从数据库读取的表名 (逗号分隔，会自动解析表结构)
+        from-db-tables: product,order
+
+        # ---------- 手动定义 Model (可选) ----------
+        # model-list:
+        #   - model-name: Product
+        #     model-desc: 商品信息
+        #   - model-name: Order
+        #     model-desc: 订单信息
+```
+
 ---
 
 ## 配置文件说明
@@ -125,6 +203,7 @@ easyfk.config.generator.project:
 | `group-id` | **是** | - | Maven groupId，例：`com.example` |
 | `project-name` | **是** | - | 项目名称，会作为项目根目录名和各子模块名的前缀。例：`my-app` |
 | `base-package` | **是** | - | Java 包根路径，所有生成的代码都在此包下。例：`com.example.myapp` |
+| `artifact-id` | 否 | 同 `project-name` | Maven artifactId，不填则默认取 `project-name` 的值 |
 | `project-type` | 否 | `smart` | 项目架构类型，决定生成的项目结构 |
 | | | | `single` — 单体项目，所有代码在一个工程中 |
 | | | | `microservice` — 微服务，生成 API + Server + PRD 模块，支持一种 RPC |
@@ -212,10 +291,27 @@ easyfk.config.generator.code:
 
 | 配置项 | 必填 | 默认值 | 说明 |
 |--------|------|--------|------|
-| `db-type` | 否 | `MYSQL` | 数据库类型。可选值：`MYSQL`、`POSTGRE_SQL`、`ORACLE`、`ORACLE_12C`、`MARIADB`、`SQL_SERVER`、`DM`（达梦）、`KINGBASE_ES`（人大金仓）、`GAUSS`、`OCEAN_BASE`、`CLICK_HOUSE` 等 |
+| `db-type` | 否 | `MYSQL` | 数据库类型。可选值见下方「支持的数据库类型」 |
 | `db-short-url` | **是**★ | - | 数据库短连接地址，格式：`host:port/database`。例：`localhost:3306/my_db`。★ 仅在使用 `from-db-tables` 时必填 |
 | `db-user` | 否 | `root` | 数据库用户名 |
 | `db-pwd` | **是**★ | - | 数据库密码。★ 仅在使用 `from-db-tables` 时必填 |
+
+**支持的数据库类型（db-type）：**
+
+| 值 | 数据库 | 值 | 数据库 |
+|---|---|---|---|
+| `MYSQL` | MySQL | `MARIADB` | MariaDB |
+| `POSTGRE_SQL` | PostgreSQL | `ORACLE` | Oracle |
+| `ORACLE_12C` | Oracle 12c+ | `SQL_SERVER` | SQL Server |
+| `SQL_SERVER2005` | SQL Server 2005 | `DM` | 达梦 |
+| `KINGBASE_ES` | 人大金仓 | `GAUSS` | GaussDB |
+| `OCEAN_BASE` | OceanBase | `CLICK_HOUSE` | ClickHouse |
+| `DB2` | IBM DB2 | `H2` | H2 |
+| `HSQL` | HSQLDB | `SQLITE` | SQLite |
+| `PHOENIX` | Apache Phoenix | `GBASE` | 南大通用 GBase |
+| `OSCAR` | 神通 OSCAR | `SYBASE` | Sybase |
+| `XU_GU` | 虚谷 | `FIREBIRD` | Firebird |
+| `OTHER` | 其他 | | |
 
 #### 表配置
 
@@ -239,6 +335,8 @@ model-list:
     only-repository: false      # 是否只生成 Repository 层，不生成 Service/Controller
     create-controller: true     # 是否为该 Model 生成 Controller
     table-prefix: base_         # 单独指定该 Model 的表前缀（覆盖全局 table-prefix）
+    forbidden-filed: field1,field2  # 需要排除的字段，逗号分隔，生成时会跳过这些字段
+    model-resource-sort: 10100  # 该 Model 的资源权限排序值
 ```
 
 > `from-db-tables` 和 `model-list` 可以同时使用。如果同一个 Model 在两边都有定义，`model-list` 中的配置优先（可用于覆盖自动解析的默认值）。
@@ -329,8 +427,16 @@ efg -c prod-generator.yml -m    # 生产环境，仅生成 Model
 
 **Q: 支持哪些数据库？**
 
-MySQL、PostgreSQL、Oracle、MariaDB、SQL Server、达梦、人大金仓、GaussDB、OceanBase 等 22 种数据库。
+MySQL、PostgreSQL、Oracle、MariaDB、SQL Server、达梦、人大金仓、GaussDB、OceanBase、ClickHouse、DB2、H2、SQLite、GBase、OSCAR、Sybase、Firebird 等 23 种数据库。完整列表见上方「支持的数据库类型」表格。
 
 **Q: 配置文件格式和 Spring Boot 的 application.yml 一样吗？**
 
 完全一致。如果你已有 Spring Boot 项目中的生成器配置，直接复制过来即可。
+
+**Q: `efg init` 会覆盖已有的配置文件吗？**
+
+不会。如果目标文件已存在，`efg init` 会提示警告并退出，不覆盖。
+
+**Q: 安装目录在哪里？如何完全卸载？**
+
+安装目录为 Windows `%USERPROFILE%\.easyfk-gen`、macOS / Linux `~/.easyfk-gen`。运行卸载脚本（`uninstall.bat` 或 `./uninstall`）会自动删除该目录并清理 PATH。macOS / Linux 卸载后需手动删除 shell 配置文件（如 `~/.zshrc`）中的 PATH 行。

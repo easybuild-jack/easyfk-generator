@@ -212,21 +212,21 @@ public class ConfigGenerator {
 
     private void createPrdConfig(String projectRootDir, Map<String, Object> paramMap) throws Exception {
         String prdConfigPackage = projectProperties.getBasePackage() + ".config";
-        String prdBaseDir = projectRootDir + File.separator + projectProperties.getProjectName() + "-prd";
         String prdControllerPackage = projectProperties.getBasePackage() + ".controller";
         paramMap.put("prdConfigPackage", prdConfigPackage);
         paramMap.put("prdControllerPackage", prdControllerPackage);
         String configJavaName = StringUtil.upperFirstChar(codeProperties.getModuleName()) + "ControllerConfig";
         String configFileSetName = "controllerFileSet";
         if (PrdType.SEPARATION.equals(projectProperties.getPrdType())) {
-            String prdClientDir = prdBaseDir + File.separator + projectProperties.getProjectName() + "-prd-client";
+            String prdClientDir = projectRootDir + File.separator + projectProperties.getProjectName() + "-prd-client";
             configJavaName = StringUtil.upperFirstChar(codeProperties.getModuleName()) + "ClientControllerConfig";
             createControllerConfig(prdClientDir, prdControllerPackage, configFileSetName, prdConfigPackage, configJavaName, paramMap);
-            String prdBmsDir = prdBaseDir + File.separator + projectProperties.getProjectName() + "-prd-bms";
+            String prdBmsDir = projectRootDir + File.separator + projectProperties.getProjectName() + "-prd-bms";
             configJavaName = StringUtil.upperFirstChar(codeProperties.getModuleName()) + "BmsControllerConfig";
             configFileSetName = "bmsControllerFileSet";
             createControllerConfig(prdBmsDir, prdControllerPackage, configFileSetName, prdConfigPackage, configJavaName, paramMap);
         } else {
+            String prdBaseDir = projectRootDir + File.separator + projectProperties.getProjectName() + "-prd";
             createControllerConfig(prdBaseDir, prdControllerPackage, configFileSetName, prdConfigPackage, configJavaName, paramMap);
         }
 

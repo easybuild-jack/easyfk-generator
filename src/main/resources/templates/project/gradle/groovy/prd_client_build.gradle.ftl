@@ -1,12 +1,25 @@
-<#if modules?has_content>
 dependencies {
+    api project(':${artifactId!projectName }-api')
+    api ('com.mcst:web-prd')
+    implementation('com.mcst:rpc-${rpcType?lower_case}')
+    <#if projectType == "MICROSERVICE">
+    implementation('com.mcst:registry-nacos')
+    </#if>
+    <#if projectType != "SMART" >
+    implementation ('com.mcst:log-${logType?lower_case}')
+    </#if>
+<#if modules?has_content>
 <#list modules as module>
-<#if module.hasPrd && module.prdSplit>
+<#if module.hasPrd>
+<#if module.prdSplit>
     implementation ('com.mcst:${module.name}-prd-client')
+<#else>
+    implementation ('com.mcst:${module.name}-prd')
+</#if>
 </#if>
 </#list>
-}
 </#if>
+}
 <#if projectType == "MICROSERVICE">
 // 将依赖包复制到lib目录
 tasks.register('copyJar', Copy) {

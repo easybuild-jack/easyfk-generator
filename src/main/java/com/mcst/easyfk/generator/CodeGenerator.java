@@ -53,8 +53,13 @@ public class CodeGenerator {
         String serverProjectOutputDir = projectRootDir + File.separator + projectProperties.getProjectName()
                 + "-server";
         String apiProjectOutputDir = projectRootDir + File.separator + projectProperties.getProjectName() + "-api";
-        String controllerProjectOutputDir = projectRootDir + File.separator + projectProperties.getProjectName()
-                + "-prd";
+        String controllerProjectOutputDir;
+        if (PrdType.SEPARATION.equals(projectProperties.getPrdType())) {
+            controllerProjectOutputDir = projectRootDir;
+        } else {
+            controllerProjectOutputDir = projectRootDir + File.separator + projectProperties.getProjectName()
+                    + "-prd";
+        }
         String scProjectOutputDir = projectRootDir + File.separator + projectProperties.getProjectName() + "-remote";
 
         // 项目包路径

@@ -183,29 +183,9 @@ public class ProjectGenerator {
                 this.createConfigFile(rootConfigFile);
                 // CreateFileUtil.createOnNotExistFile(templateFileName, prdPomFile, projectProperties,BASE_TEMPLATE_PATH);
             } else {
-                //创建PRD Parent项目
-                String prdParentProjectName = projectName + "-prd";
-                String prdParentProjectRoot = projectRoot + File.separator + prdParentProjectName;
-                //templateFileName = "prd_parent_pom.xml.ftl";
-                if (BuildType.MAVEN.equals(projectProperties.getBuildType())) {
-                    templateFileName = "prd_parent_pom.xml.ftl";
-                } else {
-                    if (GradleType.GROOVY.equals(projectProperties.getGradleType())) {
-                        templateFileName = "gradle/groovy/prd_parent_build.gradle.ftl";
-                    } else {
-                        templateFileName = "gradle/kotlin/prd_parent_build.gradle.kts.ftl";
-                    }
-                }
-
-                rootConfigFile.put("pomFile", prdParentProjectRoot + File.separator + "pom.xml");
-                rootConfigFile.put("groovyBuildFile", prdParentProjectRoot + File.separator + "build.gradle");
-                rootConfigFile.put("kotlinBuildFile", prdParentProjectRoot + File.separator + "build.gradle.kts");
-                rootConfigFile.put("templateFileName", templateFileName);
-                this.createConfigFile(rootConfigFile);
-
-                //创建PRD Client项目
+                //创建PRD Client项目（与server平级）
                 String prdClientProjectName = projectName + "-prd-client";
-                String prdClientProjectRoot = prdParentProjectRoot + File.separator + prdClientProjectName;
+                String prdClientProjectRoot = projectRoot + File.separator + prdClientProjectName;
                 createCodeDir(prdClientProjectRoot, true, true);
 
                 if (BuildType.MAVEN.equals(projectProperties.getBuildType())) {
@@ -223,9 +203,9 @@ public class ProjectGenerator {
                 rootConfigFile.put("templateFileName", templateFileName);
                 this.createConfigFile(rootConfigFile);
 
-                //创建PRD Bms项目
+                //创建PRD Bms项目（与server平级）
                 String prdBmsProjectName = projectName + "-prd-bms";
-                String prdBmsProjectRoot = prdParentProjectRoot + File.separator + prdBmsProjectName;
+                String prdBmsProjectRoot = projectRoot + File.separator + prdBmsProjectName;
                 createCodeDir(prdBmsProjectRoot, true, true);
 
                 if (BuildType.MAVEN.equals(projectProperties.getBuildType())) {

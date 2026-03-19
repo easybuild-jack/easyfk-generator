@@ -14,8 +14,12 @@
         <#if projectType =="SMART" >
         <module>${artifactId!projectName }-remote</module>
         </#if>
-        <#if prdType !="none" >
+        <#if prdType =="SINGLE" >
         <module>${artifactId!projectName }-prd</module>
+        </#if>
+        <#if prdType =="SEPARATION" >
+        <module>${artifactId!projectName }-prd-client</module>
+        <module>${artifactId!projectName }-prd-bms</module>
         </#if>
     </modules>
     <name>${artifactId!projectName }</name>

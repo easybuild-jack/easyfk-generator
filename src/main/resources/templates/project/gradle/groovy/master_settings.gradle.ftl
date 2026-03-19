@@ -27,12 +27,10 @@ include '${artifactId!projectName }-remote:${artifactId!projectName }-dubbo-prov
 findProject(':${artifactId!projectName }-remote:${artifactId!projectName }-dubbo-provider')?.name = '${artifactId!projectName }-dubbo-provider'
 </#if>
 
-<#if prdType !="NONE" >
+<#if prdType =="SINGLE" >
 include '${artifactId!projectName }-prd'
-  <#if prdType =="SEPARATION" >
-include '${artifactId!projectName }-prd:${artifactId!projectName }-prd-client'
-findProject(':${artifactId!projectName }-prd:${artifactId!projectName }-prd-client')?.name = '${artifactId!projectName }-prd-client'
-include '${artifactId!projectName }-prd:${artifactId!projectName }-prd-bms'
-findProject(':${artifactId!projectName }-prd:${artifactId!projectName }-prd-bms')?.name = '${artifactId!projectName }-prd-bms'
-  </#if>
+</#if>
+<#if prdType =="SEPARATION" >
+include '${artifactId!projectName }-prd-client'
+include '${artifactId!projectName }-prd-bms'
 </#if>
