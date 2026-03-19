@@ -28,6 +28,10 @@
     <#if projectType == "MICROSERVICE">
         <dependency>
             <groupId>com.mcst</groupId>
+            <artifactId>doc-knife4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.mcst</groupId>
             <artifactId>registry-nacos</artifactId>
         </dependency>
         <dependency>

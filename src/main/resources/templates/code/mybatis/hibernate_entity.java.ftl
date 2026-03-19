@@ -13,6 +13,23 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+<#assign hasLocalDateTime = false /><#assign hasLocalDate = false /><#assign hasLocalTime = false /><#assign hasBigDecimal = false /><#assign hasUUID = false />
+<#if modelInfo.fieldList??><#list modelInfo.fieldList as field><#if field.type == "LocalDateTime"><#assign hasLocalDateTime = true /></#if><#if field.type == "LocalDate"><#assign hasLocalDate = true /></#if><#if field.type == "LocalTime"><#assign hasLocalTime = true /></#if><#if field.type == "BigDecimal"><#assign hasBigDecimal = true /></#if><#if field.type == "UUID"><#assign hasUUID = true /></#if></#list></#if>
+<#if hasLocalDateTime>
+import java.time.LocalDateTime;
+</#if>
+<#if hasLocalDate>
+import java.time.LocalDate;
+</#if>
+<#if hasLocalTime>
+import java.time.LocalTime;
+</#if>
+<#if hasBigDecimal>
+import java.math.BigDecimal;
+</#if>
+<#if hasUUID>
+import java.util.UUID;
+</#if>
 
 /**
 * 作者: ${author}

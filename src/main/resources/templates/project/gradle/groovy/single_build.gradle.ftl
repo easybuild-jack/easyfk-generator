@@ -29,6 +29,7 @@ dependencies {
     implementation ('com.mcst:log-${logType?lower_case}')
 <#if projectType == "SINGLE" || projectType == "MICROSERVICE">
     implementation ('com.mcst:web-prd')
+    implementation ('com.mcst:doc-knife4j')
 </#if >
 <#if modules?has_content>
 <#list modules as module>

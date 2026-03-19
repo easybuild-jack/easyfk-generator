@@ -1,9 +1,11 @@
 dependencies {
     api project(':${artifactId!projectName }-api')
     implementation ('com.mcst:web-prd')
+    
     implementation('com.mcst:rpc-${rpcType?lower_case}')
 <#if projectType == "MICROSERVICE">
     implementation('com.mcst:registry-nacos')
+    implementation ('com.mcst:doc-knife4j')
 </#if>
 <#if projectType != "SMART" >
     implementation ('com.mcst:log-${logType?lower_case}')
