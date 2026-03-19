@@ -103,6 +103,11 @@ public class ProjectProperties {
     private AppType appType;
 
     /**
+     * 数据库类型
+     */
+    private DbType dbType = DbType.MYSQL;
+
+    /**
      * 业务模块列表
      */
     private List<ModuleInfo> modules;

@@ -33,6 +33,7 @@ public class CliConfigLoader {
             }
             this.projectProperties = parseProjectProperties(getMap(generatorConfig, "project"));
             this.codeProperties = parseCodeProperties(getMap(generatorConfig, "code"));
+            this.projectProperties.setDbType(this.codeProperties.getDbType());
         }
     }
 

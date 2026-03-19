@@ -8,6 +8,7 @@ import com.mcst.easyfk.generator.enums.DbType;
 import com.mcst.easyfk.generator.properties.CodeProperties;
 import com.mcst.easyfk.generator.vo.FieldInfo;
 import com.mcst.easyfk.generator.vo.ModelInfo;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -18,6 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author eb-jack
  * @version 1.0
  */
+@Slf4j
 public class GeneratorUtil {
 
     private static final List<String> parentField = List.of("deleted", "insertTime", "lastUpdateTime");
@@ -60,7 +62,7 @@ public class GeneratorUtil {
                     try {
                         getModelInfoFromDatabase(codeProperties, table, modelInfo);
                     } catch (SQLException e) {
-                        e.printStackTrace();
+                        log.error("从数据库获取表[{}]元数据失败: {}", table, e.getMessage(), e);
                     }
                 }
             }
@@ -137,21 +139,32 @@ public class GeneratorUtil {
             throw new BusinessException("jdbcUrl格式错误，无法提取数据库名称");
         }
 
-        // 构建不包含数据库名称的连接字符串
+        // 构建不包含数据库名称的连接字符串，并加载对应驱动
+        String driverClass = null;
         if (DbType.MYSQL.equals(codeProperties.getDbType())) {
             jdbcUrl = String.format(MYSQL_URL_TEMPLATE8, codeProperties.getDbShortUrl());
+            driverClass = MYSQL_DRIVER;
         } else if (DbType.POSTGRE_SQL.equals(codeProperties.getDbType())) {
             jdbcUrl = String.format(POSTGRESQL_URL_TEMPLATE, codeProperties.getDbShortUrl());
-
+            driverClass = POSTGRESQL_DRIVER;
         } else if (DbType.ORACLE_12C.equals(codeProperties.getDbType()) || DbType.ORACLE.equals(codeProperties.getDbType())) {
             jdbcUrl = String.format(ORACLE_URL_TEMPLATE, codeProperties.getDbShortUrl());
+            driverClass = ORACLE_DRIVER;
+        }
+        if (driverClass != null) {
+            try {
+                Class.forName(driverClass);
+            } catch (ClassNotFoundException ignored) {
+            }
         }
         Connection connection = DriverManager.getConnection(jdbcUrl, codeProperties.getDbUser(), codeProperties.getDbPwd());
         DatabaseMetaData metaData = connection.getMetaData();
 
+        // PostgreSQL 需要指定 schema 为 public，MySQL 用 null 即可
+        String schemaPattern = DbType.POSTGRE_SQL.equals(codeProperties.getDbType()) ? "public" : null;
+
         if (EmptyUtil.isEmpty(modelInfo.getModelDesc())) {
-            // 获取 表注释，明确指定catalog
-            ResultSet tables = metaData.getTables(databaseName, null, tableName, new String[]{"TABLE"});
+            ResultSet tables = metaData.getTables(databaseName, schemaPattern, tableName, new String[]{"TABLE"});
             if (tables.next()) {
                 String tableComment = tables.getString("REMARKS");
                 if (EmptyUtil.isNotEmpty(tableComment)) {
@@ -160,9 +173,8 @@ public class GeneratorUtil {
             }
         }
 
-        // 明确指定catalog获取字段信息
-        ResultSet columns = metaData.getColumns(databaseName, null, tableName, null);
-        ResultSet primaryKeys = metaData.getPrimaryKeys(databaseName, null, tableName);
+        ResultSet columns = metaData.getColumns(databaseName, schemaPattern, tableName, null);
+        ResultSet primaryKeys = metaData.getPrimaryKeys(databaseName, schemaPattern, tableName);
         while (columns.next()) {
             createFieldInfo(columns, fieldInfoList);
         }

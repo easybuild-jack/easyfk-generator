@@ -21,6 +21,11 @@ dependencies {
     annotationProcessor(libs.lombok, libs.processor,libs.lombokMapstruct,libs.mapstructProcessor)
     testAnnotationProcessor(libs.lombok, libs.processor,libs.lombokMapstruct,libs.mapstructProcessor)
     implementation ('com.mcst:orm-${ormType?lower_case}')
+<#if dbType?? && dbType.name() == "POSTGRE_SQL">
+    implementation ('com.mcst:db-postgresql')
+<#else>
+    implementation ('com.mcst:db-mysql')
+</#if>
     implementation ('com.mcst:log-${logType?lower_case}')
 <#if projectType == "SINGLE" || projectType == "MICROSERVICE">
     implementation ('com.mcst:web-prd')

@@ -57,6 +57,17 @@
             <groupId>com.mcst</groupId>
             <artifactId>orm-${ormType?lower_case}</artifactId>
         </dependency>
+<#if dbType?? && dbType.name() == "POSTGRE_SQL">
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>db-postgresql</artifactId>
+        </dependency>
+<#else>
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>db-mysql</artifactId>
+        </dependency>
+</#if>
         <dependency>
             <groupId>com.mcst</groupId>
             <artifactId>log-${logType?lower_case}</artifactId>
