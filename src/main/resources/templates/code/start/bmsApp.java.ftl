@@ -17,8 +17,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients(basePackages = "${groupId }.**.api.remote")
 </#if>
 @SpringBootApplication
-public class BmsApp {
+public class ${appClassName} {
     public static void main(String[] args) {
-        SpringApplication.run(BmsApp.class, args);
+        SpringApplication.run(${appClassName}.class, args);
     }
 }

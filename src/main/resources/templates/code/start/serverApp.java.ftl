@@ -13,12 +13,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 * @since ${date}
 */
 @SpringBootApplication
-public class ServerApp {
+public class ${appClassName} {
     public static void main(String[] args) {
     <#if ormType == "MYBATIS">
-        ApplicationStarter.run(ServerApp.class, args);
+        ApplicationStarter.run(${appClassName}.class, args);
     <#else >
-        SpringApplication.run(ServerApp.class, args);
+        SpringApplication.run(${appClassName}.class, args);
     </#if>
     }
 }

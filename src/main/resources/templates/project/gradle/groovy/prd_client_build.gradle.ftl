@@ -40,7 +40,7 @@ tasks.named('jar') {
     manifest {
         attributes(
             'Class-Path': configurations.runtimeClasspath.files.collect { "lib/$it.name" }.join(' '),
-            'Main-Class': '${basePackage}.ClientApp'
+            'Main-Class': '${basePackage}.${moduleName?cap_first}PrdClientApp'
         )
     }
 }

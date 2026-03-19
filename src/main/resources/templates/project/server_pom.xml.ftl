@@ -91,7 +91,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>${basePackage}.ServerApp</mainClass>
+                            <mainClass>${basePackage}.${moduleName?cap_first}ServerApp</mainClass>
                             <useUniqueVersions>false</useUniqueVersions>
                         </manifest>
                     </archive>

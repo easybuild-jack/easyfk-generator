@@ -564,8 +564,10 @@ public class CodeGenerator {
     private void createServerBaseCode(String serverProjectOutputDir, Map<String, Object> paramMap) {
         try {
             // 生成启动类
+            String appClassName = StringUtil.upperFirstChar(codeProperties.getModuleName()) + "ServerApp";
+            paramMap.put("appClassName", appClassName);
             String path = basePackage.replace(".", File.separator);
-            String filePath = serverProjectOutputDir + CODE_DIR_PRE + path + File.separator + "ServerApp.java";
+            String filePath = serverProjectOutputDir + CODE_DIR_PRE + path + File.separator + appClassName + ".java";
             CreateFileUtil.createOnNotExistFile("start/serverApp.java.ftl", filePath, paramMap, BASE_TEMPLATE_PATH);
             // 生成yml配置文件
             String configPath = serverProjectOutputDir + File.separator + "config" + File.separator + "application"
@@ -599,9 +601,11 @@ public class CodeGenerator {
         try {
             if (PrdType.SINGLE.equals(projectProperties.getPrdType())) {
                 // 生成启动类
+                String appClassName = StringUtil.upperFirstChar(codeProperties.getModuleName()) + "PrdApp";
+                paramMap.put("appClassName", appClassName);
                 String mainClassPath = basePackage.replace(".", File.separator);
                 String mainClassFile = controllerProjectOutputDir + CODE_DIR_PRE + mainClassPath + File.separator
-                        + "ClientApp.java";
+                        + appClassName + ".java";
                 CreateFileUtil.createOnNotExistFile("start/clientApp.java.ftl", mainClassFile, paramMap,
                         BASE_TEMPLATE_PATH);
                 // 生成配置文件
@@ -625,9 +629,11 @@ public class CodeGenerator {
                 createLogConfig(controllerProjectOutputDir, paramMap);
             } else {
                 // 生成Client启动类
+                String clientAppClassName = StringUtil.upperFirstChar(codeProperties.getModuleName()) + "PrdClientApp";
+                paramMap.put("appClassName", clientAppClassName);
                 String mainClassPath = basePackage.replace(".", File.separator);
                 String mainClassFile = controllerProjectOutputDir + File.separator + projectProperties.getProjectName()
-                        + "-prd-client" + CODE_DIR_PRE + mainClassPath + File.separator + "ClientApp" + ".java";
+                        + "-prd-client" + CODE_DIR_PRE + mainClassPath + File.separator + clientAppClassName + ".java";
                 CreateFileUtil.createOnNotExistFile("start/clientApp.java.ftl", mainClassFile, paramMap,
                         BASE_TEMPLATE_PATH);
                 // 生成配置文件
@@ -658,10 +664,12 @@ public class CodeGenerator {
                         + "-prd-client" + File.separator + "config" + File.separator + logName;
                 CreateFileUtil.createOnNotExistFile(logTemplateFile, logPath, paramMap, BASE_TEMPLATE_PATH);
                 // 生成Bms启动类
+                String bmsAppClassName = StringUtil.upperFirstChar(codeProperties.getModuleName()) + "PrdBmsApp";
+                paramMap.put("appClassName", bmsAppClassName);
                 String bmsMainClassPath = basePackage.replace(".", File.separator);
                 String bmsMainClassFile = controllerProjectOutputDir + File.separator
                         + projectProperties.getProjectName() + "-prd-bms" + CODE_DIR_PRE + bmsMainClassPath
-                        + File.separator + "BmsApp" + ".java";
+                        + File.separator + bmsAppClassName + ".java";
                 CreateFileUtil.createOnNotExistFile("start/bmsApp.java.ftl", bmsMainClassFile, paramMap,
                         BASE_TEMPLATE_PATH);
                 // 生成配置文件

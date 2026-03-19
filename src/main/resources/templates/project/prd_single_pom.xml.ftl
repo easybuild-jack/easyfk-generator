@@ -75,7 +75,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>${basePackage}.ClientApp</mainClass>
+                            <mainClass>${basePackage}.${moduleName?cap_first}PrdApp</mainClass>
                             <useUniqueVersions>false</useUniqueVersions>
                         </manifest>
                     </archive>

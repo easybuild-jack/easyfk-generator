@@ -24,6 +24,7 @@ public class EasyfkGenerator {
     public EasyfkGenerator() {}
 
     public EasyfkGenerator(ProjectProperties projectProperties, CodeProperties codeProperties) {
+        projectProperties.setModuleName(codeProperties.getModuleName());
         this.projectGenerator = new ProjectGenerator(projectProperties);
         this.modelGenerator = new ModelGenerator(projectProperties, codeProperties);
         this.codeGenerator = new CodeGenerator(projectProperties, codeProperties);
