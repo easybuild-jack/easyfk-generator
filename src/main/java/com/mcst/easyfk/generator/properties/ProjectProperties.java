@@ -28,7 +28,7 @@ public class ProjectProperties {
     /**
      * RPC类型，用于微服务项目
      */
-    private RpcType rpcType = RpcType.CLOUD;
+    private RpcType rpcType = RpcType.NONE;
 
     /**
      * 项目目录 必填
@@ -54,7 +54,7 @@ public class ProjectProperties {
     /**
      * 持久化类型，mybatis，mongo，all，none
      */
-    private OrmType ormType = OrmType.MYBATIS;
+    private OrmType ormType = OrmType.NONE;
 
     /**
      * PRD层项目生成类型，none：不生成，single：生成一个PRD项目，separation：分别生成后台BMS 和 2C端PRD项目
@@ -118,6 +118,7 @@ public class ProjectProperties {
      */
     public String getOrmModuleSuffix() {
         return switch (ormType) {
+            case NONE -> "";
             case MYBATIS -> "plus";
             case MYBATIS_FLEX -> "flex";
             case HIBERNATE -> "hibernate";

@@ -6,6 +6,10 @@ package com.mcst.easyfk.generator.enums;
  */
 public enum RpcType {
     /**
+     * none
+     */
+    NONE,
+    /**
      * cloud
      */
     CLOUD,

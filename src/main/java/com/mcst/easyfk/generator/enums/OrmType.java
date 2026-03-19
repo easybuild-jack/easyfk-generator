@@ -6,6 +6,10 @@ package com.mcst.easyfk.generator.enums;
 
 public enum OrmType {
     /**
+     * NONE
+     */
+    NONE,
+    /**
      * MYBATIS
      */
     MYBATIS,

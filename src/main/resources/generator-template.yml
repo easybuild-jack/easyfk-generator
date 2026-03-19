@@ -21,8 +21,8 @@ easyfk:
         project-type: single
         # 构建工具: maven / gradle
         build-type: maven
-        # ORM 框架: MYBATIS / MYBATIS_FLEX / HIBERNATE
-        orm-type: MYBATIS
+        # ORM 框架: NONE / MYBATIS / MYBATIS_FLEX / HIBERNATE
+        orm-type: NONE
         # PRD 层策略: none(不生成) / single(单一) / separation(分离: client + bms)
         prd-type: single
         # 日志框架: LOGBACK / LOG4J2
