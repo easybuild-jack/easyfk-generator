@@ -40,7 +40,7 @@ dependencies {
 </#if>
     implementation ('com.mcst:auth-server')
 <#if ormType?? && ormType != "NONE">
-    implementation ('com.mcst:auth-orm-${ormModuleSuffix}')
+    implementation ('com.mcst:auth-orm-${ormBusinessSuffix}')
 </#if>
 </#if>
 }

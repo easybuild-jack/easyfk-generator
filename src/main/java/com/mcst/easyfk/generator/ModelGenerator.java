@@ -73,6 +73,7 @@ public class ModelGenerator {
             paramMap.put("package", entityPackage);
             paramMap.put("mapperPackage", mapperPackage);
             paramMap.put("dtoPackage", dtoPackage);
+            paramMap.put("ormType", projectProperties.getOrmType());
             List<ModelInfo> modelList = GeneratorUtil.getModelInfoList(codeProperties, projectProperties.getOrmType(), true);
             if (EmptyUtil.isEmpty(modelList)) {
                 log.error("无Model信息！");

@@ -111,10 +111,23 @@ public class ProjectProperties {
     private Boolean includeAuth = Boolean.FALSE;
 
     /**
-     * 获取模块 ORM 子依赖的 artifactId 后缀
-     * MYBATIS -> plus, MYBATIS_FLEX -> flex, HIBERNATE -> hibernate
+     * 获取框架 ORM 组件的 artifactId 后缀
+     * MYBATIS -> mybatis, MYBATIS_FLEX -> flex, HIBERNATE -> hibernate
      */
     public String getOrmModuleSuffix() {
+        return switch (ormType) {
+            case NONE -> "";
+            case MYBATIS -> "mybatis";
+            case MYBATIS_FLEX -> "flex";
+            case HIBERNATE -> "hibernate";
+        };
+    }
+
+    /**
+     * 获取业务 ORM 组件的 artifactId 后缀
+     * MYBATIS -> plus, MYBATIS_FLEX -> flex, HIBERNATE -> hibernate
+     */
+    public String getOrmBusinessSuffix() {
         return switch (ormType) {
             case NONE -> "";
             case MYBATIS -> "plus";

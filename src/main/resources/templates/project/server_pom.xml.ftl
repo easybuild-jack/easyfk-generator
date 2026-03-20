@@ -70,7 +70,7 @@
 <#if ormType?? && ormType != "NONE">
         <dependency>
             <groupId>com.mcst</groupId>
-            <artifactId>auth-orm-${ormModuleSuffix}</artifactId>
+            <artifactId>auth-orm-${ormBusinessSuffix}</artifactId>
         </dependency>
 </#if>
 </#if>

@@ -17,7 +17,7 @@ easyfk:
         # [必填] 项目包根路径
         base-package: com.example.myapp
 
-        # 项目类型: single(单体) / microservice(微服务) / smart(多栈微服务)
+        # 项目类型: single(单体) / microservice(微服务) / smart(多栈微服务) / micro_prd(微服务产品层)
         project-type: single
         # 构建工具: maven / gradle
         build-type: maven
