@@ -31,7 +31,7 @@ easyfk:
         framework-version: 3.2.12
         # 项目版本
         project-version: 1.0.0-SNAPSHOT
-        # [PRD是单体的时候必填] 应用类型: BMS(后台管理端) / CLIENT(面向C端)
+        # [项目类型或PRD类型为单体的时候必填] 应用类型: BMS(后台管理端) / CLIENT(面向C端)
         app-type:
         # 是否引入 auth 权限模块 (true/false)
         include-auth: false
