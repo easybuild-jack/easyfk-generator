@@ -87,10 +87,14 @@ public class ModelGenerator {
                     } else {
                         CreateFileUtil.delAndCreateFile("mybatis/my_entity.java.ftl", modelPath, paramMap, BASE_TEMPLATE_PATH);
                     }
-                    String mapperXmlPath = mapperXMLOutputDir + File.separator + StringUtil.upperFirstChar(modelInfo.getModelName()) + "Mapper.xml";
-                    CreateFileUtil.createOnNotExistFile("mybatis/myMapper.xml.ftl", mapperXmlPath, paramMap, BASE_TEMPLATE_PATH);
                     String mapperPath = serverProjectOutputDir + CODE_DIR_PRE + mapperPackage.replace(".", File.separator) + File.separator + StringUtil.upperFirstChar(modelInfo.getModelName()) + "Mapper.java";
-                    CreateFileUtil.createOnNotExistFile("mybatis/mapper.java.ftl", mapperPath, paramMap, BASE_TEMPLATE_PATH);
+                    if (projectProperties.getOrmType().equals(OrmType.HIBERNATE)) {
+                        CreateFileUtil.createOnNotExistFile("mybatis/jpa_repository.java.ftl", mapperPath, paramMap, BASE_TEMPLATE_PATH);
+                    } else {
+                        String mapperXmlPath = mapperXMLOutputDir + File.separator + StringUtil.upperFirstChar(modelInfo.getModelName()) + "Mapper.xml";
+                        CreateFileUtil.createOnNotExistFile("mybatis/myMapper.xml.ftl", mapperXmlPath, paramMap, BASE_TEMPLATE_PATH);
+                        CreateFileUtil.createOnNotExistFile("mybatis/mapper.java.ftl", mapperPath, paramMap, BASE_TEMPLATE_PATH);
+                    }
                 } catch (Exception ex) {
                     log.error("生成模型失败：{}，原因：{}", modelInfo.getModelName(), ex.getMessage());
                 }

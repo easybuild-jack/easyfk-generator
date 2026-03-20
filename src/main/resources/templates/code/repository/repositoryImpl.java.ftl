@@ -28,7 +28,7 @@ import org.springframework.stereotype.Repository;
 <#if ormType.name() == "MYBATIS_FLEX">
 public class ${modelInfo.modelName}RepositoryImpl extends BaseFlexRepositoryImpl<${modelInfo.modelName}Mapper,${modelInfo.modelName}Dto, ${modelInfo.modelName},${modelInfo.idType}> implements I${modelInfo.modelName}Repository {
 <#elseif ormType.name() == "HIBERNATE">
-public class ${modelInfo.modelName}RepositoryImpl extends BaseHibernateRepositoryImpl<${modelInfo.modelName}Dto, ${modelInfo.modelName},${modelInfo.idType}> implements I${modelInfo.modelName}Repository {
+public class ${modelInfo.modelName}RepositoryImpl extends BaseHibernateRepositoryImpl<${modelInfo.modelName}Mapper,${modelInfo.modelName}Dto, ${modelInfo.modelName},${modelInfo.idType}> implements I${modelInfo.modelName}Repository {
 <#else>
 public class ${modelInfo.modelName}RepositoryImpl extends BaseMyBatisRepositoryImpl<${modelInfo.modelName}Mapper,${modelInfo.modelName}Dto, ${modelInfo.modelName},${modelInfo.idType}> implements I${modelInfo.modelName}Repository {
 </#if>
