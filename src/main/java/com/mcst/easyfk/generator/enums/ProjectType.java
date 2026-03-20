@@ -17,5 +17,9 @@ public enum ProjectType {
     /**
      * 智能项目
      */
-    SMART
+    SMART,
+    /**
+     * 微服务产品层项目（仅启动类+配置，通过RPC调用微服务）
+     */
+    MICRO_PRD
 }

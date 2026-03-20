@@ -88,6 +88,21 @@ public class ProjectGenerator {
                     CreateFileUtil.createOnNotExistFile(settingsTemplateFileName, rootConfigFile.get("groovySettings"), projectProperties, BASE_TEMPLATE_PATH);
                 }
                 createCodeDir(projectRoot, true, true);
+            } else if (ProjectType.MICRO_PRD.equals(projectProperties.getProjectType())) {
+                if (BuildType.MAVEN.equals(projectProperties.getBuildType())) {
+                    String templateFileName = "micro_prd_pom.xml.ftl";
+                    CreateFileUtil.createOnNotExistFile(templateFileName, rootConfigFile.get("pomFile"), projectProperties, BASE_TEMPLATE_PATH);
+                } else {
+                    String buildTemplateFileName = null;
+                    String settingsTemplateFileName = null;
+                    if (GradleType.GROOVY.equals(projectProperties.getGradleType())) {
+                        buildTemplateFileName = "gradle/groovy/micro_prd_build.gradle.ftl";
+                        settingsTemplateFileName = "gradle/groovy/single_settings.gradle.ftl";
+                    }
+                    CreateFileUtil.createOnNotExistFile(buildTemplateFileName, rootConfigFile.get("rootGroovyBuild"), projectProperties, BASE_TEMPLATE_PATH);
+                    CreateFileUtil.createOnNotExistFile(settingsTemplateFileName, rootConfigFile.get("groovySettings"), projectProperties, BASE_TEMPLATE_PATH);
+                }
+                createCodeDir(projectRoot, true, true);
             } else if (ProjectType.MICROSERVICE.equals(projectProperties.getProjectType())) {
                 createApiAndServerAndPrdFile(rootConfigFile, projectName, projectRoot);
             } else {

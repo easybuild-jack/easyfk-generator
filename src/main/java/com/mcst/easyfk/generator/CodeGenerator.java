@@ -48,6 +48,10 @@ public class CodeGenerator {
         if (EmptyUtil.isEmpty(basePackage)) {
             throw new BusinessException("项目包根路径不可为空");
         }
+        if (ProjectType.MICRO_PRD.equals(projectProperties.getProjectType())) {
+            createMicroPrdBaseCode();
+            return;
+        }
         // 项目目录
         String projectRootDir = projectProperties.getProjectDir() + File.separator + projectProperties.getProjectName();
         String serverProjectOutputDir = projectRootDir + File.separator + projectProperties.getProjectName()
@@ -593,6 +597,46 @@ public class CodeGenerator {
             log.error("生成Server模块基础代码失败：", e);
         }
 
+    }
+
+    /**
+     * 生成 MICRO_PRD 项目基础代码：启动类 + 配置文件 + 日志配置
+     */
+    private void createMicroPrdBaseCode() {
+        try {
+            String projectRootDir = projectProperties.getProjectDir() + File.separator + projectProperties.getProjectName();
+            String controllerBasePackage = basePackage + ".controller";
+
+            Map<String, Object> paramMap = GeneratorUtil.createBaseParamMap(codeProperties);
+            paramMap.put("basePackage", basePackage);
+            paramMap.put("controllerBasePackage", controllerBasePackage);
+            paramMap.put("moduleName", codeProperties.getModuleName());
+            paramMap.put("rpcType", projectProperties.getRpcType());
+            paramMap.put("logType", projectProperties.getLogType());
+            paramMap.put("logName", projectProperties.getLogType().name().toLowerCase());
+            paramMap.put("groupId", projectProperties.getGroupId());
+            paramMap.put("appType", projectProperties.getAppType());
+
+            String appClassName = StringUtil.upperFirstChar(codeProperties.getModuleName()) + "PrdApp";
+            paramMap.put("appClassName", appClassName);
+            String path = basePackage.replace(".", File.separator);
+            String filePath = projectRootDir + CODE_DIR_PRE + path + File.separator + appClassName + ".java";
+            CreateFileUtil.createOnNotExistFile("start/clientApp.java.ftl", filePath, paramMap, BASE_TEMPLATE_PATH);
+
+            String configPath = projectRootDir + File.separator + "config" + File.separator + "application.yml";
+            CreateFileUtil.createOnNotExistFile("config/prdApplication.yml.ftl", configPath, paramMap, BASE_TEMPLATE_PATH);
+            String configDevPath = projectRootDir + File.separator + "config" + File.separator + "application-dev.yml";
+            CreateFileUtil.createOnNotExistFile("config/prdApplicationDev.yml.ftl", configDevPath, paramMap, BASE_TEMPLATE_PATH);
+            String configTestPath = projectRootDir + File.separator + "config" + File.separator + "application-test.yml";
+            CreateFileUtil.createOnNotExistFile("config/prdApplicationTest.yml.ftl", configTestPath, paramMap, BASE_TEMPLATE_PATH);
+            String configProdPath = projectRootDir + File.separator + "config" + File.separator + "application-prod.yml";
+            CreateFileUtil.createOnNotExistFile("config/prdApplicationProd.yml.ftl", configProdPath, paramMap, BASE_TEMPLATE_PATH);
+
+            createLogConfig(projectRootDir, paramMap);
+            log.info("生成MICRO_PRD基础代码成功!");
+        } catch (Exception e) {
+            log.error("生成MICRO_PRD基础代码失败：", e);
+        }
     }
 
     /**

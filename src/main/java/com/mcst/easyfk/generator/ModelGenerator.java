@@ -42,6 +42,10 @@ public class ModelGenerator {
     }
 
     public void create() {
+        if (ProjectType.MICRO_PRD.equals(projectProperties.getProjectType())) {
+            log.info("项目类型为 MICRO_PRD，跳过 Model 生成");
+            return;
+        }
         if (OrmType.NONE.equals(projectProperties.getOrmType())) {
             log.info("OrmType 为 NONE，跳过 Model 生成");
             return;
