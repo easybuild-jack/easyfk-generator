@@ -138,8 +138,8 @@ easyfk:
         project-type: single
         # 构建工具: maven / gradle
         build-type: maven
-        # ORM 框架: MYBATIS / MYBATIS_FLEX / HIBERNATE
-        orm-type: MYBATIS
+        # ORM 框架: NONE / MYBATIS / MYBATIS_FLEX / HIBERNATE
+        orm-type: NONE
         # PRD 层策略: none(不生成) / single(单一) / separation(分离: client + bms)
         prd-type: single
         # 日志框架: LOGBACK / LOG4J2
@@ -148,15 +148,10 @@ easyfk:
         framework-version: 3.2.12
         # 项目版本
         project-version: 1.0.0-SNAPSHOT
-        # [必填] 应用类型: BMS(后台管理端) / CLIENT(面向C端)
+        # [项目类型或PRD类型为单体的时候必填] 应用类型: BMS(后台管理端) / CLIENT(面向C端)
         app-type:
-        # 业务模块列表 (可选)
-        # modules:
-        #   - name: auth
-        #     prd-split: false
-        #   - name: trading
-        #     has-orm: false
-        #   - name: payment
+        # 是否引入 auth 权限模块 (true/false)
+        include-auth: false
 
       # ==================== 代码配置 ====================
       code:
@@ -171,16 +166,19 @@ easyfk:
         # 数据库密码
         db-pwd: your_password
         # ---------- 表配置 ----------
+        # 表前缀 (生成类名时自动去除)
         # table-prefix: base_
-        # ORM 类型: MYBATIS / MYBATIS_FLEX / HIBERNATE
-        orm-type: MYBATIS
         # 从数据库读取的表名 (逗号分隔，会自动解析表结构)
         from-db-tables: product,order
 
         # ---------- 手动定义 Model (可选) ----------
+        # 除 from-db-tables 自动解析外，也可手动定义
         # model-list:
         #   - model-name: Product
         #     model-desc: 商品信息
+        #     # id-type: String
+        #     # only-repository: false
+        #     # create-controller: true
         #   - model-name: Order
         #     model-desc: 订单信息
 ```
@@ -208,7 +206,8 @@ easyfk.config.generator.project:
 | | | | `single` — 单体项目，所有代码在一个工程中 |
 | | | | `microservice` — 微服务，生成 API + Server + PRD 模块，支持一种 RPC |
 | | | | `smart` — 多栈微服务，同时生成 Spring Cloud 和 Dubbo 两套 RPC 通道 |
-| `rpc-type` | 否 | `cloud` | RPC 类型，仅 `microservice` 架构时生效 |
+| `rpc-type` | 否 | `NONE` | RPC 类型，仅 `microservice` 架构时生效 |
+| | | | `NONE` — 不使用 RPC |
 | | | | `cloud` — Spring Cloud Feign |
 | | | | `dubbo` — Apache Dubbo |
 | `build-type` | 否 | `maven` | 构建工具类型 |
@@ -217,7 +216,8 @@ easyfk.config.generator.project:
 | `gradle-type` | 否 | `groovy` | Gradle DSL 类型，仅 `build-type: gradle` 时生效 |
 | | | | `groovy` — Groovy DSL (build.gradle) |
 | | | | `kotlin` — Kotlin DSL (build.gradle.kts) |
-| `orm-type` | 否 | `MYBATIS` | ORM 框架类型 |
+| `orm-type` | 否 | `NONE` | ORM 框架类型 |
+| | | | `NONE` — 不使用 ORM 框架 |
 | | | | `MYBATIS` — MyBatis-Plus |
 | | | | `MYBATIS_FLEX` — MyBatis-Flex |
 | | | | `HIBERNATE` — Hibernate (JPA) |
@@ -228,47 +228,10 @@ easyfk.config.generator.project:
 | `log-type` | 否 | `LOGBACK` | 日志框架：`LOGBACK` 或 `LOG4J2` |
 | `framework-version` | 否 | `3.2.12` | EasyFK 框架版本号 |
 | `project-version` | 否 | `1.0.0-SNAPSHOT` | 生成项目的版本号 |
-| `create-prd-project` | 否 | `true` | 是否生成 PRD（Controller）项目 |
 | `create-repository` | 否 | `false` | 是否生成独立的 Repository 子项目 |
 | `controller-auto-config` | 否 | `false` | 是否为 Controller 层生成 Spring Boot AutoConfiguration |
-| `app-type` | **是** | - | 应用类型，决定模块 PRD 依赖的变体。`BMS` — 后台管理端；`CLIENT` — 面向 C 端 |
-| `modules` | 否 | - | 业务模块列表，配置后自动在生成的项目中引入对应模块依赖。详见下方「模块配置」 |
-
-#### 模块配置（modules）
-
-用于声明项目需要引入的业务模块（如权限模块、交易模块、支付模块等）。生成器会根据项目类型自动将模块依赖分配到对应的子项目中。
-
-```yaml
-modules:
-  - name: auth           # [必填] 模块名称
-    prd-split: false     # auth 只有后台 prd，不区分 bms/client
-  - name: trading
-    has-orm: false        # trading 不需要持久化层
-  - name: payment         # 使用全部默认值
-```
-
-每个模块支持以下配置项：
-
-| 配置项 | 默认值 | 说明 |
-|--------|--------|------|
-| `name` | - | **必填**。模块名称，如 `auth`、`trading`、`payment` |
-| `has-prd` | `true` | 是否引入 PRD 子依赖 |
-| `prd-split` | `true` | PRD 是否区分 bms/client。`true` — 根据 `app-type` 或子项目类型自动选择 `{module}-prd-bms` / `{module}-prd-client`；`false` — 统一使用 `{module}-prd` |
-| `has-server` | `true` | 是否引入 Server 子依赖（`{module}-server`） |
-| `has-orm` | `true` | 是否引入 ORM 子依赖。具体 artifactId 由 `orm-type` 决定：MYBATIS → `{module}-orm-plus`，MYBATIS_FLEX → `{module}-orm-flex`，HIBERNATE → `{module}-orm-hibernate` |
-
-**依赖分配规则：**
-
-| 项目类型 | 子项目 | 引入的模块依赖 |
-|----------|--------|----------------|
-| **单体项目** | 主 pom / build.gradle | prd + server + orm 全部引入 |
-| **微服务 / Smart** | server | server + orm |
-| **微服务 / Smart** | prd-single | prd（根据 `app-type` + `prd-split` 决定变体） |
-| **微服务 / Smart** | prd-parent | 仅非拆分模块的 prd（如 `auth-prd`） |
-| **微服务 / Smart** | prd-bms | 拆分模块的 `{module}-prd-bms` |
-| **微服务 / Smart** | prd-client | 拆分模块的 `{module}-prd-client` |
-| **Smart** | cloud-api / cloud-provider | `{module}-cloud-api` / `{module}-cloud-provider` |
-| **Smart** | dubbo-api / dubbo-provider | `{module}-dubbo-api` / `{module}-dubbo-provider` |
+| `app-type` | 条件必填 | - | 应用类型，决定模块 PRD 依赖的变体。`BMS` — 后台管理端；`CLIENT` — 面向 C 端。**当 `project-type` 为 `single` 或 `prd-type` 为 `single` 时必填** |
+| `include-auth` | 否 | `false` | 是否引入 auth 权限模块。设为 `true` 时会自动在生成的项目中引入 auth 模块相关依赖 |
 
 ### 代码配置（code）
 
@@ -282,9 +245,7 @@ easyfk.config.generator.code:
 |--------|------|--------|------|
 | `module-name` | **是** | - | 模块名称，用于生成配置类名、远程调用 serviceId 等。例：`myapp` |
 | `author` | 否 | `eb-jack` | 代码注释中的作者信息 |
-| `orm-type` | 否 | `MYBATIS` | ORM 类型（同 project 中的 orm-type） |
 | `spring-annotation` | 否 | `true` | 是否在生成的类上添加 Spring 注解（如 `@Repository`、`@Service`） |
-| `create-controller` | 否 | `true` | 是否生成 Controller 层代码 |
 | `extends-supper-class` | 否 | `true` | Entity 是否继承框架基类（基类提供 deleted、insertTime、lastUpdateTime 字段） |
 
 #### 数据库连接
@@ -358,27 +319,6 @@ model-list:
 
 > 以上资源权限配置也可以在 `model-list` 中为每个 Model 单独指定（字段名相同），单独指定的值优先于全局配置。
 
-### 最小配置示例
-
-只需填必填项即可运行：
-
-```yaml
-easyfk:
-  config:
-    generator:
-      project:
-        project-dir: D:\workspace\projects
-        group-id: com.example
-        project-name: my-app
-        base-package: com.example.myapp
-        app-type: BMS
-      code:
-        module-name: myapp
-        db-short-url: localhost:3306/my_database
-        db-pwd: 123456
-        from-db-tables: product,order
-```
-
 ---
 
 ## 典型使用场景
@@ -412,6 +352,210 @@ efg -d                  # 仅刷新 DTO 和 Param，不影响其他代码
 efg -c dev-generator.yml        # 开发环境
 efg -c prod-generator.yml -m    # 生产环境，仅生成 Model
 ```
+
+---
+
+## 完整配置示例
+
+以下是 `generator.yml` 配置文件的完整示例，覆盖不同架构和典型场景。
+
+### 单体项目（最小配置）
+
+```yaml
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\workspace\projects
+        group-id: com.example
+        project-name: my-app
+        base-package: com.example.myapp
+        project-type: single
+        app-type: BMS
+      code:
+        module-name: myapp
+        model-list:
+          - model-name: Product
+            model-desc: 商品信息
+          - model-name: Order
+            model-desc: 订单信息
+```
+
+### 微服务项目（Spring Cloud）
+
+```yaml
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\workspace\projects
+        group-id: com.example
+        project-name: order-service
+        base-package: com.example.order
+        project-type: microservice
+        rpc-type: cloud
+        prd-type: single
+        build-type: gradle
+        app-type: CLIENT
+        framework-version: 3.2.12
+      code:
+        module-name: order
+        author: 开发者
+        db-type: MYSQL
+        db-short-url: localhost:3306/order_db
+        db-user: root
+        db-pwd: 123456
+        from-db-tables: t_order,t_order_item
+        table-prefix: t_
+```
+
+### 微服务项目（Dubbo）
+
+```yaml
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\workspace\projects
+        group-id: com.example
+        project-name: user-service
+        base-package: com.example.user
+        project-type: microservice
+        rpc-type: dubbo
+        prd-type: separation
+        build-type: maven
+        app-type: BMS
+        framework-version: 3.2.12
+      code:
+        module-name: user
+        db-type: POSTGRE_SQL
+        db-short-url: localhost:5432/user_db
+        db-user: postgres
+        db-pwd: 123456
+        from-db-tables: user_info,user_address
+        model-list:
+          - model-name: UserInfo
+            model-desc: 用户信息
+            forbidden-filed: status
+          - model-name: UserAddress
+            model-desc: 收货地址
+```
+
+### 多栈微服务项目（SMART）
+
+```yaml
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\workspace\projects
+        group-id: com.mcst
+        project-name: trading
+        base-package: com.mcst.trading
+        project-type: smart
+        prd-type: separation
+        build-type: gradle
+        gradle-type: groovy
+        orm-type: MYBATIS
+        log-type: LOGBACK
+        app-type: BMS
+        framework-version: 3.2.12
+        project-version: 1.0.0-SNAPSHOT
+        controller-auto-config: true
+      code:
+        module-name: trading
+        author: 开发团队
+        spring-annotation: true
+        db-type: MYSQL
+        db-short-url: 192.168.1.100:3306/trading_db
+        db-user: root
+        db-pwd: secure_password
+        table-prefix: t_
+        from-db-tables: t_product,t_order,t_order_item,t_payment
+        model-list:
+          - model-name: Product
+            model-desc: 商品
+          - model-name: Order
+            model-desc: 订单
+          - model-name: OrderItem
+            model-desc: 订单明细
+            only-repository: true
+          - model-name: Payment
+            model-desc: 支付记录
+            create-controller: false
+```
+
+### 从数据库自动解析表结构
+
+```yaml
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\workspace\projects
+        group-id: com.example
+        project-name: my-app
+        base-package: com.example.myapp
+        project-type: single
+        app-type: BMS
+      code:
+        module-name: myapp
+        db-type: MYSQL
+        db-short-url: localhost:3306/my_database
+        db-user: root
+        db-pwd: 123456
+        table-prefix: base_
+        from-db-tables: base_product,base_category,base_brand
+```
+
+**工作原理：**
+1. 生成器通过 JDBC 连接数据库
+2. 使用 `DatabaseMetaData` 获取表结构（字段名、类型、注释、主键等）
+3. 自动去除表前缀（`base_product` → `Product`）
+4. 将下划线字段名转为驼峰命名（`product_name` → `productName`）
+5. 按类型映射规则转换 Java 类型
+6. 读取字段注释作为 `@Schema` 和 `@Column` 的描述
+
+### 带资源权限注解的配置
+
+```yaml
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\workspace\projects
+        group-id: com.mcst
+        project-name: user
+        base-package: com.mcst.user
+        project-type: smart
+        prd-type: separation
+        build-type: gradle
+        app-type: BMS
+      code:
+        module-name: user
+        db-short-url: localhost:3306/user_db
+        db-pwd: 123456
+        create-resource-annotation: true
+        resource-group: userManagement
+        resource-id: userManagement
+        resource-name: 用户管理
+        resource-path: /user
+        resource-sort: 80000
+        module-resource-sort: 10000
+        increment-star: 100
+        model-list:
+          - model-name: UserInfo
+            model-desc: 会员
+          - model-name: UserAddress
+            model-desc: 收货地址
+          - model-name: UserAccount
+            model-desc: 账号
+```
+
+**排序值自动计算：**
+- UserInfo: `modelResourceSort = 10000 + 100 = 10100`
+- UserAddress: `modelResourceSort = 10000 + 200 = 10200`
+- UserAccount: `modelResourceSort = 10000 + 300 = 10300`
 
 ---
 
