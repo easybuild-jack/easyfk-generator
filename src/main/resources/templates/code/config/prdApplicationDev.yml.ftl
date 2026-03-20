@@ -1,4 +1,4 @@
-<#if projectType == 'MICROSERVICE' && rpcType == 'CLOUD'>
+<#if rpcType?? && rpcType == 'CLOUD'>
 spring:
   cloud:
     nacos:
@@ -7,7 +7,7 @@ spring:
         group: ${moduleName?uncap_first}-dev
 </#if>
 
-<#if projectType == 'MICROSERVICE' && rpcType == 'DUBBO'>
+<#if rpcType?? && rpcType == 'DUBBO'>
 dubbo:
   application:
     name: ${moduleName?uncap_first}-api

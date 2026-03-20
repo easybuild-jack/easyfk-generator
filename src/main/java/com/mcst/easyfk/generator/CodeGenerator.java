@@ -119,6 +119,7 @@ public class CodeGenerator {
         paramMap.put("appType", projectProperties.getAppType());
         paramMap.put("ormType", projectProperties.getOrmType());
         paramMap.put("rpcType", projectProperties.getRpcType());
+        paramMap.put("serverRole", projectProperties.getServerRole());
         paramMap.put("logType", projectProperties.getLogType());
         paramMap.put("groupId", projectProperties.getGroupId());
         paramMap.put("createResourceAnnotation", codeProperties.getCreateResourceAnnotation());
@@ -628,6 +629,7 @@ public class CodeGenerator {
                 // 生成日志配置文件
                 createLogConfig(controllerProjectOutputDir, paramMap);
             } else {
+                paramMap.put("appType", AppType.CLIENT);
                 // 生成Client启动类
                 String clientAppClassName = StringUtil.upperFirstChar(codeProperties.getModuleName()) + "PrdClientApp";
                 paramMap.put("appClassName", clientAppClassName);
@@ -663,6 +665,7 @@ public class CodeGenerator {
                 String logPath = controllerProjectOutputDir + File.separator + projectProperties.getProjectName()
                         + "-prd-client" + File.separator + "config" + File.separator + logName;
                 CreateFileUtil.createOnNotExistFile(logTemplateFile, logPath, paramMap, BASE_TEMPLATE_PATH);
+                paramMap.put("appType", AppType.BMS);
                 // 生成Bms启动类
                 String bmsAppClassName = StringUtil.upperFirstChar(codeProperties.getModuleName()) + "PrdBmsApp";
                 paramMap.put("appClassName", bmsAppClassName);

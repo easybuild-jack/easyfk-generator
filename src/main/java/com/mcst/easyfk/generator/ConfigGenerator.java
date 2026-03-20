@@ -41,6 +41,10 @@ public class ConfigGenerator {
     }
 
     public void create() {
+        if (!ProjectType.SMART.equals(projectProperties.getProjectType())) {
+            log.info("项目类型非 SMART，跳过自动装配配置生成");
+            return;
+        }
         String projectRootDir = projectProperties.getProjectDir() + File.separator + projectProperties.getProjectName();
         String auth = codeProperties.getAuthor();
         String moduleName = codeProperties.getModuleName();

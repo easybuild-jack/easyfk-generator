@@ -39,6 +39,7 @@
             <artifactId>rpc-${rpcType?lower_case}</artifactId>
         </dependency>
     </#if >
+<#if ormType?? && ormType != "NONE">
         <dependency>
             <groupId>com.mcst</groupId>
             <artifactId>orm-${ormType?lower_case}</artifactId>
@@ -53,6 +54,7 @@
             <groupId>com.mcst</groupId>
             <artifactId>db-mysql</artifactId>
         </dependency>
+</#if>
 </#if>
     <#if projectType != "SMART" >
         <dependency>

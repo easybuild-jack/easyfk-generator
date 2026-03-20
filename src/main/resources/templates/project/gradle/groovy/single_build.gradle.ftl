@@ -20,17 +20,27 @@ dependencies {
     testCompileOnly libs.lombok
     annotationProcessor(libs.lombok, libs.processor,libs.lombokMapstruct,libs.mapstructProcessor)
     testAnnotationProcessor(libs.lombok, libs.processor,libs.lombokMapstruct,libs.mapstructProcessor)
+<#if ormType?? && ormType != "NONE">
     implementation ('com.mcst:orm-${ormType?lower_case}')
 <#if dbType?? && dbType.name() == "POSTGRE_SQL">
     implementation ('com.mcst:db-postgresql')
 <#else>
     implementation ('com.mcst:db-mysql')
 </#if>
+</#if>
     implementation ('com.mcst:log-${logType?lower_case}')
-<#if projectType == "SINGLE" || projectType == "MICROSERVICE">
+<#if rpcType?? && rpcType != "NONE">
+<#if serverRole?? && serverRole == "SERVER">
+    implementation ('com.mcst:web-micro')
+<#else>
     implementation ('com.mcst:web-prd')
+</#if>
+    implementation ('com.mcst:registry-nacos')
+    implementation ('com.mcst:rpc-${rpcType?lower_case}')
+<#else>
+    implementation ('com.mcst:web-prd')
+</#if>
     implementation ('com.mcst:doc-knife4j')
-</#if >
 <#if modules?has_content>
 <#list modules as module>
 <#if module.hasPrd>

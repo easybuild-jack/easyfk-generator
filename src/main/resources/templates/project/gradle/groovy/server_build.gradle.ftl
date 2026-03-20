@@ -1,10 +1,12 @@
 dependencies {
     api project(':${artifactId!projectName }-api')
+<#if ormType?? && ormType != "NONE">
     implementation ('com.mcst:orm-${ormType?lower_case}')
 <#if dbType?? && dbType.name() == "POSTGRE_SQL">
     implementation ('com.mcst:db-postgresql')
 <#else>
     implementation ('com.mcst:db-mysql')
+</#if>
 </#if>
 <#if projectType == "SINGLE">
     implementation ('com.mcst:web-prd')

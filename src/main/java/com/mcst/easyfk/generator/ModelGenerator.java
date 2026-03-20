@@ -42,6 +42,10 @@ public class ModelGenerator {
     }
 
     public void create() {
+        if (OrmType.NONE.equals(projectProperties.getOrmType())) {
+            log.info("OrmType 为 NONE，跳过 Model 生成");
+            return;
+        }
         try {
             String basePackage = projectProperties.getBasePackage();
             if (EmptyUtil.isEmpty(basePackage)) {

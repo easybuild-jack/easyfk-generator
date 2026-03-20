@@ -31,6 +31,11 @@ public class ProjectProperties {
     private RpcType rpcType = RpcType.NONE;
 
     /**
+     * 服务角色，NONE(默认) / SERVER(服务端) / PRD(表现层)，仅 SINGLE + RPC 时生效
+     */
+    private ServerRole serverRole = ServerRole.NONE;
+
+    /**
      * 项目目录 必填
      */
     private String projectDir;

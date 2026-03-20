@@ -49,14 +49,30 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <scope>compile</scope>
         </dependency>
+<#if rpcType?? && rpcType != "NONE">
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>${(serverRole?? && serverRole == "SERVER")?then("web-micro", "web-prd")}</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>registry-nacos</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>rpc-${rpcType?lower_case}</artifactId>
+        </dependency>
+<#else>
         <dependency>
             <groupId>com.mcst</groupId>
             <artifactId>web-prd</artifactId>
         </dependency>
+</#if>
         <dependency>
             <groupId>com.mcst</groupId>
             <artifactId>doc-knife4j</artifactId>
         </dependency>
+<#if ormType?? && ormType != "NONE">
         <dependency>
             <groupId>com.mcst</groupId>
             <artifactId>orm-${ormType?lower_case}</artifactId>
@@ -71,6 +87,7 @@
             <groupId>com.mcst</groupId>
             <artifactId>db-mysql</artifactId>
         </dependency>
+</#if>
 </#if>
         <dependency>
             <groupId>com.mcst</groupId>

@@ -1,5 +1,5 @@
 spring:
-<#if projectType == 'MICROSERVICE' && rpcType == 'CLOUD'>
+<#if rpcType?? && rpcType == 'CLOUD'>
   cloud:
     nacos:
       discovery:
@@ -14,7 +14,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: ${driverName}
 </#if>
-<#if projectType == 'MICROSERVICE' && rpcType == 'DUBBO'>
+<#if rpcType?? && rpcType == 'DUBBO'>
 dubbo:
   application:
     name: ${moduleName?uncap_first}-server

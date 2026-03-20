@@ -54,7 +54,9 @@ public class ProjectGenerator {
         if (EmptyUtil.isEmpty(basePackage)) {
             throw new BusinessException("项目包根路径不可为空");
         }
-        if (projectProperties.getAppType() == null) {
+        boolean appTypeRequired = ProjectType.SINGLE.equals(projectProperties.getProjectType())
+                || PrdType.SINGLE.equals(projectProperties.getPrdType());
+        if (appTypeRequired && projectProperties.getAppType() == null) {
             throw new BusinessException("应用类型(appType)不可为空，请指定 BMS 或 CLIENT");
         }
 
