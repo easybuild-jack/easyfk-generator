@@ -5,6 +5,7 @@ import com.mcst.easyfk.core.utils.common.EmptyUtil;
 import com.mcst.easyfk.core.utils.common.StringUtil;
 import com.mcst.easyfk.core.utils.date.LocalDateUtil;
 import com.mcst.easyfk.generator.enums.DbType;
+import com.mcst.easyfk.generator.enums.OrmType;
 import com.mcst.easyfk.generator.properties.CodeProperties;
 import com.mcst.easyfk.generator.vo.FieldInfo;
 import com.mcst.easyfk.generator.vo.ModelInfo;
@@ -32,7 +33,27 @@ public class GeneratorUtil {
     public static final String POSTGRESQL_URL_TEMPLATE = "jdbc:postgresql://%s";
     public static final String ORACLE_URL_TEMPLATE = "jdbc:oracle:thin:@%s";
 
-    public static List<ModelInfo> getModelInfoList(CodeProperties codeProperties, boolean init) {
+    /**
+     * 根据 ORM 类型和是否继承框架基类，自动解析 Entity 的父类全限定名
+     */
+    public static String resolveSuperClass(OrmType ormType, boolean extendsSupperClass) {
+        if (extendsSupperClass) {
+            return switch (ormType) {
+                case MYBATIS -> "com.mcst.easyfk.service.mybatisplus.persistence.BaseMyBatisPlusEntity";
+                case MYBATIS_FLEX -> "com.mcst.easyfk.service.flex.persistence.BaseFlexEntity";
+                case HIBERNATE -> "com.mcst.easyfk.service.hibernate.persistence.BaseHibernateEntity";
+                default -> null;
+            };
+        } else {
+            return switch (ormType) {
+                case MYBATIS -> "com.baomidou.mybatisplus.extension.activerecord.Model";
+                case MYBATIS_FLEX -> "com.mybatisflex.core.activerecord.Model";
+                default -> null;
+            };
+        }
+    }
+
+    public static List<ModelInfo> getModelInfoList(CodeProperties codeProperties, OrmType ormType, boolean init) {
         List<ModelInfo> modelList = codeProperties.getModelList();
         Map<String, ModelInfo> modelInfoMap = new HashMap<>(10);
         if (EmptyUtil.isEmpty(modelList)) {
@@ -44,6 +65,7 @@ public class GeneratorUtil {
             }
         }
 
+        boolean extendsSupperClass = codeProperties.getExtendsSupperClass();
         String fromDbTables = codeProperties.getFromDbTables();
         if (EmptyUtil.isNotEmpty(fromDbTables)) {
             String[] tables = fromDbTables.split(",");
@@ -60,7 +82,7 @@ public class GeneratorUtil {
                 }
                 if (init) {
                     try {
-                        getModelInfoFromDatabase(codeProperties, table, modelInfo);
+                        getModelInfoFromDatabase(codeProperties, table, modelInfo, extendsSupperClass);
                     } catch (SQLException e) {
                         log.error("从数据库获取表[{}]元数据失败: {}", table, e.getMessage(), e);
                     }
@@ -74,6 +96,9 @@ public class GeneratorUtil {
 
         AtomicInteger sort = new AtomicInteger(codeProperties.getIncrementStar());
         modelList.forEach(modelInfo -> {
+            if (EmptyUtil.isEmpty(modelInfo.getSuperClass())) {
+                modelInfo.setSuperClass(resolveSuperClass(ormType, extendsSupperClass));
+            }
             if (EmptyUtil.isEmpty(modelInfo.getTableName())) {
                 String tablePrefix = Optional.ofNullable(modelInfo.getTablePrefix()).orElse(codeProperties.getTablePrefix());
                 if (EmptyUtil.isNotEmpty(tablePrefix)) {
@@ -129,7 +154,7 @@ public class GeneratorUtil {
         return paramMap;
     }
 
-    public static void getModelInfoFromDatabase(CodeProperties codeProperties, String tableName, ModelInfo modelInfo) throws SQLException {
+    public static void getModelInfoFromDatabase(CodeProperties codeProperties, String tableName, ModelInfo modelInfo, boolean filterParentFields) throws SQLException {
         List<FieldInfo> fieldInfoList = new ArrayList<>();
 
         String jdbcUrl = codeProperties.getDbShortUrl();
@@ -176,7 +201,7 @@ public class GeneratorUtil {
         ResultSet columns = metaData.getColumns(databaseName, schemaPattern, tableName, null);
         ResultSet primaryKeys = metaData.getPrimaryKeys(databaseName, schemaPattern, tableName);
         while (columns.next()) {
-            createFieldInfo(columns, fieldInfoList);
+            createFieldInfo(columns, fieldInfoList, filterParentFields);
         }
         if (EmptyUtil.isNotEmpty(fieldInfoList)) {
             while (primaryKeys.next()) {
@@ -218,11 +243,10 @@ public class GeneratorUtil {
         return null;
     }
 
-    private static void createFieldInfo(ResultSet columns, List<FieldInfo> fieldInfoList) throws SQLException {
+    private static void createFieldInfo(ResultSet columns, List<FieldInfo> fieldInfoList, boolean filterParentFields) throws SQLException {
         FieldInfo fieldInfo = new FieldInfo();
         String fieldName = StringUtil.underlineToCamel(columns.getString("COLUMN_NAME"));
-        // 排除父类的字段
-        if (parentField.contains(fieldName)) {
+        if (filterParentFields && parentField.contains(fieldName)) {
             return;
         }
         fieldInfo.setName(fieldName);

@@ -28,7 +28,7 @@ public class ModelInfo {
     /**
      * 父类
      */
-    private String superClass = "com.mcst.easyfk.service.mybatisplus.persistence.BaseMyBatisPlusEntity";
+    private String superClass;
 
     /**
      * 主键类型 String/Long

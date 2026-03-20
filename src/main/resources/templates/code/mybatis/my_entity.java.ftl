@@ -1,14 +1,17 @@
 package ${package};
 
+<#if modelInfo.superClass?? && modelInfo.superClass?has_content>
 import ${modelInfo.superClass};
+</#if>
 
 import com.mcst.easyfk.core.annotation.PrimaryKey;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import ${dtoPackage}.${modelInfo.modelName}Dto;
 import lombok.Data;
+<#if modelInfo.superClass?? && modelInfo.superClass?has_content>
 import lombok.EqualsAndHashCode;
+</#if>
 import lombok.experimental.Accessors;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.linpeilie.annotations.AutoMapper;
@@ -36,11 +39,13 @@ import java.util.UUID;
 * 日期: ${date}
 */
 @Data
+<#if modelInfo.superClass?? && modelInfo.superClass?has_content>
 @EqualsAndHashCode(callSuper = true)
+</#if>
 @Accessors(chain = true)
 @TableName("${modelInfo.tableName!}")
 @AutoMapper(target = ${modelInfo.modelName}Dto.class)
-public class ${modelInfo.modelName} extends ${modelInfo.superClass?keep_after_last(".")}<${modelInfo.modelName}> {
+public class ${modelInfo.modelName}<#if modelInfo.superClass?? && modelInfo.superClass?has_content> extends ${modelInfo.superClass?keep_after_last(".")}<${modelInfo.modelName}></#if> {
 
     <#if modelInfo.fieldList??>
     <#list modelInfo.fieldList as field>

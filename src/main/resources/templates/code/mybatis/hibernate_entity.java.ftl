@@ -1,10 +1,14 @@
 package ${package};
 
+<#if modelInfo.superClass?? && modelInfo.superClass?has_content>
 import ${modelInfo.superClass};
+</#if>
 import com.mcst.easyfk.core.annotation.PrimaryKey;
 import ${dtoPackage}.${modelInfo.modelName}Dto;
 import lombok.Data;
+<#if modelInfo.superClass?? && modelInfo.superClass?has_content>
 import lombok.EqualsAndHashCode;
+</#if>
 import lombok.experimental.Accessors;
 import io.github.linpeilie.annotations.AutoMapper;
 import com.mcst.easyfk.service.mybatisplus.annotation.Column;
@@ -37,11 +41,13 @@ import java.util.UUID;
 */
 @Data
 @Entity
+<#if modelInfo.superClass?? && modelInfo.superClass?has_content>
 @EqualsAndHashCode(callSuper = true)
+</#if>
 @Accessors(chain = true)
 @Table(name = "${modelInfo.tableName!}")
 @AutoMapper(target = ${modelInfo.modelName}Dto.class)
-public class ${modelInfo.modelName} extends ${modelInfo.superClass?keep_after_last(".")}<${modelInfo.modelName}> {
+public class ${modelInfo.modelName}<#if modelInfo.superClass?? && modelInfo.superClass?has_content> extends ${modelInfo.superClass?keep_after_last(".")}<${modelInfo.modelName}></#if> {
     <#if modelInfo.fieldList??>
     <#list modelInfo.fieldList as field>
     <#if field.keyFlag?? && field.keyFlag>

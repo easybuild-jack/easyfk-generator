@@ -161,7 +161,7 @@ public class CodeGenerator {
             }
         }
 
-        List<ModelInfo> modelList = GeneratorUtil.getModelInfoList(codeProperties, !onlyUpdateDtoAndParam);
+        List<ModelInfo> modelList = GeneratorUtil.getModelInfoList(codeProperties, projectProperties.getOrmType(), !onlyUpdateDtoAndParam);
         if (EmptyUtil.isEmpty(modelList)) {
             log.info("生成代码成功!");
             return;
