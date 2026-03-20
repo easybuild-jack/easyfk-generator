@@ -89,6 +89,13 @@
                         <artifactId>lombok-mapstruct-binding</artifactId>
                         <version>0.2.0</version>
                     </path>
+<#if ormType??><#if ormType.name() == "MYBATIS_FLEX">
+                    <path>
+                        <groupId>com.mybatis-flex</groupId>
+                        <artifactId>mybatis-flex-processor</artifactId>
+                        <version>1.11.6</version>
+                    </path>
+</#if></#if>
                 </annotationProcessorPaths>
                 <compilerArgs>
                     <arg>-Amapstruct.plus.nullValuePropertyMappingStrategy=IGNORE</arg>

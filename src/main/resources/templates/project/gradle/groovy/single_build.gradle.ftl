@@ -20,6 +20,9 @@ dependencies {
     testCompileOnly libs.lombok
     annotationProcessor(libs.lombok, libs.processor,libs.lombokMapstruct,libs.mapstructProcessor)
     testAnnotationProcessor(libs.lombok, libs.processor,libs.lombokMapstruct,libs.mapstructProcessor)
+<#if ormType??><#if ormType.name() == "MYBATIS_FLEX">
+    annotationProcessor 'com.mybatis-flex:mybatis-flex-processor:1.11.6'
+</#if></#if>
 <#if ormType?? && ormType != "NONE">
     implementation ('com.mcst:orm-${ormModuleSuffix}')
 <#if dbType?? && dbType.name() == "POSTGRE_SQL">
