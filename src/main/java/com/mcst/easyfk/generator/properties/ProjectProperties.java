@@ -4,8 +4,6 @@ import com.mcst.easyfk.generator.enums.*;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.util.List;
-
 /**
  * 创建项目配置
  *
@@ -113,9 +111,9 @@ public class ProjectProperties {
     private String moduleName;
 
     /**
-     * 业务模块列表
+     * 是否引入 auth 权限模块
      */
-    private List<ModuleInfo> modules;
+    private Boolean includeAuth = Boolean.FALSE;
 
     /**
      * 获取模块 ORM 子依赖的 artifactId 后缀

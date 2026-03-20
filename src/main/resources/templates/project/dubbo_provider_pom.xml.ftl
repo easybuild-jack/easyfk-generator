@@ -35,13 +35,11 @@
             <artifactId>rpc-dubbo</artifactId>
             <scope>provided</scope>
         </dependency>
-<#if modules?has_content>
-<#list modules as module>
+<#if includeAuth>
         <dependency>
             <groupId>com.mcst</groupId>
-            <artifactId>${module.name}-dubbo-provider</artifactId>
+            <artifactId>auth-dubbo-provider</artifactId>
         </dependency>
-</#list>
 </#if>
     </dependencies>
 </project>

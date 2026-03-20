@@ -93,34 +93,23 @@
             <groupId>com.mcst</groupId>
             <artifactId>log-${logType?lower_case}</artifactId>
         </dependency>
-<#if modules?has_content>
-<#list modules as module>
-<#if module.hasPrd>
-<#if module.prdSplit>
+<#if includeAuth>
+<#if appType?? && appType == "BMS">
         <dependency>
             <groupId>com.mcst</groupId>
-            <artifactId>${module.name}-prd-${appType?lower_case}</artifactId>
+            <artifactId>auth-prd</artifactId>
         </dependency>
-<#else>
+</#if>
         <dependency>
             <groupId>com.mcst</groupId>
-            <artifactId>${module.name}-prd</artifactId>
+            <artifactId>auth-server</artifactId>
         </dependency>
-</#if>
-</#if>
-<#if module.hasServer>
+<#if ormType?? && ormType != "NONE">
         <dependency>
             <groupId>com.mcst</groupId>
-            <artifactId>${module.name}-server</artifactId>
+            <artifactId>auth-orm-${ormModuleSuffix}</artifactId>
         </dependency>
 </#if>
-<#if module.hasOrm>
-        <dependency>
-            <groupId>com.mcst</groupId>
-            <artifactId>${module.name}-orm-${ormModuleSuffix}</artifactId>
-        </dependency>
-</#if>
-</#list>
 </#if>
     </dependencies>
 

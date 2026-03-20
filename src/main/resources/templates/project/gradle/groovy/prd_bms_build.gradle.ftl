@@ -9,16 +9,8 @@ dependencies {
     <#if projectType != "SMART" >
     implementation ('com.mcst:log-${logType?lower_case}')
     </#if>
-<#if modules?has_content>
-<#list modules as module>
-<#if module.hasPrd>
-<#if module.prdSplit>
-    implementation ('com.mcst:${module.name}-prd-bms')
-<#else>
-    implementation ('com.mcst:${module.name}-prd')
-</#if>
-</#if>
-</#list>
+<#if includeAuth>
+    implementation ('com.mcst:auth-prd')
 </#if>
 }
 <#if projectType == "MICROSERVICE">

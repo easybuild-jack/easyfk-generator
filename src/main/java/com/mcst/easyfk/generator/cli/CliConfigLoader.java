@@ -140,6 +140,7 @@ public class CliConfigLoader {
 
         if ((b = getBoolean(map, "create-repository")) != null) pp.setCreateRepository(b);
         if ((b = getBoolean(map, "controller-auto-config")) != null) pp.setControllerAutoConfig(b);
+        if ((b = getBoolean(map, "include-auth")) != null) pp.setIncludeAuth(b);
 
         return pp;
     }

@@ -41,22 +41,14 @@ dependencies {
     implementation ('com.mcst:web-prd')
 </#if>
     implementation ('com.mcst:doc-knife4j')
-<#if modules?has_content>
-<#list modules as module>
-<#if module.hasPrd>
-<#if module.prdSplit>
-    implementation ('com.mcst:${module.name}-prd-${appType?lower_case}')
-<#else>
-    implementation ('com.mcst:${module.name}-prd')
+<#if includeAuth>
+<#if appType?? && appType == "BMS">
+    implementation ('com.mcst:auth-prd')
 </#if>
+    implementation ('com.mcst:auth-server')
+<#if ormType?? && ormType != "NONE">
+    implementation ('com.mcst:auth-orm-${ormModuleSuffix}')
 </#if>
-<#if module.hasServer>
-    implementation ('com.mcst:${module.name}-server')
-</#if>
-<#if module.hasOrm>
-    implementation ('com.mcst:${module.name}-orm-${ormModuleSuffix}')
-</#if>
-</#list>
 </#if>
 }
 

@@ -62,21 +62,17 @@
             <artifactId>log-${logType?lower_case}</artifactId>
         </dependency>
     </#if>
-<#if modules?has_content>
-<#list modules as module>
-<#if module.hasServer>
+<#if includeAuth>
         <dependency>
             <groupId>com.mcst</groupId>
-            <artifactId>${module.name}-server</artifactId>
+            <artifactId>auth-server</artifactId>
         </dependency>
-</#if>
-<#if module.hasOrm>
+<#if ormType?? && ormType != "NONE">
         <dependency>
             <groupId>com.mcst</groupId>
-            <artifactId>${module.name}-orm-${ormModuleSuffix}</artifactId>
+            <artifactId>auth-orm-${ormModuleSuffix}</artifactId>
         </dependency>
 </#if>
-</#list>
 </#if>
     </dependencies>
     <#if projectType != "SMART" >
