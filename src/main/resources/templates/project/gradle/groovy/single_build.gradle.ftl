@@ -29,16 +29,10 @@ dependencies {
 </#if>
 </#if>
     implementation ('com.mcst:log-${logType?lower_case}')
-<#if rpcType?? && rpcType != "NONE">
-<#if serverRole?? && serverRole == "SERVER">
-    implementation ('com.mcst:web-micro')
-<#else>
     implementation ('com.mcst:web-prd')
-</#if>
+<#if rpcType?? && rpcType != "NONE">
     implementation ('com.mcst:registry-nacos')
     implementation ('com.mcst:rpc-${rpcType?lower_case}')
-<#else>
-    implementation ('com.mcst:web-prd')
 </#if>
     implementation ('com.mcst:doc-knife4j')
 <#if includeAuth>

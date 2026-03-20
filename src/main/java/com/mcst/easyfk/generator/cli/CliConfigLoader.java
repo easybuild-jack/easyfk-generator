@@ -120,9 +120,6 @@ public class CliConfigLoader {
         RpcType rpcType = getEnum(map, "rpc-type", RpcType.class);
         if (rpcType != null) pp.setRpcType(rpcType);
 
-        ServerRole serverRole = getEnum(map, "server-role", ServerRole.class);
-        if (serverRole != null) pp.setServerRole(serverRole);
-
         OrmType ormType = getEnum(map, "orm-type", OrmType.class);
         if (ormType != null) pp.setOrmType(ormType);
 

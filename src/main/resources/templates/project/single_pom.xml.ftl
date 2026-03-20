@@ -49,11 +49,11 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <scope>compile</scope>
         </dependency>
-<#if rpcType?? && rpcType != "NONE">
         <dependency>
             <groupId>com.mcst</groupId>
-            <artifactId>${(serverRole?? && serverRole == "SERVER")?then("web-micro", "web-prd")}</artifactId>
+            <artifactId>web-prd</artifactId>
         </dependency>
+<#if rpcType?? && rpcType != "NONE">
         <dependency>
             <groupId>com.mcst</groupId>
             <artifactId>registry-nacos</artifactId>
@@ -61,11 +61,6 @@
         <dependency>
             <groupId>com.mcst</groupId>
             <artifactId>rpc-${rpcType?lower_case}</artifactId>
-        </dependency>
-<#else>
-        <dependency>
-            <groupId>com.mcst</groupId>
-            <artifactId>web-prd</artifactId>
         </dependency>
 </#if>
         <dependency>

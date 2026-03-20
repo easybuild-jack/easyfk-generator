@@ -119,7 +119,7 @@ public class CodeGenerator {
         paramMap.put("appType", projectProperties.getAppType());
         paramMap.put("ormType", projectProperties.getOrmType());
         paramMap.put("rpcType", projectProperties.getRpcType());
-        paramMap.put("serverRole", projectProperties.getServerRole());
+
         paramMap.put("logType", projectProperties.getLogType());
         paramMap.put("groupId", projectProperties.getGroupId());
         paramMap.put("createResourceAnnotation", codeProperties.getCreateResourceAnnotation());
