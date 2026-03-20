@@ -70,7 +70,7 @@
 <#if ormType?? && ormType != "NONE">
         <dependency>
             <groupId>com.mcst</groupId>
-            <artifactId>orm-${ormType?lower_case}</artifactId>
+            <artifactId>orm-${ormModuleSuffix}</artifactId>
         </dependency>
 <#if dbType?? && dbType.name() == "POSTGRE_SQL">
         <dependency>

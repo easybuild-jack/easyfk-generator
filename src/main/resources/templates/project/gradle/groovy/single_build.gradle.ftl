@@ -21,7 +21,7 @@ dependencies {
     annotationProcessor(libs.lombok, libs.processor,libs.lombokMapstruct,libs.mapstructProcessor)
     testAnnotationProcessor(libs.lombok, libs.processor,libs.lombokMapstruct,libs.mapstructProcessor)
 <#if ormType?? && ormType != "NONE">
-    implementation ('com.mcst:orm-${ormType?lower_case}')
+    implementation ('com.mcst:orm-${ormModuleSuffix}')
 <#if dbType?? && dbType.name() == "POSTGRE_SQL">
     implementation ('com.mcst:db-postgresql')
 <#else>

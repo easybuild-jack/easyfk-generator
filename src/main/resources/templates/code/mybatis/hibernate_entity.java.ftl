@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 </#if>
 import lombok.experimental.Accessors;
 import io.github.linpeilie.annotations.AutoMapper;
-import com.mcst.easyfk.service.mybatisplus.annotation.Column;
+import com.mcst.easyfk.repository.persistence.annotation.EntityColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
@@ -57,11 +57,11 @@ public class ${modelInfo.modelName}<#if modelInfo.superClass?? && modelInfo.supe
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     </#if>
     @Id
-    @Column(comment = "${modelInfo.modelDesc!}ID")
+    @EntityColumn(comment = "${modelInfo.modelDesc!}ID")
     private ${field.type} ${field.name};
     <#else>
 
-    @Column(comment = "${field.desc!}")
+    @EntityColumn(comment = "${field.desc!}")
     private ${field.type} ${field.name};
     </#if>
     </#list>
@@ -72,7 +72,7 @@ public class ${modelInfo.modelName}<#if modelInfo.superClass?? && modelInfo.supe
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     </#if>
     @Id
-    @Column(comment = "${modelInfo.modelDesc!}ID")
+    @EntityColumn(comment = "${modelInfo.modelDesc!}ID")
     private ${modelInfo.idType} ${modelInfo.modelName?uncap_first}Id;
     </#if>
 }

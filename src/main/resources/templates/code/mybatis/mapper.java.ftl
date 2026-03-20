@@ -1,7 +1,11 @@
 package ${mapperPackage};
 
 import ${package}.${modelInfo.modelName};
+<#if ormType.name() == "MYBATIS_FLEX">
+import com.mybatisflex.core.BaseMapper;
+<#else>
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+</#if>
 
 /**
  * <p>

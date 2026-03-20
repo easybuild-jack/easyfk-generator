@@ -479,7 +479,7 @@ public class CodeGenerator {
                 packageList.add(new ImportPackage().setPackageName("import java.time.LocalDateTime;"));
             } else if (fileLine.contains("import java.time.LocalDate;")) {
                 packageList.add(new ImportPackage().setPackageName("import java.time.LocalDate;"));
-            } else if (fileLine.contains("@Column")) {
+            } else if (fileLine.contains("@EntityColumn")) {
                 String desc = extractComment(fileLine);
                 FieldInfo fieldInfo = null;
                 if (newField) {

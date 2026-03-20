@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.linpeilie.annotations.AutoMapper;
-import com.mcst.easyfk.service.mybatisplus.annotation.Column;
+import com.mcst.easyfk.repository.persistence.annotation.EntityColumn;
 <#assign hasLocalDateTime = false /><#assign hasLocalDate = false /><#assign hasLocalTime = false /><#assign hasBigDecimal = false /><#assign hasUUID = false />
 <#if modelInfo.fieldList??><#list modelInfo.fieldList as field><#if field.type == "LocalDateTime"><#assign hasLocalDateTime = true /></#if><#if field.type == "LocalDate"><#assign hasLocalDate = true /></#if><#if field.type == "LocalTime"><#assign hasLocalTime = true /></#if><#if field.type == "BigDecimal"><#assign hasBigDecimal = true /></#if><#if field.type == "UUID"><#assign hasUUID = true /></#if></#list></#if>
 <#if hasLocalDateTime>
@@ -57,11 +57,11 @@ public class ${modelInfo.modelName}<#if modelInfo.superClass?? && modelInfo.supe
     <#else >
     @TableId(type = IdType.ASSIGN_UUID)
     </#if>
-    @Column(comment = "${modelInfo.modelDesc!}ID")
+    @EntityColumn(comment = "${modelInfo.modelDesc!}ID")
     private ${field.type} ${field.name};
     <#else>
 
-    @Column(comment = "${field.desc}")
+    @EntityColumn(comment = "${field.desc}")
     private ${field.type} ${field.name};
     </#if>
     </#list>
@@ -73,7 +73,7 @@ public class ${modelInfo.modelName}<#if modelInfo.superClass?? && modelInfo.supe
     <#else >
     @TableId(type = IdType.ASSIGN_UUID)
     </#if>
-    @Column(comment = "${modelInfo.modelDesc!}ID")
+    @EntityColumn(comment = "${modelInfo.modelDesc!}ID")
     private ${modelInfo.idType} ${modelInfo.modelName?uncap_first}Id;
     </#if>
 }
