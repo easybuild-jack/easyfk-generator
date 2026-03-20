@@ -135,6 +135,9 @@ public class CliConfigLoader {
         LogType logType = getEnum(map, "log-type", LogType.class);
         if (logType != null) pp.setLogType(logType);
 
+        AppType appType = getEnum(map, "app-type", AppType.class);
+        if (appType != null) pp.setAppType(appType);
+
         if ((b = getBoolean(map, "create-repository")) != null) pp.setCreateRepository(b);
         if ((b = getBoolean(map, "controller-auto-config")) != null) pp.setControllerAutoConfig(b);
         if ((b = getBoolean(map, "include-auth")) != null) pp.setIncludeAuth(b);

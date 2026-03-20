@@ -22,7 +22,7 @@ easyfk:
         # 构建工具: maven / gradle
         build-type: maven
         # ORM 框架: NONE / MYBATIS / MYBATIS_FLEX / HIBERNATE
-        orm-type: NONE
+        orm-type: MYBATIS
         # PRD 层策略: none(不生成) / single(单一) / separation(分离: client + bms)
         prd-type: single
         # 日志框架: LOGBACK / LOG4J2
@@ -32,7 +32,7 @@ easyfk:
         # 项目版本
         project-version: 1.0.0-SNAPSHOT
         # [项目类型或PRD类型为单体的时候必填] 应用类型: BMS(后台管理端) / CLIENT(面向C端)
-        app-type:
+        app-type: BMS
         # 是否引入 auth 权限模块 (true/false)
         include-auth: false
 
@@ -51,16 +51,16 @@ easyfk:
         # ---------- 表配置 ----------
         # 表前缀 (生成类名时自动去除)
         # table-prefix: base_
-        # 从数据库读取的表名 (逗号分隔，会自动解析表结构)
+        # 从数据库读取的表名 (逗号分隔，会自动解析表结构)，为空则不从数据库读取表结构
         from-db-tables: product,order
 
         # ---------- 手动定义 Model (可选) ----------
-        # 除 from-db-tables 自动解析外，也可手动定义
-        # model-list:
-        #   - model-name: Product
-        #     model-desc: 商品信息
-        #     # id-type: String
-        #     # only-repository: false
-        #     # create-controller: true
-        #   - model-name: Order
-        #     model-desc: 订单信息
+        # 除 from-db-tables 自动解析外，也可手动定义，两者可以共存
+        model-list:
+          - model-name: Product
+            model-desc: 商品信息
+            # id-type: String
+            # only-repository: false
+            # create-controller: true
+          - model-name: Order
+            model-desc: 订单信息
