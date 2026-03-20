@@ -53,16 +53,6 @@
             <groupId>com.mcst</groupId>
             <artifactId>web-prd</artifactId>
         </dependency>
-<#if rpcType?? && rpcType != "NONE">
-        <dependency>
-            <groupId>com.mcst</groupId>
-            <artifactId>registry-nacos</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.mcst</groupId>
-            <artifactId>rpc-${rpcType?lower_case}</artifactId>
-        </dependency>
-</#if>
         <dependency>
             <groupId>com.mcst</groupId>
             <artifactId>doc-knife4j</artifactId>

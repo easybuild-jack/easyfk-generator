@@ -33,10 +33,6 @@ dependencies {
 </#if>
     implementation ('com.mcst:log-${logType?lower_case}')
     implementation ('com.mcst:web-prd')
-<#if rpcType?? && rpcType != "NONE">
-    implementation ('com.mcst:registry-nacos')
-    implementation ('com.mcst:rpc-${rpcType?lower_case}')
-</#if>
     implementation ('com.mcst:doc-knife4j')
 <#if includeAuth>
 <#if appType?? && appType == "BMS">
