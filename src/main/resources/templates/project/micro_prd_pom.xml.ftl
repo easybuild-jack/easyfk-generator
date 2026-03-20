@@ -75,11 +75,11 @@
             <groupId>com.mcst</groupId>
             <artifactId>auth-prd</artifactId>
         </dependency>
-</#if>
         <dependency>
             <groupId>com.mcst</groupId>
-            <artifactId>auth-server</artifactId>
+            <artifactId>auth-${rpcType?lower_case}-api</artifactId>
         </dependency>
+</#if> 
 </#if>
     </dependencies>
 

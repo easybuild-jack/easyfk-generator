@@ -28,8 +28,8 @@ dependencies {
 <#if includeAuth>
 <#if appType?? && appType == "BMS">
     implementation ('com.mcst:auth-prd')
+    implementation ('com.mcst:auth-${rpcType?lower_case}-api')
 </#if>
-    implementation ('com.mcst:auth-server')
 </#if>
 }
 
