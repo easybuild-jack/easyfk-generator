@@ -14,6 +14,15 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: ${driverName}
 </#if>
+<#if ormType == 'HIBERNATE'>
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+</#if>
 <#if rpcType?? && rpcType == 'DUBBO'>
 dubbo:
   application:
@@ -27,7 +36,7 @@ dubbo:
   scan:
     base-packages: ${groupId }.**.service.impl
 </#if>
-<#if ormType == 'MYBATIS' || ormType == 'MYBATIS_FLEX'>
+<#if ormType == 'MYBATIS'>
 #mybatis-plus 配置
 mybatis-plus:
   mapper-locations: classpath*:/mappings/**/*Mapper.xml
@@ -39,6 +48,21 @@ mybatis-plus:
       #逻辑删除配置
       logic-delete-value: 1
       logic-not-delete-value: 0
+  # 原生配置
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    #调试sql语句设置
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+</#if>
+<#if ormType == 'MYBATIS_FLEX'>
+#mybatis-flex 配置
+mybatis-flex:
+  mapper-locations: classpath*:/mappings/**/*Mapper.xml
+  global-config:
+    #逻辑删除配置
+    normal-value-of-logic-delete: 0
+    deleted-value-of-logic-delete: 1
   # 原生配置
   configuration:
     map-underscore-to-camel-case: true
