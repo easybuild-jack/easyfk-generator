@@ -134,7 +134,7 @@ easyfk:
         # [必填] 项目包根路径
         base-package: com.example.myapp
 
-        # 项目类型: single(单体) / microservice(微服务) / smart(多栈微服务)
+        # 项目类型: single(单体) / micro_prd(微服务产品层) / microservice(微服务) / smart(多栈微服务)
         project-type: single
         # 构建工具: maven / gradle
         build-type: maven
@@ -204,9 +204,10 @@ easyfk.config.generator.project:
 | `artifact-id` | 否 | 同 `project-name` | Maven artifactId，不填则默认取 `project-name` 的值 |
 | `project-type` | 否 | `smart` | 项目架构类型，决定生成的项目结构 |
 | | | | `single` — 单体项目，所有代码在一个工程中 |
+| | | | `micro_prd` — 微服务产品层，仅生成启动类+配置，通过 RPC 调用后端微服务，无 ORM/业务代码 |
 | | | | `microservice` — 微服务，生成 API + Server + PRD 模块，支持一种 RPC |
 | | | | `smart` — 多栈微服务，同时生成 Spring Cloud 和 Dubbo 两套 RPC 通道 |
-| `rpc-type` | 否 | `NONE` | RPC 类型，仅 `microservice` 架构时生效 |
+| `rpc-type` | 否 | `NONE` | RPC 类型，`microservice` 或 `micro_prd` 架构时生效（`micro_prd` 时必选） |
 | | | | `NONE` — 不使用 RPC |
 | | | | `cloud` — Spring Cloud Feign |
 | | | | `dubbo` — Apache Dubbo |
@@ -230,7 +231,7 @@ easyfk.config.generator.project:
 | `project-version` | 否 | `1.0.0-SNAPSHOT` | 生成项目的版本号 |
 | `create-repository` | 否 | `false` | 是否生成独立的 Repository 子项目 |
 | `controller-auto-config` | 否 | `false` | 是否为 Controller 层生成 Spring Boot AutoConfiguration |
-| `app-type` | 条件必填 | - | 应用类型，决定模块 PRD 依赖的变体。`BMS` — 后台管理端；`CLIENT` — 面向 C 端。**当 `project-type` 为 `single` 或 `prd-type` 为 `single` 时必填** |
+| `app-type` | 条件必填 | - | 应用类型，决定模块 PRD 依赖的变体。`BMS` — 后台管理端；`CLIENT` — 面向 C 端。**当 `project-type` 为 `single`/`micro_prd` 或 `prd-type` 为 `single` 时必填** |
 | `include-auth` | 否 | `false` | 是否引入 auth 权限模块。设为 `true` 时会自动在生成的项目中引入 auth 模块相关依赖 |
 
 ### 代码配置（code）
@@ -346,7 +347,18 @@ efg -s                  # 生成对应的业务代码
 efg -d                  # 仅刷新 DTO 和 Param，不影响其他代码
 ```
 
-### 场景四：使用不同配置文件
+### 场景四：创建微服务产品层项目（MICRO_PRD）
+
+```bash
+mkdir mall-prd && cd mall-prd
+efg init                # 生成配置模板
+# 编辑 generator.yml：设置 project-type: micro_prd, rpc-type: cloud, app-type: CLIENT
+efg -p                  # 生成项目骨架
+efg -s                  # 生成启动类和配置文件
+# 手动引入业务模块的 API 依赖，编写 Controller
+```
+
+### 场景五：使用不同配置文件
 
 ```bash
 efg -c dev-generator.yml        # 开发环境
@@ -380,6 +392,29 @@ easyfk:
           - model-name: Order
             model-desc: 订单信息
 ```
+
+### 微服务产品层项目（MICRO_PRD）
+
+```yaml
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\workspace\projects
+        group-id: com.example
+        project-name: mall-prd
+        base-package: com.example.mall.prd
+        project-type: micro_prd
+        rpc-type: cloud
+        app-type: CLIENT
+        framework-version: 3.2.12
+      code:
+        module-name: mall
+```
+
+> **MICRO_PRD 项目不需要数据库配置和 model-list**，因为它不生成任何业务代码。生成后手动在 pom.xml / build.gradle 中引入需要调用的微服务 API 模块依赖，编写 Controller 通过 RPC 远程调用后端服务。
+>
+> **注意**：MICRO_PRD 项目的 `rpc-type` 为必选项，必须指定为 `cloud` 或 `dubbo`。`orm-type` 和 `prd-type` 会被忽略（强制为 NONE）。
 
 ### 微服务项目（Spring Cloud）
 

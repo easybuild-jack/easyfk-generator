@@ -23,7 +23,7 @@ subprojects {
         annotationProcessor(libs.lombok, libs.processor,libs.lombokMapstruct,libs.mapstructProcessor)
         testAnnotationProcessor(libs.lombok, libs.processor,libs.lombokMapstruct,libs.mapstructProcessor)
 <#if ormType??><#if ormType.name() == "MYBATIS_FLEX">
-        annotationProcessor 'com.mybatis-flex:mybatis-flex-processor:1.11.6'
+        annotationProcessor libs.flexProcessor
 </#if></#if>
     }
     tasks.withType(JavaCompile).configureEach {
