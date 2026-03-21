@@ -22,7 +22,7 @@ dependencies {
     api('com.mcst:easyfk-core')
     api('com.mysql:mysql-connector-j')
     api('org.postgresql:postgresql')
-    testImplementation('com.mcst:log-logback')
+    implementation('com.mcst:log-logback')
     api('org.freemarker:freemarker:2.3.31')
     implementation('info.picocli:picocli:4.7.6')
     implementation('org.yaml:snakeyaml:2.2')
