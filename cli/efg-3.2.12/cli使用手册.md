@@ -134,7 +134,7 @@ easyfk:
         # [必填] 项目包根路径
         base-package: com.example.myapp
 
-        # 项目类型: single(单体) / micro_prd(微服务产品层) / microservice(微服务) / smart(多栈微服务)
+        # 项目类型: single(单体项目) / micro_prd(产品层项目) / microservice(微服务项目) / smart(智能型项目)
         project-type: single
         # 构建工具: maven / gradle
         build-type: maven
@@ -204,9 +204,9 @@ easyfk.config.generator.project:
 | `artifact-id` | 否 | 同 `project-name` | Maven artifactId，不填则默认取 `project-name` 的值 |
 | `project-type` | 否 | `smart` | 项目架构类型，决定生成的项目结构 |
 | | | | `single` — 单体项目，所有代码在一个工程中 |
-| | | | `micro_prd` — 微服务产品层，仅生成启动类+配置，通过 RPC 调用后端微服务，无 ORM/业务代码 |
-| | | | `microservice` — 微服务，生成 API + Server + PRD 模块，支持一种 RPC |
-| | | | `smart` — 多栈微服务，同时生成 Spring Cloud 和 Dubbo 两套 RPC 通道 |
+| | | | `micro_prd` — 产品层项目，仅生成启动类+配置，通过 RPC 调用后端微服务，无 ORM/业务代码 |
+| | | | `microservice` — 微服务项目，生成 API + Server + PRD 模块，支持一种 RPC |
+| | | | `smart` — 智能型项目，同时生成 Spring Cloud 和 Dubbo 两套 RPC 通道 |
 | `rpc-type` | 否 | `NONE` | RPC 类型，`microservice` 或 `micro_prd` 架构时生效（`micro_prd` 时必选） |
 | | | | `NONE` — 不使用 RPC |
 | | | | `cloud` — Spring Cloud Feign |
@@ -347,7 +347,7 @@ efg -s                  # 生成对应的业务代码
 efg -d                  # 仅刷新 DTO 和 Param，不影响其他代码
 ```
 
-### 场景四：创建微服务产品层项目（MICRO_PRD）
+### 场景四：创建产品层项目（MICRO_PRD）
 
 ```bash
 mkdir mall-prd && cd mall-prd
@@ -393,7 +393,7 @@ easyfk:
             model-desc: 订单信息
 ```
 
-### 微服务产品层项目（MICRO_PRD）
+### 产品层项目（MICRO_PRD）
 
 ```yaml
 easyfk:
@@ -476,7 +476,7 @@ easyfk:
             model-desc: 收货地址
 ```
 
-### 多栈微服务项目（SMART）
+### 智能型项目（SMART）
 
 ```yaml
 easyfk:
