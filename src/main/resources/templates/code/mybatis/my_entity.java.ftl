@@ -51,17 +51,27 @@ public class ${modelInfo.modelName}<#if modelInfo.superClass?? && modelInfo.supe
     <#list modelInfo.fieldList as field>
     <#if field.keyFlag?? && field.keyFlag>
 
+    <#if field.desc!?length gt 0>
+    /**
+    * ${field.desc}
+    */
+    </#if>
     @PrimaryKey
     <#if modelInfo.idIsAuto?? && modelInfo.idIsAuto>
     @TableId(type = IdType.AUTO)
     <#else >
     @TableId(type = IdType.ASSIGN_UUID)
     </#if>
-    @EntityColumn(comment = "${modelInfo.modelDesc!}ID")
+    @EntityColumn(comment = "${field.desc!}")
     private ${field.type} ${field.name};
     <#else>
 
-    @EntityColumn(comment = "${field.desc}")
+    <#if field.desc!?length gt 0>
+    /**
+    * ${field.desc}
+    */
+    </#if>
+    @EntityColumn(comment = "${field.desc!}")
     private ${field.type} ${field.name};
     </#if>
     </#list>

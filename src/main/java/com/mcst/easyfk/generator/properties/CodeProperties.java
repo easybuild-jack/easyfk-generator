@@ -93,12 +93,5 @@ public class CodeProperties {
      */
     private String dbTables;
 
-    public String getDbTables() {
-        return dbTables;
-    }
-
-    public void setDbTables(String dbTables) {
-        this.dbTables = dbTables;
-    }
 
 }

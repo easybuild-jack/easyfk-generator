@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 </#if>
 /**
 * <p>
-* ${modelInfo.modelDesc}!} Api接口Server层实现
+* ${modelInfo.modelDesc!} Api接口Server层实现
 * </p>
 *
 * @author ${author}

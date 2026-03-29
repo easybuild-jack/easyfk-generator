@@ -93,7 +93,7 @@ public class ProjectProperties {
     /**
      * 应用类型，BMS(后台管理端) / CLIENT(面向C端)
      */
-    private AppType appType;
+    private AppType appType = AppType.BMS;
 
     /**
      * 数据库类型

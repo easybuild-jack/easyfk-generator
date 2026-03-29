@@ -79,8 +79,7 @@ public class ModelGenerator {
             paramMap.put("ormType", projectProperties.getOrmType());
             List<ModelInfo> modelList = GeneratorUtil.getModelInfoList(codeProperties, projectProperties.getOrmType(), true);
             if (EmptyUtil.isEmpty(modelList)) {
-                log.error("无Model信息！");
-                return;
+                throw new BusinessException("无Model信息");
             }
             for (ModelInfo modelInfo : modelList) {
                 try {
@@ -104,12 +103,16 @@ public class ModelGenerator {
                         CreateFileUtil.createOnNotExistFile("mybatis/mapper.java.ftl", mapperPath, paramMap, BASE_TEMPLATE_PATH);
                     }
                 } catch (Exception ex) {
-                    log.error("生成模型失败：{}，原因：{}", modelInfo.getModelName(), ex.getMessage());
+                    throw new BusinessException("生成模型失败：" + modelInfo.getModelName() + "，原因：" + ex.getMessage());
                 }
             }
             log.info("生成Model成功！");
         } catch (Exception e) {
             log.error("生成Model失败：{}", e.getMessage());
+            if (e instanceof BusinessException businessException) {
+                throw businessException;
+            }
+            throw new BusinessException("生成Model失败：" + e.getMessage());
         }
     }
 

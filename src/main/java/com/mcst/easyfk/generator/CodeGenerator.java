@@ -170,8 +170,7 @@ public class CodeGenerator {
 
         List<ModelInfo> modelList = GeneratorUtil.getModelInfoList(codeProperties, projectProperties.getOrmType(), !onlyUpdateDtoAndParam);
         if (EmptyUtil.isEmpty(modelList)) {
-            log.info("生成代码成功!");
-            return;
+            throw new BusinessException("无Model信息");
         }
         for (ModelInfo modelInfo : modelList) {
             try {
@@ -235,7 +234,7 @@ public class CodeGenerator {
                     }
                 }
             } catch (Exception e) {
-                log.error("生成代码失败：{}", e.getMessage());
+                throw new BusinessException("生成代码失败：" + modelInfo.getModelName() + "，原因：" + e.getMessage());
             }
         }
         log.info("生成代码成功!");

@@ -66,7 +66,8 @@ public class GeneratorUtil {
                     continue;
                 }
                 ModelInfo modelInfo = new ModelInfo();
-                String modelName = EmptyUtil.isEmpty(codeProperties.getTablePrefix()) ? table : table.replace(codeProperties.getTablePrefix(), "");
+                String modelName = EmptyUtil.isEmpty(codeProperties.getTablePrefix()) ? table
+                        : table.replace(codeProperties.getTablePrefix(), "");
                 // 转驼峰 并首字母大写
                 modelInfo.setModelName(StringUtil.upperFirstChar(StringUtil.underlineToCamel(modelName)));
                 if (!modelNameSet.add(modelInfo.getModelName())) {
@@ -77,8 +78,11 @@ public class GeneratorUtil {
                 if (init) {
                     try {
                         getModelInfoFromDatabase(codeProperties, table, modelInfo, extendsSupperClass);
+                        if (EmptyUtil.isEmpty(modelInfo.getFieldList())) {
+                            throw new BusinessException("从数据库未读取到表字段：" + table + "，请检查表名、schema、db-type、连接地址是否正确");
+                        }
                     } catch (SQLException e) {
-                        log.error("从数据库获取表[{}]元数据失败: {}", table, e.getMessage(), e);
+                        throw new BusinessException("从数据库读取表字段失败：" + table + "，原因：" + e.getMessage());
                     }
                 }
             }
@@ -102,7 +106,8 @@ public class GeneratorUtil {
                 modelInfo.setSuperClass(resolveSuperClass(ormType, extendsSupperClass));
             }
             if (EmptyUtil.isEmpty(modelInfo.getTableName())) {
-                String tablePrefix = Optional.ofNullable(modelInfo.getTablePrefix()).orElse(codeProperties.getTablePrefix());
+                String tablePrefix = Optional.ofNullable(modelInfo.getTablePrefix())
+                        .orElse(codeProperties.getTablePrefix());
                 if (EmptyUtil.isNotEmpty(tablePrefix)) {
                     if (!tablePrefix.endsWith("_")) {
                         tablePrefix = tablePrefix + "_";
@@ -157,10 +162,12 @@ public class GeneratorUtil {
     }
 
     public static boolean hasModelSource(CodeProperties codeProperties) {
-        return EmptyUtil.isNotEmpty(codeProperties.getDbTables()) || EmptyUtil.isNotEmpty(codeProperties.getModelList());
+        return EmptyUtil.isNotEmpty(codeProperties.getDbTables())
+                || EmptyUtil.isNotEmpty(codeProperties.getModelList());
     }
 
-    public static void getModelInfoFromDatabase(CodeProperties codeProperties, String tableName, ModelInfo modelInfo, boolean filterParentFields) throws SQLException {
+    public static void getModelInfoFromDatabase(CodeProperties codeProperties, String tableName, ModelInfo modelInfo,
+            boolean filterParentFields) throws SQLException {
         List<FieldInfo> fieldInfoList = new ArrayList<>();
 
         String jdbcUrl = codeProperties.getDbShortUrl();
@@ -178,7 +185,8 @@ public class GeneratorUtil {
         } else if (DbType.POSTGRE_SQL.equals(codeProperties.getDbType())) {
             jdbcUrl = String.format(POSTGRESQL_URL_TEMPLATE, codeProperties.getDbShortUrl());
             driverClass = POSTGRESQL_DRIVER;
-        } else if (DbType.ORACLE_12C.equals(codeProperties.getDbType()) || DbType.ORACLE.equals(codeProperties.getDbType())) {
+        } else if (DbType.ORACLE_12C.equals(codeProperties.getDbType())
+                || DbType.ORACLE.equals(codeProperties.getDbType())) {
             jdbcUrl = String.format(ORACLE_URL_TEMPLATE, codeProperties.getDbShortUrl());
             driverClass = ORACLE_DRIVER;
         }
@@ -188,15 +196,28 @@ public class GeneratorUtil {
             } catch (ClassNotFoundException ignored) {
             }
         }
-        Connection connection = DriverManager.getConnection(jdbcUrl, codeProperties.getDbUser(), codeProperties.getDbPwd());
+        Connection connection = DriverManager.getConnection(jdbcUrl, codeProperties.getDbUser(),
+                codeProperties.getDbPwd());
         DatabaseMetaData metaData = connection.getMetaData();
 
-        // PostgreSQL 需要指定 schema 为 public，MySQL 用 null 即可
-        String schemaPattern = DbType.POSTGRE_SQL.equals(codeProperties.getDbType()) ? "public" : null;
-
-        if (EmptyUtil.isEmpty(modelInfo.getModelDesc())) {
-            ResultSet tables = metaData.getTables(databaseName, schemaPattern, tableName, new String[]{"TABLE"});
-            if (tables.next()) {
+        // PostgreSQL 不同数据库/驱动下 schema 可能不是固定的 public，因此先定位真实的表元数据
+        String catalogPattern = DbType.POSTGRE_SQL.equals(codeProperties.getDbType()) ? null : databaseName;
+        String schemaPattern = DbType.POSTGRE_SQL.equals(codeProperties.getDbType()) ? connection.getSchema() : null;
+        if (EmptyUtil.isEmpty(schemaPattern) && DbType.POSTGRE_SQL.equals(codeProperties.getDbType())) {
+            schemaPattern = "public";
+        }
+        String tableCatalog = catalogPattern;
+        String tableSchema = schemaPattern;
+        ResultSet tables = metaData.getTables(catalogPattern, schemaPattern, tableName, new String[] { "TABLE" });
+        boolean tableFound = tables.next();
+        if (!tableFound && DbType.POSTGRE_SQL.equals(codeProperties.getDbType())) {
+            tables = metaData.getTables(null, null, tableName, new String[] { "TABLE" });
+            tableFound = tables.next();
+        }
+        if (tableFound) {
+            tableCatalog = tables.getString("TABLE_CAT");
+            tableSchema = tables.getString("TABLE_SCHEM");
+            if (EmptyUtil.isEmpty(modelInfo.getModelDesc())) {
                 String tableComment = tables.getString("REMARKS");
                 if (EmptyUtil.isNotEmpty(tableComment)) {
                     modelInfo.setModelDesc(tableComment);
@@ -204,8 +225,8 @@ public class GeneratorUtil {
             }
         }
 
-        ResultSet columns = metaData.getColumns(databaseName, schemaPattern, tableName, null);
-        ResultSet primaryKeys = metaData.getPrimaryKeys(databaseName, schemaPattern, tableName);
+        ResultSet columns = metaData.getColumns(tableCatalog, tableSchema, tableName, null);
+        ResultSet primaryKeys = metaData.getPrimaryKeys(tableCatalog, tableSchema, tableName);
         while (columns.next()) {
             createFieldInfo(columns, fieldInfoList, filterParentFields);
         }
@@ -249,7 +270,8 @@ public class GeneratorUtil {
         return null;
     }
 
-    private static void createFieldInfo(ResultSet columns, List<FieldInfo> fieldInfoList, boolean filterParentFields) throws SQLException {
+    private static void createFieldInfo(ResultSet columns, List<FieldInfo> fieldInfoList, boolean filterParentFields)
+            throws SQLException {
         FieldInfo fieldInfo = new FieldInfo();
         String fieldName = StringUtil.underlineToCamel(columns.getString("COLUMN_NAME"));
         if (filterParentFields && parentField.contains(fieldName)) {
@@ -259,7 +281,7 @@ public class GeneratorUtil {
         String fieldType = columns.getString("TYPE_NAME").toUpperCase();
         switch (fieldType) {
             case "DATETIME", "TIMESTAMP", "TIMESTAMPTZ", "TIMESTAMP WITH TIME ZONE" ->
-                    fieldInfo.setType("LocalDateTime");
+                fieldInfo.setType("LocalDateTime");
             case "DATE" -> fieldInfo.setType("LocalDate");
             case "TIME" -> fieldInfo.setType("LocalTime");
             case "DECIMAL", "NUMERIC" -> fieldInfo.setType("BigDecimal");

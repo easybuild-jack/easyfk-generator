@@ -159,6 +159,8 @@ easyfk:
         module-name: myapp
         # 作者信息
         author: eb-jack
+        # 数据库类型: MYSQL / POSTGRE_SQL / ORACLE / ORACLE_12C / MARIADB / SQL_SERVER / ...
+        db-type: MYSQL
         # [必填] 数据库短连接 (host:port/database)
         db-short-url: localhost:3306/my_database
         # 数据库用户名

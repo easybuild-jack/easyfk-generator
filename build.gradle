@@ -34,9 +34,9 @@ application {
     mainClass = 'com.mcst.easyfk.generator.cli.GeneratorCli'
 }
 
-test {
-    enabled(false)
-}
+/*test {
+    useJUnitPlatform()
+}*/
 
 tasks.register('fatJar', Jar) {
     archiveClassifier.set('cli')

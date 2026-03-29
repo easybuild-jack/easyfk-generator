@@ -52,15 +52,25 @@ public class ${modelInfo.modelName}<#if modelInfo.superClass?? && modelInfo.supe
     <#list modelInfo.fieldList as field>
     <#if field.keyFlag?? && field.keyFlag>
 
+    <#if field.desc!?length gt 0>
+    /**
+    * ${field.desc}
+    */
+    </#if>
     @PrimaryKey
     <#if modelInfo.idIsAuto?? && modelInfo.idIsAuto>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     </#if>
     @Id
-    @EntityColumn(comment = "${modelInfo.modelDesc!}ID")
+    @EntityColumn(comment = "${field.desc!}")
     private ${field.type} ${field.name};
     <#else>
 
+    <#if field.desc!?length gt 0>
+    /**
+    * ${field.desc}
+    */
+    </#if>
     @EntityColumn(comment = "${field.desc!}")
     private ${field.type} ${field.name};
     </#if>

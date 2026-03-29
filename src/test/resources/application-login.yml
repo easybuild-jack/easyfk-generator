@@ -1,0 +1,37 @@
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\codespace\module-project\3.2.12
+        group-id: com.mcst
+        artifact-id: login
+        project-name: login
+        prd-type: single
+        project-version: 3.2.12.3
+        orm-type: MYBATIS
+        project-type: smart
+        framework-version: 3.2.12
+        gradle-version: 8.7
+        build-type: gradle
+        app-type: BMS
+        base-package: com.mcst.login
+        #create-prd-project: false
+
+      code:
+        module-name: login
+        db-type: POSTGRE_SQL
+        db-short-url: 127.0.0.1:5432/eb_demo
+        db-pwd: 123456
+        db-user: postgres
+        create-resource-annotation: false
+        #table-prefix: base_
+        db-tables: login_record,login_cache
+
+
+
+
+
+
+
+
+
