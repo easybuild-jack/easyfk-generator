@@ -6,6 +6,7 @@ import ${servicePackage}.I${modelInfo.modelName}Service;
 import ${remotePackage}.I${modelInfo.modelName}Remote;
 import com.mcst.easyfk.remote.sc.BaseRemoteImpl;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
 * <p>
