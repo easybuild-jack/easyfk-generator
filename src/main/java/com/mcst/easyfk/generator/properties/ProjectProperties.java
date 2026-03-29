@@ -91,7 +91,7 @@ public class ProjectProperties {
     private LogType logType = LogType.LOGBACK;
 
     /**
-     * 应用类型，BMS(后台管理端) / CLIENT(面向C端)，必填
+     * 应用类型，BMS(后台管理端) / CLIENT(面向C端)
      */
     private AppType appType;
 

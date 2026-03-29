@@ -159,7 +159,9 @@ public class CliConfigLoader {
         if ((v = getString(map, "db-short-url")) != null) cp.setDbShortUrl(v);
         if ((v = getString(map, "db-user")) != null) cp.setDbUser(v);
         if ((v = getString(map, "db-pwd")) != null) cp.setDbPwd(v);
-        if ((v = getString(map, "from-db-tables")) != null) cp.setFromDbTables(v);
+        if ((v = getString(map, "db-tables")) != null) {
+            cp.setDbTables(v);
+        }
         if ((v = getString(map, "resource-group")) != null) cp.setResourceGroup(v);
         if ((v = getString(map, "resource-name")) != null) cp.setResourceName(v);
         if ((v = getString(map, "resource-id")) != null) cp.setResourceId(v);

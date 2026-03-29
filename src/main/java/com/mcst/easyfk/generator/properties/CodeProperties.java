@@ -91,6 +91,14 @@ public class CodeProperties {
     /**
      * 需要从数据库初始化生成Model的表
      */
-    private String fromDbTables;
+    private String dbTables;
+
+    public String getDbTables() {
+        return dbTables;
+    }
+
+    public void setDbTables(String dbTables) {
+        this.dbTables = dbTables;
+    }
 
 }

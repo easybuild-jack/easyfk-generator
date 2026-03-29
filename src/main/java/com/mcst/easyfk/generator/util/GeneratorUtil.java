@@ -54,32 +54,26 @@ public class GeneratorUtil {
     }
 
     public static List<ModelInfo> getModelInfoList(CodeProperties codeProperties, OrmType ormType, boolean init) {
-        List<ModelInfo> modelList = codeProperties.getModelList();
-        Map<String, ModelInfo> modelInfoMap = new HashMap<>(10);
-        if (EmptyUtil.isEmpty(modelList)) {
-            modelList = new ArrayList<>();
-        } else {
-            // modelInfo to map
-            for (ModelInfo modelInfo : modelList) {
-                modelInfoMap.put(modelInfo.getModelName(), modelInfo);
-            }
-        }
-
+        List<ModelInfo> modelList = new ArrayList<>();
+        Set<String> modelNameSet = new HashSet<>(10);
         boolean extendsSupperClass = codeProperties.getExtendsSupperClass();
-        String fromDbTables = codeProperties.getFromDbTables();
-        if (EmptyUtil.isNotEmpty(fromDbTables)) {
-            String[] tables = fromDbTables.split(",");
+        String dbTables = codeProperties.getDbTables();
+        if (EmptyUtil.isNotEmpty(dbTables)) {
+            String[] tables = dbTables.split(",");
             for (String table : tables) {
+                table = table.trim();
+                if (EmptyUtil.isEmpty(table)) {
+                    continue;
+                }
                 ModelInfo modelInfo = new ModelInfo();
                 String modelName = EmptyUtil.isEmpty(codeProperties.getTablePrefix()) ? table : table.replace(codeProperties.getTablePrefix(), "");
                 // 转驼峰 并首字母大写
                 modelInfo.setModelName(StringUtil.upperFirstChar(StringUtil.underlineToCamel(modelName)));
-                if (modelInfoMap.containsKey(modelInfo.getModelName())) {
-                    modelInfo = modelInfoMap.get(modelInfo.getModelName());
-                } else {
-                    modelInfoMap.put(modelInfo.getModelName(), modelInfo);
-                    modelList.add(modelInfo);
+                if (!modelNameSet.add(modelInfo.getModelName())) {
+                    throw new BusinessException("Model名称重复：" + modelInfo.getModelName() + "，同一个Model不能重复定义");
                 }
+                modelInfo.setTableName(table);
+                modelList.add(modelInfo);
                 if (init) {
                     try {
                         getModelInfoFromDatabase(codeProperties, table, modelInfo, extendsSupperClass);
@@ -87,6 +81,14 @@ public class GeneratorUtil {
                         log.error("从数据库获取表[{}]元数据失败: {}", table, e.getMessage(), e);
                     }
                 }
+            }
+        }
+        if (EmptyUtil.isNotEmpty(codeProperties.getModelList())) {
+            for (ModelInfo modelInfo : codeProperties.getModelList()) {
+                if (!modelNameSet.add(modelInfo.getModelName())) {
+                    throw new BusinessException("Model名称重复：" + modelInfo.getModelName() + "，同一个Model不能重复定义");
+                }
+                modelList.add(modelInfo);
             }
         }
 
@@ -152,6 +154,10 @@ public class GeneratorUtil {
         paramMap.put("author", codeProperties.getAuthor());
         paramMap.put("date", LocalDateUtil.localDateToString(LocalDate.now()));
         return paramMap;
+    }
+
+    public static boolean hasModelSource(CodeProperties codeProperties) {
+        return EmptyUtil.isNotEmpty(codeProperties.getDbTables()) || EmptyUtil.isNotEmpty(codeProperties.getModelList());
     }
 
     public static void getModelInfoFromDatabase(CodeProperties codeProperties, String tableName, ModelInfo modelInfo, boolean filterParentFields) throws SQLException {

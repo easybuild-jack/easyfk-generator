@@ -67,7 +67,7 @@ mybatis-flex:
     #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 </#if>
 
-<#if projectType == 'SINGLE' && appType == 'BMS'>
+<#if projectType == 'SINGLE' && appType?? && appType == 'BMS'>
 easyfk:
   config:
     #跨域配置  

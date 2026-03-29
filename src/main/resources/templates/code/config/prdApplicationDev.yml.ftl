@@ -24,7 +24,7 @@ easyfk:
     web:
       cors:
         open: true  
-  <#if appType == 'BMS'>
+  <#if appType?? && appType == 'BMS'>
   #资源初始化
     resource:
       init:

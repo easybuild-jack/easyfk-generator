@@ -50,6 +50,9 @@ public class ModelGenerator {
             log.info("OrmType 为 NONE，跳过 Model 生成");
             return;
         }
+        if (!GeneratorUtil.hasModelSource(codeProperties)) {
+            throw new BusinessException("db-tables 和 model-list 不能同时为空");
+        }
         try {
             String basePackage = projectProperties.getBasePackage();
             if (EmptyUtil.isEmpty(basePackage)) {

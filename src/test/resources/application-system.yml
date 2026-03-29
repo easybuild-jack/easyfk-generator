@@ -36,7 +36,7 @@ easyfk:
 #            model-desc: 字典
 #          - model-name: DictItem
 #            model-desc: 字典项
-        from-db-tables: system_dict2
+        db-tables: system_dict2
 
 
 

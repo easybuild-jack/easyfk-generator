@@ -31,7 +31,7 @@ easyfk:
         framework-version: 3.2.12
         # 项目版本
         project-version: 1.0.0-SNAPSHOT
-        # [项目类型或PRD类型为单体的时候必填] 应用类型: BMS(后台管理端) / CLIENT(面向C端)
+        # [项目类型为 single / micro_prd，或 prd-type 为 single 时必填] 应用类型: BMS(后台管理端) / CLIENT(面向C端)
         app-type: BMS
         # 是否引入 auth 权限模块 (true/false)
         include-auth: false
@@ -52,10 +52,10 @@ easyfk:
         # 表前缀 (生成类名时自动去除)
         # table-prefix: base_
         # 从数据库读取的表名 (逗号分隔，会自动解析表结构)，为空则不从数据库读取表结构
-        from-db-tables: product,order
+        db-tables: product,order
 
         # ---------- 手动定义 Model (可选) ----------
-        # 除 from-db-tables 自动解析外，也可手动定义，两者可以共存
+        # 除 db-tables 自动解析外，也可手动定义，两者可以共存
         model-list:
           - model-name: Product
             model-desc: 商品信息

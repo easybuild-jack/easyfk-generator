@@ -148,7 +148,7 @@ easyfk:
         framework-version: 3.2.12
         # 项目版本
         project-version: 1.0.0-SNAPSHOT
-        # [项目类型或PRD类型为单体的时候必填] 应用类型: BMS(后台管理端) / CLIENT(面向C端)
+        # [项目类型为 single / micro_prd，或 prd-type 为 single 时必填] 应用类型: BMS(后台管理端) / CLIENT(面向C端)
         app-type:
         # 是否引入 auth 权限模块 (true/false)
         include-auth: false
@@ -169,10 +169,10 @@ easyfk:
         # 表前缀 (生成类名时自动去除)
         # table-prefix: base_
         # 从数据库读取的表名 (逗号分隔，会自动解析表结构)
-        from-db-tables: product,order
+        db-tables: product,order
 
         # ---------- 手动定义 Model (可选) ----------
-        # 除 from-db-tables 自动解析外，也可手动定义
+        # 除 db-tables 自动解析外，也可手动定义
         # model-list:
         #   - model-name: Product
         #     model-desc: 商品信息
@@ -231,7 +231,7 @@ easyfk.config.generator.project:
 | `project-version` | 否 | `1.0.0-SNAPSHOT` | 生成项目的版本号 |
 | `create-repository` | 否 | `false` | 是否生成独立的 Repository 子项目 |
 | `controller-auto-config` | 否 | `false` | 是否为 Controller 层生成 Spring Boot AutoConfiguration |
-| `app-type` | 条件必填 | - | 应用类型，决定模块 PRD 依赖的变体。`BMS` — 后台管理端；`CLIENT` — 面向 C 端。**当 `project-type` 为 `single`/`micro_prd` 或 `prd-type` 为 `single` 时必填** |
+| `app-type` | 条件必填 | - | 应用类型，决定模块 PRD 依赖的变体。`BMS` — 后台管理端；`CLIENT` — 面向 C 端。**当 `project-type` 为 `single` / `micro_prd`，或 `prd-type` 为 `single` 时必填** |
 | `include-auth` | 否 | `false` | 是否引入 auth 权限模块。设为 `true` 时会自动在生成的项目中引入 auth 模块相关依赖 |
 
 ### 代码配置（code）
@@ -254,9 +254,9 @@ easyfk.config.generator.code:
 | 配置项 | 必填 | 默认值 | 说明 |
 |--------|------|--------|------|
 | `db-type` | 否 | `MYSQL` | 数据库类型。可选值见下方「支持的数据库类型」 |
-| `db-short-url` | **是**★ | - | 数据库短连接地址，格式：`host:port/database`。例：`localhost:3306/my_db`。★ 仅在使用 `from-db-tables` 时必填 |
+| `db-short-url` | **是**★ | - | 数据库短连接地址，格式：`host:port/database`。例：`localhost:3306/my_db`。★ 仅在使用 `db-tables` 时必填 |
 | `db-user` | 否 | `root` | 数据库用户名 |
-| `db-pwd` | **是**★ | - | 数据库密码。★ 仅在使用 `from-db-tables` 时必填 |
+| `db-pwd` | **是**★ | - | 数据库密码。★ 仅在使用 `db-tables` 时必填 |
 
 **支持的数据库类型（db-type）：**
 
@@ -280,11 +280,11 @@ easyfk.config.generator.code:
 | 配置项 | 必填 | 默认值 | 说明 |
 |--------|------|--------|------|
 | `table-prefix` | 否 | - | 表名前缀，生成类名时自动去除。例：配置 `base_`，表 `base_product` → 类 `Product` |
-| `from-db-tables` | 否 | - | 需要从数据库读取结构的表名，逗号分隔。例：`product,order,user_info`。配置后会自动连接数据库解析字段 |
+| `db-tables` | 否 | - | 需要从数据库读取结构的表名，逗号分隔。例：`product,order,user_info`。配置后会自动连接数据库解析字段 |
 
 #### 手动定义 Model（可选）
 
-除了 `from-db-tables` 自动解析，也可以手动定义模型：
+除了 `db-tables` 自动解析，也可以手动定义模型：
 
 ```yaml
 model-list:
@@ -301,7 +301,7 @@ model-list:
     model-resource-sort: 10100  # 该 Model 的资源权限排序值
 ```
 
-> `from-db-tables` 和 `model-list` 可以同时使用。如果同一个 Model 在两边都有定义，`model-list` 中的配置优先（可用于覆盖自动解析的默认值）。
+> `db-tables` 和 `model-list` 可以同时使用。两者会合并成最终的 Model 列表；如果出现同名 Model，会直接报错。
 
 #### 资源权限配置（可选）
 
@@ -336,7 +336,7 @@ efg                     # 全量生成
 ### 场景二：已有项目新增业务表
 
 ```bash
-# 修改 generator.yml 中 from-db-tables，添加新表名
+# 修改 generator.yml 中 db-tables，添加新表名
 efg -m                  # 生成新表的 Entity + Mapper
 efg -s                  # 生成对应的业务代码
 ```
@@ -440,7 +440,7 @@ easyfk:
         db-short-url: localhost:3306/order_db
         db-user: root
         db-pwd: 123456
-        from-db-tables: t_order,t_order_item
+        db-tables: t_order,t_order_item
         table-prefix: t_
 ```
 
@@ -467,7 +467,7 @@ easyfk:
         db-short-url: localhost:5432/user_db
         db-user: postgres
         db-pwd: 123456
-        from-db-tables: user_info,user_address
+        db-tables: user_info,user_address
         model-list:
           - model-name: UserInfo
             model-desc: 用户信息
@@ -506,7 +506,7 @@ easyfk:
         db-user: root
         db-pwd: secure_password
         table-prefix: t_
-        from-db-tables: t_product,t_order,t_order_item,t_payment
+        db-tables: t_product,t_order,t_order_item,t_payment
         model-list:
           - model-name: Product
             model-desc: 商品
@@ -540,7 +540,7 @@ easyfk:
         db-user: root
         db-pwd: 123456
         table-prefix: base_
-        from-db-tables: base_product,base_category,base_brand
+        db-tables: base_product,base_category,base_brand
 ```
 
 **工作原理：**

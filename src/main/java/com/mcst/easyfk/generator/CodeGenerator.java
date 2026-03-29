@@ -52,6 +52,9 @@ public class CodeGenerator {
             createMicroPrdBaseCode();
             return;
         }
+        if (!GeneratorUtil.hasModelSource(codeProperties)) {
+            throw new BusinessException("db-tables 和 model-list 不能同时为空");
+        }
         // 项目目录
         String projectRootDir = projectProperties.getProjectDir() + File.separator + projectProperties.getProjectName();
         String serverProjectOutputDir = projectRootDir + File.separator + projectProperties.getProjectName()
