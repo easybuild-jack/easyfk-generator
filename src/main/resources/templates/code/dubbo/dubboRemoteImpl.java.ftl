@@ -5,7 +5,6 @@ import ${reqPackage}.${modelInfo.modelName}Req;
 import ${servicePackage}.I${modelInfo.modelName}Service;
 import ${remotePackage}.I${modelInfo.modelName}Remote;
 import com.mcst.easyfk.remote.dubbo.DubboBaseRemoteImpl;
-import org.apache.dubbo.config.annotation.DubboService;
 
 /**
 * <p>
@@ -14,7 +13,6 @@ import org.apache.dubbo.config.annotation.DubboService;
 *
 * @author ${author}
 */
-@DubboService
 public class ${modelInfo.modelName}RemoteImpl extends DubboBaseRemoteImpl<I${modelInfo.modelName}Service, ${modelInfo.modelName}Resp,${modelInfo.idType},${modelInfo.modelName}Req> implements I${modelInfo.modelName}Remote {
 
 
