@@ -53,9 +53,48 @@ public class GeneratorUtil {
         }
     }
 
+    public static String buildModelNameFromTable(String tableName, String tablePrefix) {
+        return StringUtil.upperFirstChar(StringUtil.underlineToCamel(removeIgnoredTablePrefix(tableName, tablePrefix)));
+    }
+
+    public static String removeIgnoredTablePrefix(String tableName, String tablePrefix) {
+        String modelName = tableName;
+        if (EmptyUtil.isEmpty(modelName) || EmptyUtil.isEmpty(tablePrefix)) {
+            return modelName;
+        }
+        for (String prefix : splitTablePrefixes(tablePrefix)) {
+            if (modelName.startsWith(prefix)) {
+                modelName = modelName.substring(prefix.length());
+                if (modelName.startsWith("_")) {
+                    modelName = modelName.substring(1);
+                }
+                break;
+            }
+        }
+        return modelName;
+    }
+
+    public static String getPrimaryTablePrefix(String tablePrefix) {
+        List<String> prefixes = splitTablePrefixes(tablePrefix);
+        return prefixes.isEmpty() ? null : prefixes.get(0);
+    }
+
+    private static List<String> splitTablePrefixes(String tablePrefix) {
+        List<String> prefixes = new ArrayList<>();
+        if (EmptyUtil.isEmpty(tablePrefix)) {
+            return prefixes;
+        }
+        for (String prefix : tablePrefix.split(",")) {
+            String value = prefix.trim();
+            if (!value.isEmpty()) {
+                prefixes.add(value);
+            }
+        }
+        return prefixes;
+    }
+
     public static List<ModelInfo> getModelInfoList(CodeProperties codeProperties, OrmType ormType, boolean init) {
         List<ModelInfo> modelList = new ArrayList<>();
-        Set<String> modelNameSet = new HashSet<>(10);
         boolean extendsSupperClass = codeProperties.getExtendsSupperClass();
         String dbTables = codeProperties.getDbTables();
         if (EmptyUtil.isNotEmpty(dbTables)) {
@@ -66,13 +105,7 @@ public class GeneratorUtil {
                     continue;
                 }
                 ModelInfo modelInfo = new ModelInfo();
-                String modelName = EmptyUtil.isEmpty(codeProperties.getTablePrefix()) ? table
-                        : table.replace(codeProperties.getTablePrefix(), "");
-                // 转驼峰 并首字母大写
-                modelInfo.setModelName(StringUtil.upperFirstChar(StringUtil.underlineToCamel(modelName)));
-                if (!modelNameSet.add(modelInfo.getModelName())) {
-                    throw new BusinessException("Model名称重复：" + modelInfo.getModelName() + "，同一个Model不能重复定义");
-                }
+                modelInfo.setModelName(buildModelNameFromTable(table, codeProperties.getTablePrefix()));
                 modelInfo.setTableName(table);
                 modelList.add(modelInfo);
                 if (init) {
@@ -88,17 +121,20 @@ public class GeneratorUtil {
             }
         }
         if (EmptyUtil.isNotEmpty(codeProperties.getModelList())) {
-            for (ModelInfo modelInfo : codeProperties.getModelList()) {
-                if (!modelNameSet.add(modelInfo.getModelName())) {
-                    throw new BusinessException("Model名称重复：" + modelInfo.getModelName() + "，同一个Model不能重复定义");
+            for (ModelInfo overrideModelInfo : codeProperties.getModelList()) {
+                ModelInfo matchedModelInfo = findMatchedModelInfo(modelList, overrideModelInfo);
+                if (matchedModelInfo != null) {
+                    mergeModelInfo(matchedModelInfo, overrideModelInfo);
+                } else {
+                    modelList.add(overrideModelInfo);
                 }
-                modelList.add(modelInfo);
             }
         }
 
         if (EmptyUtil.isEmpty(modelList)) {
             return null;
         }
+        validateModelNameUnique(modelList);
 
         AtomicInteger sort = new AtomicInteger(codeProperties.getIncrementStar());
         modelList.forEach(modelInfo -> {
@@ -108,11 +144,12 @@ public class GeneratorUtil {
             if (EmptyUtil.isEmpty(modelInfo.getTableName())) {
                 String tablePrefix = Optional.ofNullable(modelInfo.getTablePrefix())
                         .orElse(codeProperties.getTablePrefix());
-                if (EmptyUtil.isNotEmpty(tablePrefix)) {
-                    if (!tablePrefix.endsWith("_")) {
-                        tablePrefix = tablePrefix + "_";
+                String primaryTablePrefix = getPrimaryTablePrefix(tablePrefix);
+                if (EmptyUtil.isNotEmpty(primaryTablePrefix)) {
+                    if (!primaryTablePrefix.endsWith("_")) {
+                        primaryTablePrefix = primaryTablePrefix + "_";
                     }
-                    modelInfo.setTableName(tablePrefix + StringUtil.camelToUnderline(modelInfo.getModelName()));
+                    modelInfo.setTableName(primaryTablePrefix + StringUtil.camelToUnderline(modelInfo.getModelName()));
                 } else {
                     modelInfo.setTableName(StringUtil.camelToUnderline(modelInfo.getModelName()));
                 }
@@ -152,6 +189,96 @@ public class GeneratorUtil {
             }
         });
         return modelList;
+    }
+
+    private static ModelInfo findMatchedModelInfo(List<ModelInfo> modelList, ModelInfo overrideModelInfo) {
+        if (EmptyUtil.isNotEmpty(overrideModelInfo.getTableName())) {
+            for (ModelInfo modelInfo : modelList) {
+                if (overrideModelInfo.getTableName().equals(modelInfo.getTableName())) {
+                    return modelInfo;
+                }
+            }
+        }
+        if (EmptyUtil.isNotEmpty(overrideModelInfo.getModelName())) {
+            for (ModelInfo modelInfo : modelList) {
+                if (overrideModelInfo.getModelName().equals(modelInfo.getModelName())) {
+                    return modelInfo;
+                }
+            }
+        }
+        return null;
+    }
+
+    private static void mergeModelInfo(ModelInfo modelInfo, ModelInfo overrideModelInfo) {
+        if (EmptyUtil.isNotEmpty(overrideModelInfo.getModelName())) {
+            modelInfo.setModelName(overrideModelInfo.getModelName());
+        }
+        if (EmptyUtil.isNotEmpty(overrideModelInfo.getTableName())) {
+            modelInfo.setTableName(overrideModelInfo.getTableName());
+        }
+        if (EmptyUtil.isNotEmpty(overrideModelInfo.getModelDesc())) {
+            modelInfo.setModelDesc(overrideModelInfo.getModelDesc());
+        }
+        if (EmptyUtil.isNotEmpty(overrideModelInfo.getSuperClass())) {
+            modelInfo.setSuperClass(overrideModelInfo.getSuperClass());
+        }
+        if (EmptyUtil.isNotEmpty(overrideModelInfo.getIdType())) {
+            modelInfo.setIdType(overrideModelInfo.getIdType());
+        }
+        if (EmptyUtil.isNotEmpty(overrideModelInfo.getTablePrefix())) {
+            modelInfo.setTablePrefix(overrideModelInfo.getTablePrefix());
+        }
+        if (EmptyUtil.isNotEmpty(overrideModelInfo.getForbiddenFiled())) {
+            modelInfo.setForbiddenFiled(overrideModelInfo.getForbiddenFiled());
+        }
+        if (EmptyUtil.isNotEmpty(overrideModelInfo.getResourceGroup())) {
+            modelInfo.setResourceGroup(overrideModelInfo.getResourceGroup());
+        }
+        if (EmptyUtil.isNotEmpty(overrideModelInfo.getResourceName())) {
+            modelInfo.setResourceName(overrideModelInfo.getResourceName());
+        }
+        if (EmptyUtil.isNotEmpty(overrideModelInfo.getResourceId())) {
+            modelInfo.setResourceId(overrideModelInfo.getResourceId());
+        }
+        if (EmptyUtil.isNotEmpty(overrideModelInfo.getResourcePath())) {
+            modelInfo.setResourcePath(overrideModelInfo.getResourcePath());
+        }
+        if (overrideModelInfo.getIdIsAuto() != null) {
+            modelInfo.setIdIsAuto(overrideModelInfo.getIdIsAuto());
+        }
+        if (overrideModelInfo.getOnlyRepository() != null) {
+            modelInfo.setOnlyRepository(overrideModelInfo.getOnlyRepository());
+        }
+        if (overrideModelInfo.getCreateController() != null) {
+            modelInfo.setCreateController(overrideModelInfo.getCreateController());
+        }
+        if (overrideModelInfo.getResourceSort() != null) {
+            modelInfo.setResourceSort(overrideModelInfo.getResourceSort());
+        }
+        if (overrideModelInfo.getModelResourceSort() != null) {
+            modelInfo.setModelResourceSort(overrideModelInfo.getModelResourceSort());
+        }
+        if (EmptyUtil.isNotEmpty(overrideModelInfo.getFieldList())) {
+            modelInfo.setFieldList(overrideModelInfo.getFieldList());
+        }
+        if (EmptyUtil.isNotEmpty(overrideModelInfo.getBasicPackages())) {
+            modelInfo.setBasicPackages(overrideModelInfo.getBasicPackages());
+        }
+        if (EmptyUtil.isNotEmpty(overrideModelInfo.getOtherPackages())) {
+            modelInfo.setOtherPackages(overrideModelInfo.getOtherPackages());
+        }
+    }
+
+    private static void validateModelNameUnique(List<ModelInfo> modelList) {
+        Set<String> modelNameSet = new HashSet<>(modelList.size());
+        for (ModelInfo modelInfo : modelList) {
+            if (EmptyUtil.isEmpty(modelInfo.getModelName())) {
+                continue;
+            }
+            if (!modelNameSet.add(modelInfo.getModelName())) {
+                throw new BusinessException("Model名称重复：" + modelInfo.getModelName() + "，同一个Model不能重复定义");
+            }
+        }
     }
 
     public static Map<String, Object> createBaseParamMap(CodeProperties codeProperties) {

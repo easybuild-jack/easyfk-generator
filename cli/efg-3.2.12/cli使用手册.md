@@ -168,8 +168,8 @@ easyfk:
         # 数据库密码
         db-pwd: your_password
         # ---------- 表配置 ----------
-        # 表前缀 (生成类名时自动去除)
-        # table-prefix: base_
+        # 忽略表前缀 (支持多个，多个使用英文逗号分隔)
+        # table-prefix: base_,auth_
         # 从数据库读取的表名 (逗号分隔，会自动解析表结构)
         db-tables: product,order
 
@@ -231,7 +231,6 @@ easyfk.config.generator.project:
 | `log-type` | 否 | `LOGBACK` | 日志框架：`LOGBACK` 或 `LOG4J2` |
 | `framework-version` | 否 | `3.2.12` | EasyFK 框架版本号 |
 | `project-version` | 否 | `1.0.0-SNAPSHOT` | 生成项目的版本号 |
-| `create-repository` | 否 | `false` | 是否生成独立的 Repository 子项目 |
 | `controller-auto-config` | 否 | `false` | 是否为 Controller 层生成 Spring Boot AutoConfiguration |
 | `app-type` | 条件必填 | - | 应用类型，决定模块 PRD 依赖的变体。`BMS` — 后台管理端；`CLIENT` — 面向 C 端。**当 `project-type` 为 `single` / `micro_prd`，或 `prd-type` 为 `single` 时必填** |
 | `include-auth` | 否 | `false` | 是否引入 auth 权限模块。设为 `true` 时会自动在生成的项目中引入 auth 模块相关依赖 |
@@ -281,7 +280,7 @@ easyfk.config.generator.code:
 
 | 配置项 | 必填 | 默认值 | 说明 |
 |--------|------|--------|------|
-| `table-prefix` | 否 | - | 表名前缀，生成类名时自动去除。例：配置 `base_`，表 `base_product` → 类 `Product` |
+| `table-prefix` | 否 | - | 忽略表前缀，支持多个前缀使用英文逗号分隔。例：配置 `base_,auth_`，表 `base_product` → 类 `Product`，表 `auth_role` → 类 `Role` |
 | `db-tables` | 否 | - | 需要从数据库读取结构的表名，逗号分隔。例：`product,order,user_info`。配置后会自动连接数据库解析字段 |
 
 #### 手动定义 Model（可选）
@@ -292,18 +291,18 @@ easyfk.config.generator.code:
 model-list:
   - model-name: Product         # [必填] 模型名称（大驼峰），对应生成的类名
     model-desc: 商品信息         # 模型描述，用于代码注释
-    table-name: base_product    # 数据库表名（不填则自动根据 model-name + table-prefix 推导）
+    table-name: base_product    # 数据库表名（不填则自动根据 model-name + 主前缀 推导）
     id-type: String             # 主键类型：String（默认）或 Long
     id-is-auto: false           # 主键是否自增（默认 false，使用 UUID）
     super-class: com.mcst...    # Entity 父类全路径（有默认值，一般不用改）
     only-repository: false      # 是否只生成 Repository 层，不生成 Service/Controller
     create-controller: true     # 是否为该 Model 生成 Controller
-    table-prefix: base_         # 单独指定该 Model 的表前缀（覆盖全局 table-prefix）
+    table-prefix: base_,auth_   # 单独指定该 Model 的忽略表前缀（覆盖全局 table-prefix）
     forbidden-filed: field1,field2  # 需要排除的字段，逗号分隔，生成时会跳过这些字段
     model-resource-sort: 10100  # 该 Model 的资源权限排序值
 ```
 
-> `db-tables` 和 `model-list` 可以同时使用。两者会合并成最终的 Model 列表；如果出现同名 Model，会直接报错。
+> `db-tables` 和 `model-list` 可以同时使用。`db-tables` 会先生成基础模型，`model-list` 会按 `table-name` 优先、`model-name` 次之的规则覆盖这些基础模型；未匹配项会作为独立手工模型追加。
 
 #### 资源权限配置（可选）
 
@@ -548,7 +547,7 @@ easyfk:
 **工作原理：**
 1. 生成器通过 JDBC 连接数据库
 2. 使用 `DatabaseMetaData` 获取表结构（字段名、类型、注释、主键等）
-3. 自动去除表前缀（`base_product` → `Product`）
+3. 按 `table-prefix` 自动去除忽略前缀（如配置 `base_,auth_` 时，`base_product` → `Product`）
 4. 将下划线字段名转为驼峰命名（`product_name` → `productName`）
 5. 按类型映射规则转换 Java 类型
 6. 读取字段注释作为 `@Schema` 和 `@Column` 的描述

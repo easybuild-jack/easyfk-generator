@@ -36,7 +36,7 @@ public class CodeProperties {
     private List<ModelInfo> modelList;
 
     /**
-     * 表前缀
+     * 忽略的表前缀，多个使用英文逗号分隔
      */
     private String tablePrefix;
 

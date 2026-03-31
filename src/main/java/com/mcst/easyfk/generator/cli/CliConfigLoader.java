@@ -138,7 +138,6 @@ public class CliConfigLoader {
         AppType appType = getEnum(map, "app-type", AppType.class);
         if (appType != null) pp.setAppType(appType);
 
-        if ((b = getBoolean(map, "create-repository")) != null) pp.setCreateRepository(b);
         if ((b = getBoolean(map, "controller-auto-config")) != null) pp.setControllerAutoConfig(b);
         if ((b = getBoolean(map, "include-auth")) != null) pp.setIncludeAuth(b);
 

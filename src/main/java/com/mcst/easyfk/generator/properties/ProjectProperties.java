@@ -60,11 +60,6 @@ public class ProjectProperties {
     private PrdType prdType = PrdType.NONE;
 
     /**
-     * 是否生成独立的Repository项目
-     */
-    private Boolean createRepository = Boolean.FALSE;
-
-    /**
      * 项目构建方式，Maven/Gradle 默认Maven
      */
     private BuildType buildType = BuildType.MAVEN;
