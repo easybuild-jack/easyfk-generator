@@ -2,6 +2,7 @@ package ${dtoPackage};
 import com.mcst.easyfk.core.annotation.PrimaryKey;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.experimental.FieldNameConstants;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -28,6 +29,7 @@ ${pkg.packageName}
 @Schema(description="${modelInfo.modelDesc!}数据对象")
 @SuperBuilder
 @NoArgsConstructor
+@FieldNameConstants
 public class ${modelInfo.modelName}Dto extends BaseDto {
 
 <#list modelInfo.fieldList as field>

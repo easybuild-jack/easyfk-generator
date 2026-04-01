@@ -2,6 +2,7 @@ package ${paramPackage};
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.experimental.FieldNameConstants;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.mcst.easyfk.core.dto.request.BasicParam;
@@ -25,6 +26,7 @@ ${pkg.packageName}
 @Schema(description="${modelInfo.modelDesc!}数据参数对象")
 @SuperBuilder
 @NoArgsConstructor
+@FieldNameConstants
 public class ${modelInfo.modelName}Param extends BasicParam {
 
 <#list modelInfo.fieldList as field>

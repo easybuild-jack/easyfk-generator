@@ -6,6 +6,7 @@ import ${modelInfo.superClass};
 import com.mcst.easyfk.core.annotation.PrimaryKey;
 import ${dtoPackage}.${modelInfo.modelName}Dto;
 import lombok.Data;
+import lombok.experimental.FieldNameConstants;
 <#if modelInfo.superClass?? && modelInfo.superClass?has_content>
 import lombok.EqualsAndHashCode;
 </#if>
@@ -47,6 +48,7 @@ import java.util.UUID;
 @Accessors(chain = true)
 @Table(name = "${modelInfo.tableName!}")
 @AutoMapper(target = ${modelInfo.modelName}Dto.class)
+@FieldNameConstants
 public class ${modelInfo.modelName}<#if modelInfo.superClass?? && modelInfo.superClass?has_content> extends ${modelInfo.superClass?keep_after_last(".")}</#if> {
     <#if modelInfo.fieldList??>
     <#list modelInfo.fieldList as field>
