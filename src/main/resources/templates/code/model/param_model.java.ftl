@@ -26,7 +26,7 @@ ${pkg.packageName}
 @Schema(description="${modelInfo.modelDesc!}数据参数对象")
 @SuperBuilder
 @NoArgsConstructor
-@FieldNameConstants
+@FieldNameConstants(asEnum = true)
 public class ${modelInfo.modelName}Param extends BasicParam {
 
 <#list modelInfo.fieldList as field>

@@ -48,7 +48,7 @@ import java.util.UUID;
 @Accessors(chain = true)
 @Table(name = "${modelInfo.tableName!}")
 @AutoMapper(target = ${modelInfo.modelName}Dto.class)
-@FieldNameConstants
+@FieldNameConstants(asEnum = true)
 public class ${modelInfo.modelName}<#if modelInfo.superClass?? && modelInfo.superClass?has_content> extends ${modelInfo.superClass?keep_after_last(".")}</#if> {
     <#if modelInfo.fieldList??>
     <#list modelInfo.fieldList as field>

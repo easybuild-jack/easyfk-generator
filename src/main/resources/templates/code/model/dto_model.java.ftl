@@ -29,7 +29,7 @@ ${pkg.packageName}
 @Schema(description="${modelInfo.modelDesc!}数据对象")
 @SuperBuilder
 @NoArgsConstructor
-@FieldNameConstants
+@FieldNameConstants(asEnum = true)
 public class ${modelInfo.modelName}Dto extends BaseDto {
 
 <#list modelInfo.fieldList as field>
