@@ -138,6 +138,33 @@ public class CliConfigLoader {
         AppType appType = getEnum(map, "app-type", AppType.class);
         if (appType != null) pp.setAppType(appType);
 
+        Object ormModulesObj = map.get("orm-modules");
+        if (ormModulesObj instanceof List<?> rawList) {
+            List<OrmType> ormModules = new ArrayList<>();
+            for (Object item : rawList) {
+                if (item == null) {
+                    continue;
+                }
+                String value = item.toString().trim().toUpperCase();
+                try {
+                    OrmType ormModuleType = OrmType.valueOf(value);
+                    if (OrmType.NONE.equals(ormModuleType)) {
+                        throw new IllegalArgumentException("orm-modules 不允许包含 NONE");
+                    }
+                    ormModules.add(ormModuleType);
+                } catch (IllegalArgumentException e) {
+                    if (e.getMessage() != null && e.getMessage().startsWith("orm-modules")) {
+                        throw e;
+                    }
+                    throw new IllegalArgumentException("无效的配置值 orm-modules=" + value
+                            + "，可选值: MYBATIS, MYBATIS_FLEX, HIBERNATE");
+                }
+            }
+            if (!ormModules.isEmpty()) {
+                pp.setOrmModules(ormModules);
+            }
+        }
+
         if ((b = getBoolean(map, "controller-auto-config")) != null) pp.setControllerAutoConfig(b);
         if ((b = getBoolean(map, "include-auth")) != null) pp.setIncludeAuth(b);
 

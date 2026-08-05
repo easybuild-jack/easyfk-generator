@@ -19,6 +19,10 @@ public enum ProjectType {
      */
     SMART,
     /**
+     * 智能项目（ORM 层抽离）：ORM 抽离为独立模块，同时支持多种 ORM 实现
+     */
+    SMART_ORM,
+    /**
      * 微服务产品层项目（仅启动类+配置，通过RPC调用微服务）
      */
     MICRO_PRD

@@ -6,7 +6,7 @@ dependencies {
     implementation('com.mcst:registry-nacos')
     implementation ('com.mcst:doc-knife4j')
 </#if>
-<#if projectType != "SMART" >
+<#if projectType != "SMART" && projectType != "SMART_ORM" >
     implementation ('com.mcst:log-${logType?lower_case}')
 </#if>
 <#if includeAuth && appType?? && appType == "BMS">

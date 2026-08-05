@@ -17,7 +17,7 @@ easyfk:
         # [必填] 项目包根路径
         base-package: com.example.myapp
 
-        # 项目类型: single(单体) / microservice(微服务) / smart(多栈微服务) / micro_prd(微服务产品层)
+        # 项目类型: single(单体) / microservice(微服务) / smart(多栈微服务) / smart_orm(多栈微服务+ORM抽离) / micro_prd(微服务产品层)
         project-type: single
         # 构建工具: maven / gradle
         build-type: maven
@@ -27,6 +27,11 @@ easyfk:
         prd-type: single
         # 日志框架: LOGBACK / LOG4J2
         log-type: LOGBACK
+        # [project-type 为 smart_orm 时可选] ORM 实现模块列表，不填默认全部: MYBATIS(plus) / MYBATIS_FLEX(flex) / HIBERNATE(hibernate)
+        # orm-modules:
+        #   - MYBATIS
+        #   - MYBATIS_FLEX
+        #   - HIBERNATE
         # 框架版本
         framework-version: 3.2.12
         # 项目版本

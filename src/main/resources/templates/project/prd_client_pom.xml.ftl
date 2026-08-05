@@ -25,7 +25,7 @@
             <groupId>com.mcst</groupId>
             <artifactId>web-prd</artifactId>
         </dependency>
-        <#if projectType == "MICROSERVICE">
+        <#if projectType == "MICROSERVICE" || projectType == "MICRO_PRD">
         <dependency>
             <groupId>com.mcst</groupId>
             <artifactId>doc-knife4j</artifactId>
@@ -39,10 +39,12 @@
             <artifactId>rpc-${rpcType?lower_case}</artifactId>
         </dependency>
         </#if>
+        <#if projectType != "SMART" && projectType != "SMART_ORM">
         <dependency>
             <groupId>com.mcst</groupId>
             <artifactId>log-${logType?lower_case}</artifactId>
         </dependency>
+        </#if>
     </dependencies>
 
     <#if projectType == "MICROSERVICE">

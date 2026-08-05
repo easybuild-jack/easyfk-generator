@@ -16,6 +16,7 @@ import com.mcst.easyfk.repository.persistence.annotation.EntityColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
+import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 <#assign hasLocalDateTime = false /><#assign hasLocalDate = false /><#assign hasLocalTime = false /><#assign hasBigDecimal = false /><#assign hasUUID = false />
@@ -52,6 +53,7 @@ import java.util.UUID;
 public class ${modelInfo.modelName}<#if modelInfo.superClass?? && modelInfo.superClass?has_content> extends ${modelInfo.superClass?keep_after_last(".")}</#if> {
     <#if modelInfo.fieldList??>
     <#list modelInfo.fieldList as field>
+    <#assign colName = field.name?replace('([a-z0-9])([A-Z])', '$1_$2', 'r')?lower_case />
     <#if field.keyFlag?? && field.keyFlag>
 
     <#if field.desc!?length gt 0>
@@ -64,6 +66,7 @@ public class ${modelInfo.modelName}<#if modelInfo.superClass?? && modelInfo.supe
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     </#if>
     @Id
+    @Column(name = "${colName}")
     @EntityColumn(comment = "${field.desc!}")
     private ${field.type} ${field.name};
     <#else>
@@ -73,6 +76,7 @@ public class ${modelInfo.modelName}<#if modelInfo.superClass?? && modelInfo.supe
     * ${field.desc}
     */
     </#if>
+    @Column(name = "${colName}")
     @EntityColumn(comment = "${field.desc!}")
     private ${field.type} ${field.name};
     </#if>
@@ -84,6 +88,7 @@ public class ${modelInfo.modelName}<#if modelInfo.superClass?? && modelInfo.supe
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     </#if>
     @Id
+    @Column(name = "${(modelInfo.modelName?uncap_first + 'Id')?replace('([a-z0-9])([A-Z])', '$1_$2', 'r')?lower_case}")
     @EntityColumn(comment = "${modelInfo.modelDesc!}ID")
     private ${modelInfo.idType} ${modelInfo.modelName?uncap_first}Id;
     </#if>

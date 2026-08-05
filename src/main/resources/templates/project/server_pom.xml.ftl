@@ -39,7 +39,17 @@
             <artifactId>rpc-${rpcType?lower_case}</artifactId>
         </dependency>
     </#if >
-<#if ormType?? && ormType != "NONE">
+<#if projectType == "SMART_ORM">
+        <dependency>
+            <groupId>${groupId }</groupId>
+            <artifactId>${artifactId!projectName }-orm-api</artifactId>
+            <version><#noparse>${project.parent.version}</#noparse></version>
+        </dependency>
+        <dependency>
+            <groupId>com.mcst</groupId>
+            <artifactId>service-base</artifactId>
+        </dependency>
+<#elseif ormType?? && ormType != "NONE">
         <dependency>
             <groupId>com.mcst</groupId>
             <artifactId>orm-${ormModuleSuffix}</artifactId>
@@ -56,7 +66,7 @@
         </dependency>
 </#if>
 </#if>
-    <#if projectType != "SMART" >
+    <#if projectType != "SMART" && projectType != "SMART_ORM" >
         <dependency>
             <groupId>com.mcst</groupId>
             <artifactId>log-${logType?lower_case}</artifactId>
@@ -75,7 +85,7 @@
 </#if>
 </#if>
     </dependencies>
-    <#if projectType != "SMART" >
+    <#if projectType != "SMART" && projectType != "SMART_ORM" >
     <build>
         <finalName>${projectName}-server</finalName>
         <plugins>

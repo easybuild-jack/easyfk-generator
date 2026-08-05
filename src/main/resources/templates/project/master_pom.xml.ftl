@@ -11,8 +11,11 @@
     <modules>
         <module>${artifactId!projectName }-server</module>
         <module>${artifactId!projectName }-api</module>
-        <#if projectType =="SMART" >
+        <#if projectType =="SMART" || projectType =="SMART_ORM" >
         <module>${artifactId!projectName }-remote</module>
+        </#if>
+        <#if projectType =="SMART_ORM" >
+        <module>${artifactId!projectName }-orm</module>
         </#if>
         <#if prdType =="SINGLE" >
         <module>${artifactId!projectName }-prd</module>

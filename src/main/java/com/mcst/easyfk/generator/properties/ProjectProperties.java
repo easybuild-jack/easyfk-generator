@@ -4,6 +4,9 @@ import com.mcst.easyfk.generator.enums.*;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 创建项目配置
  *
@@ -22,6 +25,12 @@ public class ProjectProperties {
      * 项目类型，必填
      */
     private ProjectType projectType = ProjectType.SMART;
+
+    /**
+     * ORM 实现模块列表，仅 project-type 为 SMART_ORM 时生效。
+     * 为空时默认生成全部：MYBATIS(plus) / MYBATIS_FLEX(flex) / HIBERNATE(hibernate)
+     */
+    private List<OrmType> ormModules;
 
     /**
      * RPC类型，用于微服务项目
@@ -128,6 +137,39 @@ public class ProjectProperties {
             case MYBATIS -> "plus";
             case MYBATIS_FLEX -> "flex";
             case HIBERNATE -> "hibernate";
+        };
+    }
+
+    /**
+     * 获取 ORM 实现模块列表，未配置时默认返回全部实现（plus/flex/hibernate）
+     */
+    public List<OrmType> getOrmModules() {
+        if (ormModules == null || ormModules.isEmpty()) {
+            return List.of(OrmType.MYBATIS, OrmType.MYBATIS_FLEX, OrmType.HIBERNATE);
+        }
+        return new ArrayList<>(ormModules);
+    }
+
+    public void setOrmModules(List<OrmType> ormModules) {
+        this.ormModules = ormModules;
+    }
+
+    /**
+     * 获取 ORM 模块短名列表（plus/flex/hibernate），与 ormModules 顺序一致
+     */
+    public List<String> getOrmModuleList() {
+        return getOrmModules().stream().map(ProjectProperties::ormModuleName).toList();
+    }
+
+    /**
+     * ORM 类型 -> ORM 模块短名
+     */
+    public static String ormModuleName(OrmType ormType) {
+        return switch (ormType) {
+            case MYBATIS -> "plus";
+            case MYBATIS_FLEX -> "flex";
+            case HIBERNATE -> "hibernate";
+            default -> throw new IllegalArgumentException("不支持的 ORM 实现模块类型: " + ormType);
         };
     }
 

@@ -18,7 +18,7 @@ dependencyResolutionManagement.versionCatalogs{
 include '${artifactId!projectName }-server'
 include '${artifactId!projectName }-api'
 
-<#if projectType =="SMART" >
+<#if projectType =="SMART" || projectType =="SMART_ORM" >
 include '${artifactId!projectName }-remote'
 include '${artifactId!projectName }-remote:${artifactId!projectName }-cloud-api'
 findProject(':${artifactId!projectName }-remote:${artifactId!projectName }-cloud-api')?.name = '${artifactId!projectName }-cloud-api'
@@ -28,6 +28,16 @@ include '${artifactId!projectName }-remote:${artifactId!projectName }-dubbo-api'
 findProject(':${artifactId!projectName }-remote:${artifactId!projectName }-dubbo-api')?.name = '${artifactId!projectName }-dubbo-api'
 include '${artifactId!projectName }-remote:${artifactId!projectName }-dubbo-provider'
 findProject(':${artifactId!projectName }-remote:${artifactId!projectName }-dubbo-provider')?.name = '${artifactId!projectName }-dubbo-provider'
+</#if>
+
+<#if projectType =="SMART_ORM" >
+include '${artifactId!projectName }-orm'
+include '${artifactId!projectName }-orm:${artifactId!projectName }-orm-api'
+findProject(':${artifactId!projectName }-orm:${artifactId!projectName }-orm-api')?.name = '${artifactId!projectName }-orm-api'
+<#list ormModuleList as om>
+include '${artifactId!projectName }-orm:${artifactId!projectName }-orm-${om}'
+findProject(':${artifactId!projectName }-orm:${artifactId!projectName }-orm-${om}')?.name = '${artifactId!projectName }-orm-${om}'
+</#list>
 </#if>
 
 <#if prdType =="SINGLE" >

@@ -2,6 +2,7 @@ package com.mcst.easyfk.generator;
 
 import com.mcst.easyfk.core.utils.common.EmptyUtil;
 import com.mcst.easyfk.core.utils.common.StringUtil;
+import com.mcst.easyfk.generator.enums.OrmType;
 import com.mcst.easyfk.generator.enums.PrdType;
 import com.mcst.easyfk.generator.enums.ProjectType;
 import com.mcst.easyfk.generator.properties.CodeProperties;
@@ -41,8 +42,10 @@ public class ConfigGenerator {
     }
 
     public void create() {
-        if (!ProjectType.SMART.equals(projectProperties.getProjectType())) {
-            log.info("项目类型非 SMART，跳过自动装配配置生成");
+        boolean smart = ProjectType.SMART.equals(projectProperties.getProjectType());
+        boolean smartOrm = ProjectType.SMART_ORM.equals(projectProperties.getProjectType());
+        if (!smart && !smartOrm) {
+            log.info("项目类型非 SMART/SMART_ORM，跳过自动装配配置生成");
             return;
         }
         String projectRootDir = projectProperties.getProjectDir() + File.separator + projectProperties.getProjectName();
@@ -53,17 +56,21 @@ public class ConfigGenerator {
             paramMap.put("author", auth);
             paramMap.put("moduleName", moduleName);
             paramMap.put("projectType", projectProperties.getProjectType());
-            boolean createServer = ProjectType.SMART.equals(projectProperties.getProjectType()) || !codeProperties.getSpringAnnotation();
+            boolean createServer = smart || smartOrm || !codeProperties.getSpringAnnotation();
             if (createServer) {
                 this.createServerConfig(projectRootDir, paramMap);
             }
-            boolean createRemote = ProjectType.SMART.equals(projectProperties.getProjectType());
+            boolean createRemote = smart || smartOrm;
             if (createRemote) {
                 this.createRemoteConfig(projectRootDir, paramMap);
             }
-            boolean createPrd = !PrdType.NONE.equals(projectProperties.getPrdType()) && createRemote && projectProperties.getControllerAutoConfig();
+            boolean createPrd = !PrdType.NONE.equals(projectProperties.getPrdType()) && createRemote
+                    && (projectProperties.getControllerAutoConfig() || smartOrm);
             if (createPrd) {
                 this.createPrdConfig(projectRootDir, paramMap);
+            }
+            if (smartOrm) {
+                this.createOrmConfig(projectRootDir, paramMap);
             }
             log.info("生成项目自动装配配置成功！");
         } catch (Exception exception) {
@@ -120,7 +127,8 @@ public class ConfigGenerator {
     }
 
     private void createRemoteConfig(String projectRootDir, Map<String, Object> paramMap) throws Exception {
-        if (ProjectType.SMART.equals(projectProperties.getProjectType())) {
+        if (ProjectType.SMART.equals(projectProperties.getProjectType())
+                || ProjectType.SMART_ORM.equals(projectProperties.getProjectType())) {
             String remoteBasePackage = projectProperties.getBasePackage() + ".remote";
             String remoteApiPackage = projectProperties.getBasePackage() + ".remote";
             String remoteClientImplPackage = remoteBasePackage + ".impl";
@@ -212,6 +220,47 @@ public class ConfigGenerator {
                 CreateFileUtil.delAndCreateFile("dubbo/dubboApiConfig.factories.ftl", dubboClientFactoriesPath, paramMap, BASE_TEMPLATE_PATH);
             }
         }*/
+    }
+
+    /**
+     * SMART_ORM 模式：为每个 ORM 实现模块生成自动装配配置，
+     * 注册该 ORM 的 Repository 实现 Bean（@ConditionalOnMissingBean，运行时按 classpath 选型）。
+     */
+    private void createOrmConfig(String projectRootDir, Map<String, Object> paramMap) throws Exception {
+        String projectName = projectProperties.getProjectName();
+        String basePackage = projectProperties.getBasePackage();
+        String repositoryPackage = basePackage + ".orm.repository";
+        for (OrmType ormType : projectProperties.getOrmModules()) {
+            String ormModuleName = ProjectProperties.ormModuleName(ormType);
+            String ormProjectOutputDir = projectRootDir + File.separator + projectName + "-orm"
+                    + File.separator + projectName + "-orm-" + ormModuleName;
+            String ormBasePackage = basePackage + ".orm." + ormModuleName;
+            String repositoryImplPackage = ormBasePackage + ".repository.impl";
+            String configPackage = ormBasePackage + ".config";
+            String configJavaName = StringUtil.upperFirstChar(codeProperties.getModuleName()) + "Orm"
+                    + StringUtil.upperFirstChar(ormModuleName) + "Config";
+
+            Map<String, Set<String>> fileMap = new HashMap<>();
+            Set<String> repositoryImplFileSet = this.getFolderSubFileName(ormProjectOutputDir + CODE_DIR_PRE
+                    + repositoryImplPackage.replace(".", "/"));
+            if (EmptyUtil.isNotEmpty(repositoryImplFileSet)) {
+                fileMap.put("ormRepositoryImplFileSet", repositoryImplFileSet);
+            }
+            paramMap.put("fileMap", fileMap);
+            paramMap.put("repositoryPackage", repositoryPackage);
+            paramMap.put("implPackage", repositoryImplPackage);
+            paramMap.put("configPackage", configPackage);
+            paramMap.put("configJavaName", configJavaName);
+
+            String codePath = ormProjectOutputDir + CODE_DIR_PRE + configPackage.replace(".", File.separator)
+                    + File.separator + configJavaName + ".java";
+            CreateFileUtil.delAndCreateFile("orm/ormConfig.java.ftl", codePath, paramMap, BASE_TEMPLATE_PATH);
+
+            String factoriesPath = ormProjectOutputDir + RESOURCE_DIR_PRE + "META-INF" + File.separator + "spring"
+                    + File.separator + "org.springframework.boot.autoconfigure.AutoConfiguration.imports";
+            CreateFileUtil.delAndCreateFile("orm/ormConfig.factories.ftl", factoriesPath, paramMap,
+                    BASE_TEMPLATE_PATH);
+        }
     }
 
     private void createPrdConfig(String projectRootDir, Map<String, Object> paramMap) throws Exception {

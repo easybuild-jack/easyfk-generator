@@ -2,10 +2,12 @@ package ${serverConfigPackage};
 
 import ${apiPackage}.*;
 import ${servicePackage}.*;
-import ${repositoryPackage}.*;
 import ${apiImplPackage}.*;
 import ${serviceImplPackage}.*;
+<#if fileMap.repositoryImplFileSet??>
+import ${repositoryPackage}.*;
 import ${repositoryImplPackage}.*;
+</#if>
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -20,7 +22,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 public class ${moduleName?cap_first}ServerConfig {
 
 <#if fileMap.apiImplFileSet??>
-<#if projectType == 'SMART'>
+<#if projectType == 'SMART' || projectType == 'SMART_ORM'>
   <#list fileMap.apiImplFileSet as name>
     @Bean
     @ConditionalOnMissingBean

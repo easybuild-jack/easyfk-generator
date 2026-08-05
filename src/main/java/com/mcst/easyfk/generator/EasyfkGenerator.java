@@ -3,6 +3,7 @@ package com.mcst.easyfk.generator;
 import com.mcst.easyfk.generator.properties.CodeProperties;
 import com.mcst.easyfk.generator.properties.ProjectProperties;
 import jakarta.annotation.Resource;
+import com.mcst.easyfk.generator.enums.ProjectType;
 
 /**
  * easyfk 代码生成器
@@ -21,9 +22,13 @@ public class EasyfkGenerator {
     @Resource
     private ConfigGenerator configGenerator;
 
+    @Resource
+    private ProjectProperties projectProperties;
+
     public EasyfkGenerator() {}
 
     public EasyfkGenerator(ProjectProperties projectProperties, CodeProperties codeProperties) {
+        this.projectProperties = projectProperties;
         projectProperties.setModuleName(codeProperties.getModuleName());
         this.projectGenerator = new ProjectGenerator(projectProperties);
         this.modelGenerator = new ModelGenerator(projectProperties, codeProperties);
@@ -58,6 +63,10 @@ public class EasyfkGenerator {
      */
     public void generateCode() {
         codeGenerator.create(false);
+        // SMART_ORM 模式默认全量生成自动装配配置（server/orm/remote/prd 全带 config）
+        if (ProjectType.SMART_ORM.equals(projectProperties.getProjectType())) {
+            configGenerator.create();
+        }
     }
 
     /**

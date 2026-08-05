@@ -5,6 +5,7 @@ import com.mcst.easyfk.core.exception.BusinessException;
 import com.mcst.easyfk.core.utils.common.EmptyUtil;
 import com.mcst.easyfk.generator.enums.BuildType;
 import com.mcst.easyfk.generator.enums.GradleType;
+import com.mcst.easyfk.generator.enums.OrmType;
 import com.mcst.easyfk.generator.enums.PrdType;
 import com.mcst.easyfk.generator.enums.ProjectType;
 import com.mcst.easyfk.generator.properties.ProjectProperties;
@@ -112,6 +113,12 @@ public class ProjectGenerator {
                 String remoteParentProjectName = projectName + "-remote";
                 String remoteParentProjectRoot = projectRoot + File.separator + remoteParentProjectName;
                 createRemoteProjects(rootConfigFile, projectName, remoteParentProjectRoot);
+                if (ProjectType.SMART_ORM.equals(projectProperties.getProjectType())) {
+                    //创建ORM Parent项目（ORM 层抽离为独立模块）
+                    String ormParentProjectName = projectName + "-orm";
+                    String ormParentProjectRoot = projectRoot + File.separator + ormParentProjectName;
+                    createOrmProjects(rootConfigFile, projectName, ormParentProjectRoot);
+                }
             }
             log.info("生成项目成功");
         } catch (Exception e) {
@@ -400,6 +407,71 @@ public class ProjectGenerator {
         rootConfigFile.put("kotlinBuildFile", dubboProviderProjectRoot + File.separator + "build.gradle.kts");
         rootConfigFile.put("templateFileName", templateFileName);
         this.createConfigFile(rootConfigFile);
+    }
+
+    /**
+     * 创建 ORM 模块项目结构（仅 SMART_ORM 项目类型）：
+     * -orm 父模块 + -orm-api(契约) + 各 ORM 实现模块(plus/flex/hibernate)
+     */
+    private void createOrmProjects(Map<String, String> rootConfigFile, String projectName, String ormParentProjectRoot) throws Exception {
+        // 创建 ORM 父模块
+        String templateFileName = null;
+        if (BuildType.MAVEN.equals(projectProperties.getBuildType())) {
+            templateFileName = "orm_parent_pom.xml.ftl";
+        } else {
+            if (GradleType.GROOVY.equals(projectProperties.getGradleType())) {
+                templateFileName = "gradle/groovy/orm_parent_build.gradle.ftl";
+            } else {
+                templateFileName = "gradle/kotlin/orm_parent_build.gradle.kts.ftl";
+            }
+        }
+        rootConfigFile.put("pomFile", ormParentProjectRoot + File.separator + "pom.xml");
+        rootConfigFile.put("groovyBuildFile", ormParentProjectRoot + File.separator + "build.gradle");
+        rootConfigFile.put("kotlinBuildFile", ormParentProjectRoot + File.separator + "build.gradle.kts");
+        rootConfigFile.put("templateFileName", templateFileName);
+        this.createConfigFile(rootConfigFile);
+
+        // 创建 ORM API（契约）模块
+        String ormApiProjectName = projectName + "-orm-api";
+        String ormApiProjectRoot = ormParentProjectRoot + File.separator + ormApiProjectName;
+        createCodeDir(ormApiProjectRoot, true, false);
+        if (BuildType.MAVEN.equals(projectProperties.getBuildType())) {
+            templateFileName = "orm_api_pom.xml.ftl";
+        } else {
+            if (GradleType.GROOVY.equals(projectProperties.getGradleType())) {
+                templateFileName = "gradle/groovy/orm_api_build.gradle.ftl";
+            } else {
+                templateFileName = "gradle/kotlin/orm_api_build.gradle.kts.ftl";
+            }
+        }
+        rootConfigFile.put("pomFile", ormApiProjectRoot + File.separator + "pom.xml");
+        rootConfigFile.put("groovyBuildFile", ormApiProjectRoot + File.separator + "build.gradle");
+        rootConfigFile.put("kotlinBuildFile", ormApiProjectRoot + File.separator + "build.gradle.kts");
+        rootConfigFile.put("templateFileName", templateFileName);
+        this.createConfigFile(rootConfigFile);
+
+        // 创建各 ORM 实现模块（plus/flex/hibernate）
+        for (OrmType ormType : projectProperties.getOrmModules()) {
+            String ormModuleName = ProjectProperties.ormModuleName(ormType);
+            String ormImplProjectName = projectName + "-orm-" + ormModuleName;
+            String ormImplProjectRoot = ormParentProjectRoot + File.separator + ormImplProjectName;
+            createCodeDir(ormImplProjectRoot, true, false);
+
+            if (BuildType.MAVEN.equals(projectProperties.getBuildType())) {
+                templateFileName = "orm_" + ormModuleName + "_pom.xml.ftl";
+            } else {
+                if (GradleType.GROOVY.equals(projectProperties.getGradleType())) {
+                    templateFileName = "gradle/groovy/orm_" + ormModuleName + "_build.gradle.ftl";
+                } else {
+                    templateFileName = "gradle/kotlin/orm_" + ormModuleName + "_build.gradle.kts.ftl";
+                }
+            }
+            rootConfigFile.put("pomFile", ormImplProjectRoot + File.separator + "pom.xml");
+            rootConfigFile.put("groovyBuildFile", ormImplProjectRoot + File.separator + "build.gradle");
+            rootConfigFile.put("kotlinBuildFile", ormImplProjectRoot + File.separator + "build.gradle.kts");
+            rootConfigFile.put("templateFileName", templateFileName);
+            this.createConfigFile(rootConfigFile);
+        }
     }
 
 }

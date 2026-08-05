@@ -134,7 +134,7 @@ easyfk:
         # [必填] 项目包根路径
         base-package: com.example.myapp
 
-        # 项目类型: single(单体项目) / micro_prd(产品层项目) / microservice(微服务项目) / smart(智能型项目)
+        # 项目类型: single(单体项目) / micro_prd(产品层项目) / microservice(微服务项目) / smart(智能型项目) / smart_orm(智能型项目+ORM抽离)
         project-type: single
         # 构建工具: maven / gradle
         build-type: maven
@@ -209,6 +209,7 @@ easyfk.config.generator.project:
 | | | | `micro_prd` — 产品层项目，仅生成启动类+配置，通过 RPC 调用后端微服务，无 ORM/业务代码 |
 | | | | `microservice` — 微服务项目，生成 API + Server + PRD 模块，支持一种 RPC |
 | | | | `smart` — 智能型项目，同时生成 Spring Cloud 和 Dubbo 两套 RPC 通道 |
+| | | | `smart_orm` — 智能型项目，ORM 层抽离为独立 `-orm` 模块，同时生成 MyBatis-Plus / MyBatis-Flex / Hibernate 多套实现 |
 | `rpc-type` | 否 | `NONE` | RPC 类型，`microservice` 或 `micro_prd` 架构时生效（`micro_prd` 时必选） |
 | | | | `NONE` — 不使用 RPC |
 | | | | `cloud` — Spring Cloud Feign |
@@ -224,6 +225,7 @@ easyfk.config.generator.project:
 | | | | `MYBATIS` — MyBatis-Plus |
 | | | | `MYBATIS_FLEX` — MyBatis-Flex |
 | | | | `HIBERNATE` — Hibernate (JPA) |
+| `orm-modules` | 否 | 全部 | 仅 `project-type: smart_orm` 时生效。ORM 实现模块列表（`MYBATIS` / `MYBATIS_FLEX` / `HIBERNATE`），不填默认生成全部 |
 | `prd-type` | 否 | `none` | 前端对接层（Controller）策略 |
 | | | | `none` — 不生成 Controller 层 |
 | | | | `single` — 生成单一 PRD 项目，所有 Controller 集中 |
@@ -520,6 +522,50 @@ easyfk:
             model-desc: 支付记录
             create-controller: false
 ```
+
+### 智能型项目 + ORM 抽离（SMART_ORM）
+
+`smart_orm` 在 `smart` 的基础上，将 ORM 层抽离为独立的 `-orm` 父模块：
+
+- `-orm-api`：Repository 接口契约，不依赖任何 ORM 框架；
+- `-orm-plus` / `-orm-flex` / `-orm-hibernate`：各 ORM 的实体、Mapper、Repository 实现与自动装配配置；
+- server 模块只依赖 `-orm-api`，编译期不绑定具体 ORM，运行时按 classpath 中引入的 orm 实现模块自动选择。
+
+```yaml
+easyfk:
+  config:
+    generator:
+      project:
+        project-dir: D:\workspace\projects
+        group-id: com.mcst
+        project-name: trading
+        base-package: com.mcst.trading
+        project-type: smart_orm
+        prd-type: separation
+        build-type: gradle
+        gradle-type: groovy
+        orm-type: NONE
+        # 不填默认生成全部：MYBATIS / MYBATIS_FLEX / HIBERNATE
+        # 可按需选配，例如只生成 MyBatis-Plus 与 Hibernate：
+        # orm-modules:
+        #   - MYBATIS
+        #   - HIBERNATE
+        log-type: LOGBACK
+        app-type: BMS
+        framework-version: 3.2.12
+        project-version: 1.0.0-SNAPSHOT
+      code:
+        module-name: trading
+        author: 开发团队
+        db-type: MYSQL
+        db-short-url: 192.168.1.100:3306/trading_db
+        db-user: root
+        db-pwd: secure_password
+        table-prefix: t_
+        db-tables: t_product,t_order
+```
+
+> **说明**：`smart_orm` 模式默认对 server / orm / remote / prd 全模块生成 Spring Boot 自动装配配置（等价于始终执行 `-a`），生成结果与模块化示例项目结构一致。
 
 ### 从数据库自动解析表结构
 

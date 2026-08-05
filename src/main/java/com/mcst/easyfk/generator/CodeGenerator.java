@@ -102,9 +102,11 @@ public class CodeGenerator {
         String repositoryImpPackage = repositoryPackage + ".impl";
         String entityPackage = serverBasePackage + ".persistence.model";
         String mapperPackage = serverBasePackage + ".persistence.mapper";
+        boolean smartOrm = ProjectType.SMART_ORM.equals(projectProperties.getProjectType());
+        String ormRepositoryPackage = basePackage + ".orm.repository";
 
         Map<String, Object> paramMap = GeneratorUtil.createBaseParamMap(codeProperties);
-        paramMap.put("repositoryPackage", repositoryPackage);
+        paramMap.put("repositoryPackage", smartOrm ? ormRepositoryPackage : repositoryPackage);
         paramMap.put("repositoryImpPackage", repositoryImpPackage);
         paramMap.put("serverPackage", serverBasePackage);
         paramMap.put("serviceImplPackage", serviceImplPackage);
@@ -116,7 +118,8 @@ public class CodeGenerator {
         paramMap.put("respPackage", respPackage);
         paramMap.put("apiBasePackage", apiBasePackage);
         paramMap.put("createSpringAnnotation",
-                projectProperties.getProjectType() != ProjectType.SMART && codeProperties.getSpringAnnotation());
+                projectProperties.getProjectType() != ProjectType.SMART && !smartOrm
+                        && codeProperties.getSpringAnnotation());
         paramMap.put("serverApiImplPackage", serverApiImplPackage);
         paramMap.put("servicePackage", servicePackage);
         paramMap.put("basePackage", basePackage);
@@ -159,7 +162,7 @@ public class CodeGenerator {
         if (!PrdType.NONE.equals(projectProperties.getPrdType())) {
             paramMap.put("controllerBasePackage", controllerBasePackage);
         }
-        if (!projectProperties.getProjectType().equals(ProjectType.SMART)) {
+        if (!projectProperties.getProjectType().equals(ProjectType.SMART) && !smartOrm) {
             createServerBaseCode(serverProjectOutputDir, paramMap);
             if (ProjectType.MICROSERVICE.equals(projectProperties.getProjectType())) {
                 if (!PrdType.NONE.equals(projectProperties.getPrdType())) {
@@ -174,7 +177,17 @@ public class CodeGenerator {
         }
         for (ModelInfo modelInfo : modelList) {
             try {
-                readModelFile(serverProjectOutputDir, entityPackage, modelInfo);
+                if (smartOrm) {
+                    String firstOrmModule = ProjectProperties.ormModuleName(
+                            projectProperties.getOrmModules().get(0));
+                    String ormEntityPackage = basePackage + ".orm." + firstOrmModule + ".persistence.model";
+                    String ormModuleDir = projectRootDir + File.separator + projectProperties.getProjectName()
+                            + "-orm" + File.separator + projectProperties.getProjectName() + "-orm-"
+                            + firstOrmModule;
+                    readModelFile(ormModuleDir, ormEntityPackage, modelInfo);
+                } else {
+                    readModelFile(serverProjectOutputDir, entityPackage, modelInfo);
+                }
                 paramMap.put("modelInfo", modelInfo);
                 if (onlyUpdateDtoAndParam) {
                     // 生成 dto、param、req
@@ -185,8 +198,12 @@ public class CodeGenerator {
                     createDtoParamReq(apiProjectOutputDir, dtoPackage, paramPackage, reqPackage, respPackage, paramMap,
                             modelInfo);
                     // 生成 repository
-                    createRepository(serverProjectOutputDir, repositoryPackage, repositoryImpPackage, paramMap,
-                            modelInfo);
+                    if (smartOrm) {
+                        createOrmRepository(projectRootDir, ormRepositoryPackage, paramMap, modelInfo);
+                    } else {
+                        createRepository(serverProjectOutputDir, repositoryPackage, repositoryImpPackage, paramMap,
+                                modelInfo);
+                    }
                     if (!modelInfo.getOnlyRepository()) {
                         // 生成 service
                         createService(serverProjectOutputDir, servicePackage, serviceImplPackage, paramMap, modelInfo);
@@ -204,7 +221,8 @@ public class CodeGenerator {
                                         modelInfo,
                                         false);
                             }
-                        } else if (ProjectType.SMART.equals(projectProperties.getProjectType())) {
+                        } else if (ProjectType.SMART.equals(projectProperties.getProjectType())
+                                || ProjectType.SMART_ORM.equals(projectProperties.getProjectType())) {
                             String scApiProjectOutputDir = scProjectOutputDir + File.separator
                                     + projectProperties.getProjectName() + "-cloud-api";
                             String scApiImplProjectOutputDir = scProjectOutputDir + File.separator
@@ -385,7 +403,9 @@ public class CodeGenerator {
     private void createApi(String apiProjectOutputDir, String apiBasePackage, Map<String, Object> paramMap,
                            ModelInfo modelInfo) {
         try {
-            if (ProjectType.SMART.equals(projectProperties.getProjectType()) && !modelInfo.getOnlyRepository()) {
+            if ((ProjectType.SMART.equals(projectProperties.getProjectType())
+                    || ProjectType.SMART_ORM.equals(projectProperties.getProjectType()))
+                    && !modelInfo.getOnlyRepository()) {
                 String apiPath = apiProjectOutputDir + CODE_DIR_PRE + apiBasePackage.replace(".", File.separator)
                         + File.separator + "I" + StringUtil.upperFirstChar(modelInfo.getModelName()) + "Api.java";
                 CreateFileUtil.createOnNotExistFile("api/base_api.java.ftl", apiPath, paramMap, BASE_TEMPLATE_PATH);
@@ -456,10 +476,56 @@ public class CodeGenerator {
         }
     }
 
+    /**
+     * SMART_ORM 模式生成 repository：
+     * 接口生成到 -orm-api 模块，实现类按 ORM 分别生成到各 -orm-{plus/flex/hibernate} 模块。
+     */
+    private void createOrmRepository(String projectRootDir, String repositoryPackage,
+                                     Map<String, Object> paramMap, ModelInfo modelInfo) {
+        String projectName = projectProperties.getProjectName();
+        String ormParentDir = projectRootDir + File.separator + projectName + "-orm";
+        try {
+            // Repository 接口 -> orm-api 模块
+            String apiPath = ormParentDir + File.separator + projectName + "-orm-api" + CODE_DIR_PRE
+                    + repositoryPackage.replace(".", File.separator) + File.separator
+                    + "I" + StringUtil.upperFirstChar(modelInfo.getModelName()) + "Repository.java";
+            paramMap.put("repositoryPackage", repositoryPackage);
+            CreateFileUtil.createOnNotExistFile("repository/repository.java.ftl", apiPath, paramMap,
+                    BASE_TEMPLATE_PATH);
+
+            // Repository 实现 -> 各 ORM 实现模块
+            for (OrmType ormType : projectProperties.getOrmModules()) {
+                String ormModuleName = ProjectProperties.ormModuleName(ormType);
+                String ormModuleDir = ormParentDir + File.separator + projectName + "-orm-" + ormModuleName;
+                String ormBasePackage = basePackage + ".orm." + ormModuleName;
+                String ormEntityPackage = ormBasePackage + ".persistence.model";
+                String ormMapperPackage = ormBasePackage + ".persistence.mapper";
+                String ormRepositoryImpPackage = ormBasePackage + ".repository.impl";
+                paramMap.put("repositoryImpPackage", ormRepositoryImpPackage);
+                paramMap.put("entityPackage", ormEntityPackage);
+                paramMap.put("mapperPackage", ormMapperPackage);
+                paramMap.put("ormType", ormType);
+                paramMap.put("createSpringAnnotation", Boolean.FALSE);
+                String implPath = ormModuleDir + CODE_DIR_PRE
+                        + ormRepositoryImpPackage.replace(".", File.separator) + File.separator
+                        + StringUtil.upperFirstChar(modelInfo.getModelName()) + "RepositoryImpl.java";
+                CreateFileUtil.createOnNotExistFile("repository/repositoryImpl.java.ftl", implPath, paramMap,
+                        BASE_TEMPLATE_PATH);
+            }
+        } catch (Exception e) {
+            log.error("生成Repository模块失败：{}", e.getMessage());
+        }
+    }
+
     private void readModelFile(String serverProjectOutputDir, String entityPackage, ModelInfo modelInfo) {
         String modelPath = serverProjectOutputDir + CODE_DIR_PRE + entityPackage.replace(".", File.separator)
                 + File.separator + StringUtil.upperFirstChar(modelInfo.getModelName()) + ".java";
-        List<String> fileLines = FileUtil.readLines(new File(modelPath), "UTF-8");
+        File modelFile = new File(modelPath);
+        if (!modelFile.exists()) {
+            // 实体文件尚未生成（如仅执行 -s 时），跳过注解解析，字段信息以 db-tables/model-list 为准
+            return;
+        }
+        List<String> fileLines = FileUtil.readLines(modelFile, "UTF-8");
         if (EmptyUtil.isEmpty(fileLines)) {
             return;
         }

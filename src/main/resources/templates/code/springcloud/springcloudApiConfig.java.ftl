@@ -1,11 +1,11 @@
-<#if projectType == 'SMART'>
+<#if projectType == 'SMART' || projectType == 'SMART_ORM'>
 package ${remoteConfigPackage};
 <#else >
 package ${apiConfigPackage};
 </#if>
 
 
-<#if projectType == 'SMART'>
+<#if projectType == 'SMART' || projectType == 'SMART_ORM'>
 import ${apiPackage}.*;
 import ${remoteClientImplPackage}.*;
 import ${remoteBasePackage}.properties.${moduleName?cap_first}ApiProperties;
@@ -24,7 +24,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 @AutoConfiguration
 @EnableConfigurationProperties(${moduleName?cap_first}ApiProperties.class)
 public class ${moduleName?cap_first}ApiConfig {
-<#if projectType == 'SMART'>
+<#if projectType == 'SMART' || projectType == 'SMART_ORM'>
 <#if fileMap.remoteImplFileSet??>
     <#list fileMap.remoteImplFileSet as name>
     @Bean

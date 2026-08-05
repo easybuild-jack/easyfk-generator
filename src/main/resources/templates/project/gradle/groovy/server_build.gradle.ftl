@@ -1,6 +1,9 @@
 dependencies {
     api project(':${artifactId!projectName }-api')
-<#if ormType?? && ormType != "NONE">
+<#if projectType == "SMART_ORM">
+    api project(':${artifactId!projectName }-orm:${artifactId!projectName }-orm-api')
+    implementation ('com.mcst:service-base')
+<#elseif ormType?? && ormType != "NONE">
     implementation ('com.mcst:orm-${ormModuleSuffix}')
 <#if dbType?? && dbType.name() == "POSTGRE_SQL">
     implementation ('com.mcst:db-postgresql')
@@ -15,7 +18,7 @@ dependencies {
     implementation('com.mcst:registry-nacos')
     implementation('com.mcst:rpc-${rpcType?lower_case}')
 </#if >
-<#if projectType != "SMART" >
+<#if projectType != "SMART" && projectType != "SMART_ORM" >
     implementation ('com.mcst:log-${logType?lower_case}')
 </#if>
 <#if includeAuth>
@@ -26,7 +29,7 @@ dependencies {
 </#if>
 }
 
-<#if projectType != "SMART" >
+<#if projectType != "SMART" && projectType != "SMART_ORM" >
 // 将依赖包复制到lib目录
 tasks.register('copyJar', Copy) {
     // 清除现有的lib目录
