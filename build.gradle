@@ -26,6 +26,9 @@ dependencies {
     api('org.freemarker:freemarker:2.3.31')
     implementation('info.picocli:picocli:4.7.6')
     implementation('org.yaml:snakeyaml:2.2')
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
 }
 
 apply plugin: 'application'
