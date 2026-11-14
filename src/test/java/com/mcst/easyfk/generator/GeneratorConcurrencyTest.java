@@ -86,8 +86,8 @@ class GeneratorConcurrencyTest {
             }
         }, "generated-file-observer");
 
-        int threads = 6;
-        int iterations = 10;
+        int threads = 8;
+        int iterations = 20;
         List<Throwable> errors = runConcurrently(threads, iterations, (thread, iteration) -> {
             Consumer<EasyfkGenerator> operation = operations.get((thread + iteration) % operations.size());
             operation.accept(new EasyfkGenerator(project(dir), code()));
@@ -101,6 +101,20 @@ class GeneratorConcurrencyTest {
     }
 
     @Test
+    void concurrentFirstRunsIntoSameEmptyDirectoryProduceCompleteProject(@TempDir Path tempDir) throws Exception {
+        Path referenceDir = tempDir.resolve("reference");
+        new EasyfkGenerator(project(referenceDir), code()).generateAll();
+        Map<String, String> reference = snapshot(referenceDir);
+
+        Path dir = tempDir.resolve("fresh");
+        List<Throwable> errors = runConcurrently(8, 1, (thread, iteration) ->
+                new EasyfkGenerator(project(dir), code()).generateAll(), null, null);
+
+        assertNoErrors(errors);
+        assertSameTree(reference, snapshot(dir), "多个任务同时首次生成同一项目");
+    }
+
+    @Test
     void parallelRunsIntoSeparateDirectoriesWithSharedCodePropertiesMatchSequentialRun(@TempDir Path tempDir)
             throws Exception {
         Path referenceDir = tempDir.resolve("reference");
@@ -110,7 +124,7 @@ class GeneratorConcurrencyTest {
         // 与 Spring 单例 Bean / 服务端复用配置的场景一致：所有任务共用同一个 CodeProperties
         CodeProperties sharedCode = code();
         int threads = 8;
-        int iterations = 2;
+        int iterations = 3;
         List<Throwable> errors = runConcurrently(threads, iterations, (thread, iteration) ->
                 new EasyfkGenerator(project(tempDir.resolve("run-" + thread + "-" + iteration)), sharedCode)
                         .generateAll(), null, null);
