@@ -12,7 +12,7 @@
 
 ## 安装
 
-解压 `efg-3.2.12.zip`，进入 `efg-3.2.12` 目录：
+解压 `efg-3.5.16.zip`，进入 `efg-3.5.16` 目录：
 
 **Windows：** 双击 `install.bat`
 
@@ -25,11 +25,11 @@ chmod +x install && ./install
 安装完成后**重新打开终端**，输入 `efg -V` 验证：
 
 ```
-easyfk-generator 3.2.12
+easyfk-generator 3.5.16
 ```
 
 > **安装位置**：Windows — `%USERPROFILE%\.easyfk-gen`；macOS / Linux — `~/.easyfk-gen`。
-> 安装脚本会自动将该目录加入用户 PATH，并在目录中放置 `efg` 启动脚本和 `easyfk-generator-3.2.12-cli.jar`。
+> 安装脚本会自动将该目录加入用户 PATH，并在目录中放置 `efg` 启动脚本和 `easyfk-generator-3.5.16-cli.jar`。
 
 ---
 
@@ -145,7 +145,7 @@ easyfk:
         # 日志框架: LOGBACK / LOG4J2
         log-type: LOGBACK
         # 框架版本
-        framework-version: 3.2.12
+        framework-version: 3.5.16
         # 项目版本
         project-version: 1.0.0-SNAPSHOT
         # [项目类型为 single / micro_prd，或 prd-type 为 single 时必填] 应用类型: BMS(后台管理端) / CLIENT(面向C端)
@@ -231,7 +231,7 @@ easyfk.config.generator.project:
 | | | | `single` — 生成单一 PRD 项目，所有 Controller 集中 |
 | | | | `separation` — 分离式：prd-client（C端）+ prd-bms（B端管理后台） |
 | `log-type` | 否 | `LOGBACK` | 日志框架：`LOGBACK` 或 `LOG4J2` |
-| `framework-version` | 否 | `3.2.12` | EasyFK 框架版本号 |
+| `framework-version` | 否 | `3.5.16` | EasyFK 框架版本号 |
 | `project-version` | 否 | `1.0.0-SNAPSHOT` | 生成项目的版本号 |
 | `controller-auto-config` | 否 | `false` | 是否为 Controller 层生成 Spring Boot AutoConfiguration |
 | `app-type` | 条件必填 | - | 应用类型，决定模块 PRD 依赖的变体。`BMS` — 后台管理端；`CLIENT` — 面向 C 端。**当 `project-type` 为 `single` / `micro_prd`，或 `prd-type` 为 `single` 时必填** |
@@ -410,7 +410,7 @@ easyfk:
         project-type: micro_prd
         rpc-type: cloud
         app-type: CLIENT
-        framework-version: 3.2.12
+        framework-version: 3.5.16
       code:
         module-name: mall
 ```
@@ -435,7 +435,7 @@ easyfk:
         prd-type: single
         build-type: gradle
         app-type: CLIENT
-        framework-version: 3.2.12
+        framework-version: 3.5.16
       code:
         module-name: order
         author: 开发者
@@ -463,7 +463,7 @@ easyfk:
         prd-type: separation
         build-type: maven
         app-type: BMS
-        framework-version: 3.2.12
+        framework-version: 3.5.16
       code:
         module-name: user
         db-type: POSTGRE_SQL
@@ -497,7 +497,7 @@ easyfk:
         orm-type: MYBATIS
         log-type: LOGBACK
         app-type: BMS
-        framework-version: 3.2.12
+        framework-version: 3.5.16
         project-version: 1.0.0-SNAPSHOT
         controller-auto-config: true
       code:
@@ -552,7 +552,7 @@ easyfk:
         #   - HIBERNATE
         log-type: LOGBACK
         app-type: BMS
-        framework-version: 3.2.12
+        framework-version: 3.5.16
         project-version: 1.0.0-SNAPSHOT
       code:
         module-name: trading

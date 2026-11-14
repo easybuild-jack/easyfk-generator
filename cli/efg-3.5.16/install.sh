@@ -12,7 +12,7 @@
 #    easyfk-gen generate -c generator.yml
 # ============================================================
 
-VERSION="${VERSION:-3.2.12}"
+VERSION="${VERSION:-3.5.16}"
 INSTALL_DIR="${INSTALL_DIR:-$HOME/.easyfk-gen}"
 JAR_NAME="easyfk-generator-${VERSION}-cli.jar"
 # Gitee Release 下载地址，请替换为你的实际仓库路径

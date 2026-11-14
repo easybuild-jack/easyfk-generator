@@ -1,5 +1,5 @@
 //指定项目版本号和group
-version = '3.2.12'
+version = '3.5.16'
 group = 'com.mcst'
 description = '易架构代码生成器'
 apply plugin: 'java-library'
@@ -23,12 +23,16 @@ dependencies {
     api('com.mysql:mysql-connector-j')
     api('org.postgresql:postgresql')
     implementation('com.mcst:log-logback')
-    api('org.freemarker:freemarker:2.3.31')
-    implementation('info.picocli:picocli:4.7.6')
-    implementation('org.yaml:snakeyaml:2.2')
+    // 2.3.35 修复 CVE-2026-84939；Boot 3.5.16 管理的是 2.3.34
+    api('org.freemarker:freemarker:2.3.35')
+    implementation('info.picocli:picocli:4.7.7')
+    // 版本由 easyfk-dependencies 导入的 Boot 3.5.16 管理（SnakeYAML 2.4）
+    implementation('org.yaml:snakeyaml')
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
     }
+    // JUnit 5.12（Boot 3.5.16）需要与 engine 同版本的 launcher，Gradle 自带的 launcher 对不上
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
 }
 
 apply plugin: 'application'

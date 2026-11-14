@@ -3,7 +3,6 @@ package com.mcst.easyfk.generator.util;
 import cn.hutool.core.io.FileUtil;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import freemarker.template.Version;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -41,7 +40,7 @@ public class CreateFileUtil {
 
     private static synchronized void createFile(String templateFile, String filePath, Object param,
             String templateBasePath) throws Exception {
-        Configuration configuration = new Configuration(new Version("2.3.31"));
+        Configuration configuration = new Configuration(Configuration.VERSION_2_3_35);
         configuration.setClassForTemplateLoading(CreateFileUtil.class, templateBasePath);
         Template template = configuration.getTemplate(templateFile);
         FileUtil.touch(filePath);

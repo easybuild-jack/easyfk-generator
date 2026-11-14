@@ -46,7 +46,7 @@ public class GeneratorUtil {
             };
         } else {
             return switch (ormType) {
-                case MYBATIS -> "com.baomidou.mybatisplus.extension.activerecord.Model";
+                case MYBATIS -> "com.baomidou.mybatisplus.spring.activerecord.Model";
                 case MYBATIS_FLEX -> "com.mybatisflex.core.activerecord.Model";
                 default -> null;
             };

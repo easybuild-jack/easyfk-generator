@@ -33,7 +33,7 @@ easyfk:
         #   - MYBATIS_FLEX
         #   - HIBERNATE
         # 框架版本
-        framework-version: 3.2.12
+        framework-version: 3.5.16
         # 项目版本
         project-version: 1.0.0-SNAPSHOT
         # [项目类型为 single / micro_prd，或 prd-type 为 single 时必填] 应用类型: BMS(后台管理端) / CLIENT(面向C端)

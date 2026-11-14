@@ -10,7 +10,7 @@
 # ============================================================
 
 param(
-    [string]$Version = "3.2.12",
+    [string]$Version = "3.5.16",
     [string]$InstallDir = "$env:USERPROFILE\.easyfk-gen",
     # Gitee Release 下载地址，请替换为你的实际仓库路径
     [string]$DownloadUrl = ""

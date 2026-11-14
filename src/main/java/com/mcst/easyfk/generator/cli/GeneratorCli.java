@@ -17,7 +17,7 @@ import java.util.concurrent.Callable;
  */
 @Command(name = "efg",
         mixinStandardHelpOptions = true,
-        version = "easyfk-generator 3.2.12",
+        version = "easyfk-generator 3.5.16",
         description = "EasyFK 代码生成器命令行工具",
         subcommands = {GeneratorCli.InitCommand.class})
 public class GeneratorCli implements Callable<Integer> {

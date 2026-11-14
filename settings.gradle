@@ -2,8 +2,8 @@ rootProject.name = 'easyfk-generator'
 
 dependencyResolutionManagement.versionCatalogs{
     libs {
-        library("easyfkDependencies", "com.mcst:easyfk-dependencies:3.2.12")
-        library('lombok', 'org.projectlombok:lombok:1.18.38')
-        library('processor', 'org.springframework.boot:spring-boot-configuration-processor:3.2.12')
+        library("easyfkDependencies", "com.mcst:easyfk-dependencies:3.5.16")
+        library('lombok', 'org.projectlombok:lombok:1.18.46')
+        library('processor', 'org.springframework.boot:spring-boot-configuration-processor:3.5.16')
     }
 }

@@ -104,7 +104,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.13.0</version>
+                <version>3.14.1</version>
                 <configuration>
                     <source><#noparse>${maven.compiler.source}</#noparse></source>
                     <target>21</target>
@@ -112,12 +112,12 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.32</version>
+                            <version>1.18.46</version>
                         </path>
                         <path>
                             <groupId>io.github.linpeilie</groupId>
                             <artifactId>mapstruct-plus-processor</artifactId>
-                            <version>1.5.0</version>
+                            <version>1.5.3</version>
                         </path>
                         <path>
                             <groupId>org.projectlombok</groupId>
@@ -128,7 +128,7 @@
                         <path>
                             <groupId>com.mybatis-flex</groupId>
                             <artifactId>mybatis-flex-processor</artifactId>
-                            <version>1.11.6</version>
+                            <version>1.11.8</version>
                         </path>
 </#if>
                     </annotationProcessorPaths>
@@ -141,7 +141,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.4.2</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -158,7 +158,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.8.1</version>
                 <executions>
                     <execution>
                         <id>copy-dependencies</id>
@@ -181,7 +181,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M7</version>
+                <version>3.5.6</version>
                 <configuration>
                     <skip>true</skip>
                 </configuration>

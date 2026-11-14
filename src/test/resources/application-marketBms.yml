@@ -9,7 +9,7 @@ easyfk:
         prd-type: single
         project-version: 1.0.0-SNAPSHOT
         project-type: single
-        framework-version: 3.2.12
+        framework-version: 3.5.16
         build-type: maven
         base-package: com.mcst.market
 
