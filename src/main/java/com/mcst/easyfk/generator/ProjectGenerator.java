@@ -73,7 +73,7 @@ public class ProjectGenerator {
 
         try {
             //创建项目根路径文件夹
-            FileUtil.mkdir(projectRoot);
+            FileUtil.mkdir(new File(projectRoot));
             if (ProjectType.SINGLE.equals(projectProperties.getProjectType())) {
                 if (BuildType.MAVEN.equals(projectProperties.getBuildType())) {
                     String templateFileName = "single_pom.xml.ftl";
@@ -282,14 +282,17 @@ public class ProjectGenerator {
         }
     }
 
+    /**
+     * 使用 File 重载：hutool 的 String 重载会把相对路径解析到 classpath 下，与 CreateFileUtil 按工作目录解析不一致
+     */
     private void createCodeDir(String rootPath, boolean createResource, boolean createTest) {
-        FileUtil.mkParentDirs(rootPath + File.separator + MAIN_CODE_DIR);
+        FileUtil.mkParentDirs(new File(rootPath, MAIN_CODE_DIR));
         if (createResource) {
-            FileUtil.mkParentDirs(rootPath + File.separator + MAIN_SOURCE_DIR);
+            FileUtil.mkParentDirs(new File(rootPath, MAIN_SOURCE_DIR));
         }
         if (createTest) {
-            FileUtil.mkParentDirs(rootPath + File.separator + TEST_CODE_DIR);
-            FileUtil.mkParentDirs(rootPath + File.separator + TEST_SOURCE_DIR);
+            FileUtil.mkParentDirs(new File(rootPath, TEST_CODE_DIR));
+            FileUtil.mkParentDirs(new File(rootPath, TEST_SOURCE_DIR));
         }
     }
 
