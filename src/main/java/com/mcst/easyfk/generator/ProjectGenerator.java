@@ -10,6 +10,7 @@ import com.mcst.easyfk.generator.enums.PrdType;
 import com.mcst.easyfk.generator.enums.ProjectType;
 import com.mcst.easyfk.generator.properties.ProjectProperties;
 import com.mcst.easyfk.generator.util.CreateFileUtil;
+import com.mcst.easyfk.generator.util.GeneratorUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import jakarta.annotation.Resource;
@@ -122,7 +123,7 @@ public class ProjectGenerator {
             }
             log.info("生成项目成功");
         } catch (Exception e) {
-            log.error("生成项目失败：{}", e.getMessage());
+            throw GeneratorUtil.generateException("生成项目失败", e);
         }
     }
 

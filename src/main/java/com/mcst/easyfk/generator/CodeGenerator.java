@@ -252,7 +252,7 @@ public class CodeGenerator {
                     }
                 }
             } catch (Exception e) {
-                throw new BusinessException("生成代码失败：" + modelInfo.getModelName() + "，原因：" + e.getMessage());
+                throw generateException("生成代码失败：" + modelInfo.getModelName(), e);
             }
         }
         log.info("生成代码成功!");
@@ -322,7 +322,7 @@ public class CodeGenerator {
                 }
             }
         } catch (Exception e) {
-            log.error("生成Controller模块失败：{}", e.getMessage());
+            throw generateException("生成Controller模块失败", e);
         }
 
     }
@@ -355,7 +355,7 @@ public class CodeGenerator {
                         paramMap, BASE_TEMPLATE_PATH);
             }
         } catch (Exception e) {
-            log.error("生成SpringCloud模块失败：{}", e.getMessage());
+            throw generateException("生成SpringCloud模块失败", e);
         }
     }
 
@@ -385,7 +385,7 @@ public class CodeGenerator {
                         BASE_TEMPLATE_PATH);
             }
         } catch (Exception e) {
-            log.error("生成Dubbo模块失败：{}", e.getMessage());
+            throw generateException("生成Dubbo模块失败", e);
         }
     }
 
@@ -411,7 +411,7 @@ public class CodeGenerator {
                 CreateFileUtil.createOnNotExistFile("api/base_api.java.ftl", apiPath, paramMap, BASE_TEMPLATE_PATH);
             }
         } catch (Exception e) {
-            log.error("生成Api模块失败：{}", e.getMessage());
+            throw generateException("生成Api模块失败", e);
         }
     }
 
@@ -438,7 +438,7 @@ public class CodeGenerator {
                         BASE_TEMPLATE_PATH);
             }
         } catch (Exception e) {
-            log.error("生成DtoAndParam失败：{}", e.getMessage());
+            throw generateException("生成DtoAndParam失败", e);
         }
     }
 
@@ -456,7 +456,7 @@ public class CodeGenerator {
             CreateFileUtil.createOnNotExistFile("server/my_serviceImpl.java.ftl", implPath, paramMap,
                     BASE_TEMPLATE_PATH);
         } catch (Exception e) {
-            log.error("生成Service模块失败：{}", e.getMessage());
+            throw generateException("生成Service模块失败", e);
         }
     }
 
@@ -472,7 +472,7 @@ public class CodeGenerator {
             CreateFileUtil.createOnNotExistFile("repository/repositoryImpl.java.ftl", implPath, paramMap,
                     BASE_TEMPLATE_PATH);
         } catch (Exception e) {
-            log.error("生成Repository模块失败：{}", e.getMessage());
+            throw generateException("生成Repository模块失败", e);
         }
     }
 
@@ -513,7 +513,7 @@ public class CodeGenerator {
                         BASE_TEMPLATE_PATH);
             }
         } catch (Exception e) {
-            log.error("生成Repository模块失败：{}", e.getMessage());
+            throw generateException("生成Repository模块失败", e);
         }
     }
 
@@ -662,7 +662,7 @@ public class CodeGenerator {
             // 生成日志配置文件
             createLogConfig(serverProjectOutputDir, paramMap);
         } catch (Exception e) {
-            log.error("生成Server模块基础代码失败：", e);
+            throw generateException("生成Server模块基础代码失败", e);
         }
 
     }
@@ -703,7 +703,7 @@ public class CodeGenerator {
             createLogConfig(projectRootDir, paramMap);
             log.info("生成MICRO_PRD基础代码成功!");
         } catch (Exception e) {
-            log.error("生成MICRO_PRD基础代码失败：", e);
+            throw generateException("生成MICRO_PRD基础代码失败", e);
         }
     }
 
@@ -813,7 +813,7 @@ public class CodeGenerator {
                 CreateFileUtil.createOnNotExistFile(logTemplateFile, bmsLogPath, paramMap, BASE_TEMPLATE_PATH);
             }
         } catch (Exception e) {
-            log.error("生成Prd基础代码失败：{}", e.getMessage());
+            throw generateException("生成Prd基础代码失败", e);
         }
     }
 

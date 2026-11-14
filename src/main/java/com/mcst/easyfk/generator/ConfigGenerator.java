@@ -8,6 +8,7 @@ import com.mcst.easyfk.generator.enums.ProjectType;
 import com.mcst.easyfk.generator.properties.CodeProperties;
 import com.mcst.easyfk.generator.properties.ProjectProperties;
 import com.mcst.easyfk.generator.util.CreateFileUtil;
+import com.mcst.easyfk.generator.util.GeneratorUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 
@@ -74,7 +75,7 @@ public class ConfigGenerator {
             }
             log.info("生成项目自动装配配置成功！");
         } catch (Exception exception) {
-            log.error("生成项目自动装配配置失败:{}", exception.getMessage());
+            throw GeneratorUtil.generateException("生成项目自动装配配置失败", exception);
         }
 
     }

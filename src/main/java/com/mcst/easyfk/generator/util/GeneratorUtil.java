@@ -281,6 +281,15 @@ public class GeneratorUtil {
         }
     }
 
+    /**
+     * 生成失败时抛给调用方（CLI / IDEA 插件 / 服务端）的异常，保留原始异常便于排查
+     */
+    public static BusinessException generateException(String message, Throwable cause) {
+        BusinessException exception = new BusinessException(message + "，原因：" + cause.getMessage());
+        exception.initCause(cause);
+        return exception;
+    }
+
     public static Map<String, Object> createBaseParamMap(CodeProperties codeProperties) {
         Map<String, Object> paramMap = new HashMap<>(10);
         paramMap.put("author", codeProperties.getAuthor());
