@@ -307,7 +307,8 @@ public class ConfigGenerator {
         File[] files = folder.listFiles();
         if (EmptyUtil.isNotEmpty(files)) {
             for (File file : files) {
-                if (file.isFile()) {
+                // 以 "." 开头的是 CreateFileUtil 并发写入时的临时文件
+                if (file.isFile() && !file.getName().startsWith(".")) {
                     if (EmptyUtil.isNotEmpty(file.getName())) {
                         String fileName = file.getName();
                         String baseName = fileName;
