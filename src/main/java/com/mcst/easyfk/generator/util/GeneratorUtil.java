@@ -126,7 +126,9 @@ public class GeneratorUtil {
                 if (matchedModelInfo != null) {
                     mergeModelInfo(matchedModelInfo, overrideModelInfo);
                 } else {
-                    modelList.add(overrideModelInfo);
+                    // 后续流程会改写 ModelInfo（父类、字段、导入包等），不能直接改调用方的配置对象：
+                    // 同一个 CodeProperties 被重复或并发使用（Spring 单例、服务端）时会互相污染
+                    modelList.add(copyModelInfo(overrideModelInfo));
                 }
             }
         }
@@ -207,6 +209,29 @@ public class GeneratorUtil {
             }
         }
         return null;
+    }
+
+    private static ModelInfo copyModelInfo(ModelInfo source) {
+        return new ModelInfo()
+                .setModelName(source.getModelName())
+                .setTableName(source.getTableName())
+                .setModelDesc(source.getModelDesc())
+                .setSuperClass(source.getSuperClass())
+                .setIdType(source.getIdType())
+                .setIdIsAuto(source.getIdIsAuto())
+                .setOnlyRepository(source.getOnlyRepository())
+                .setFieldList(source.getFieldList())
+                .setBasicPackages(source.getBasicPackages())
+                .setOtherPackages(source.getOtherPackages())
+                .setForbiddenFiled(source.getForbiddenFiled())
+                .setResourceGroup(source.getResourceGroup())
+                .setResourceName(source.getResourceName())
+                .setResourceId(source.getResourceId())
+                .setResourcePath(source.getResourcePath())
+                .setResourceSort(source.getResourceSort())
+                .setModelResourceSort(source.getModelResourceSort())
+                .setTablePrefix(source.getTablePrefix())
+                .setCreateController(source.getCreateController());
     }
 
     private static void mergeModelInfo(ModelInfo modelInfo, ModelInfo overrideModelInfo) {
