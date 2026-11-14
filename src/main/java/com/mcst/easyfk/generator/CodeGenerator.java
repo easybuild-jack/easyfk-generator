@@ -520,6 +520,13 @@ public class CodeGenerator {
     private void readModelFile(String serverProjectOutputDir, String entityPackage, ModelInfo modelInfo) {
         String modelPath = serverProjectOutputDir + CODE_DIR_PRE + entityPackage.replace(".", File.separator)
                 + File.separator + StringUtil.upperFirstChar(modelInfo.getModelName()) + ".java";
+        // 实体文件不存在或为空时也要保证导入包列表非 null，dto/param 等模板会直接遍历它们
+        if (modelInfo.getBasicPackages() == null) {
+            modelInfo.setBasicPackages(new ArrayList<>());
+        }
+        if (modelInfo.getOtherPackages() == null) {
+            modelInfo.setOtherPackages(new ArrayList<>());
+        }
         File modelFile = new File(modelPath);
         if (!modelFile.exists()) {
             // 实体文件尚未生成（如仅执行 -s 时），跳过注解解析，字段信息以 db-tables/model-list 为准
