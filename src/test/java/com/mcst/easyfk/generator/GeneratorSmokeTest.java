@@ -1,6 +1,7 @@
 package com.mcst.easyfk.generator;
 
 import com.mcst.easyfk.generator.enums.BuildType;
+import com.mcst.easyfk.generator.enums.GradleType;
 import com.mcst.easyfk.generator.enums.OrmType;
 import com.mcst.easyfk.generator.enums.ProjectType;
 import com.mcst.easyfk.generator.properties.CodeProperties;
@@ -81,6 +82,40 @@ class GeneratorSmokeTest {
         assertTrue(settings.contains("spring-boot-configuration-processor:3.5.16"));
         assertTrue(settings.contains("mybatis-flex-processor:1.11.8"));
         assertFalse(settings.contains("3.2.12"));
+
+        String entity = Files.readString(output.resolve(
+                "demo-app/src/main/java/com/example/demo/service/persistence/model/Product.java"),
+                StandardCharsets.UTF_8);
+        assertTrue(entity.contains("com.mcst.easyfk.service.flex.persistence.BaseFlexEntity"));
+    }
+
+    @Test
+    void generatesGradleKotlinDslAtFrameworkVersion(@TempDir Path tempDir) throws Exception {
+        Path output = tempDir.resolve("gradle-kotlin");
+        ProjectProperties project = baseProject(output);
+        project.setBuildType(BuildType.GRADLE);
+        project.setGradleType(GradleType.KOTLIN);
+        project.setOrmType(OrmType.MYBATIS_FLEX);
+        project.setProjectType(ProjectType.SINGLE);
+
+        CodeProperties code = baseCode(true);
+        new EasyfkGenerator(project, code).generateProjectAndModel();
+
+        String settings = Files.readString(output.resolve("demo-app/settings.gradle.kts"), StandardCharsets.UTF_8);
+        assertTrue(settings.contains("create(\"libs\")"));
+        assertTrue(settings.contains("com.mcst:easyfk-dependencies:3.5.16"));
+        assertTrue(settings.contains("com.mcst:module-dependencies:3.5.16"));
+        assertTrue(settings.contains("org.projectlombok:lombok:1.18.46"));
+        assertTrue(settings.contains("mapstruct-plus-processor:1.5.3"));
+        assertTrue(settings.contains("mybatis-flex-processor:1.11.8"));
+
+        String build = Files.readString(output.resolve("demo-app/build.gradle.kts"), StandardCharsets.UTF_8);
+        assertTrue(build.contains("plugins {"));
+        assertTrue(build.contains("annotationProcessor(libs.lombok.get())"));
+        assertTrue(build.contains("\"Main-Class\" to \"com.example.demo.DemoServerApp\""));
+        // kotlin DSL 只生成 .kts，不应再生成 groovy 构建脚本
+        assertFalse(Files.exists(output.resolve("demo-app/build.gradle")));
+        assertFalse(Files.exists(output.resolve("demo-app/settings.gradle")));
 
         String entity = Files.readString(output.resolve(
                 "demo-app/src/main/java/com/example/demo/service/persistence/model/Product.java"),

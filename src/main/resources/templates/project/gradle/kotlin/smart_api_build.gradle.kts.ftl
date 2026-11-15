@@ -1,0 +1,8 @@
+plugins {
+    `java-library`
+}
+
+dependencies {
+    api("com.mcst:service-api")
+    compileOnly("com.mcst:easyfk-core")
+}

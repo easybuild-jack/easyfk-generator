@@ -80,15 +80,7 @@ public class ProjectGenerator {
                     //创建根POM文件
                     CreateFileUtil.createOnNotExistFile(templateFileName, rootConfigFile.get("pomFile"), projectProperties, BASE_TEMPLATE_PATH);
                 } else {
-                    String buildTemplateFileName = null;
-                    String settingsTemplateFileName = null;
-                    if (GradleType.GROOVY.equals(projectProperties.getGradleType())) {
-                        buildTemplateFileName = "gradle/groovy/single_build.gradle.ftl";
-                        settingsTemplateFileName = "gradle/groovy/single_settings.gradle.ftl";
-                    }
-                    //创建根配置文件
-                    CreateFileUtil.createOnNotExistFile(buildTemplateFileName, rootConfigFile.get("rootGroovyBuild"), projectProperties, BASE_TEMPLATE_PATH);
-                    CreateFileUtil.createOnNotExistFile(settingsTemplateFileName, rootConfigFile.get("groovySettings"), projectProperties, BASE_TEMPLATE_PATH);
+                    createRootGradleConfigFile(rootConfigFile, "single");
                 }
                 createCodeDir(projectRoot, true, true);
             } else if (ProjectType.MICRO_PRD.equals(projectProperties.getProjectType())) {
@@ -96,14 +88,7 @@ public class ProjectGenerator {
                     String templateFileName = "micro_prd_pom.xml.ftl";
                     CreateFileUtil.createOnNotExistFile(templateFileName, rootConfigFile.get("pomFile"), projectProperties, BASE_TEMPLATE_PATH);
                 } else {
-                    String buildTemplateFileName = null;
-                    String settingsTemplateFileName = null;
-                    if (GradleType.GROOVY.equals(projectProperties.getGradleType())) {
-                        buildTemplateFileName = "gradle/groovy/micro_prd_build.gradle.ftl";
-                        settingsTemplateFileName = "gradle/groovy/single_settings.gradle.ftl";
-                    }
-                    CreateFileUtil.createOnNotExistFile(buildTemplateFileName, rootConfigFile.get("rootGroovyBuild"), projectProperties, BASE_TEMPLATE_PATH);
-                    CreateFileUtil.createOnNotExistFile(settingsTemplateFileName, rootConfigFile.get("groovySettings"), projectProperties, BASE_TEMPLATE_PATH);
+                    createRootGradleConfigFile(rootConfigFile, "micro_prd");
                 }
                 createCodeDir(projectRoot, true, true);
             } else if (ProjectType.MICROSERVICE.equals(projectProperties.getProjectType())) {
@@ -143,7 +128,7 @@ public class ProjectGenerator {
                 if (GradleType.GROOVY.equals(projectProperties.getGradleType())) {
                     templateFileName = "gradle/groovy/micro_api_build.gradle.ftl";
                 } else {
-                    templateFileName = "gradle/kotlin/springcloud_api_build.gradle.kts.ftl";
+                    templateFileName = "gradle/kotlin/micro_api_build.gradle.kts.ftl";
                 }
             }
         } else {
@@ -255,17 +240,32 @@ public class ProjectGenerator {
     private void createRootConfigFile(Map<String, String> rootConfigFile) throws Exception {
         if (BuildType.MAVEN.equals(projectProperties.getBuildType())) {
             //创建根POM文件
-            CreateFileUtil.createOnNotExistFile("master_pom.xml.ftl", rootConfigFile.get("pomFile"), projectProperties, "/templates/project");
+            CreateFileUtil.createOnNotExistFile("master_pom.xml.ftl", rootConfigFile.get("pomFile"), projectProperties, BASE_TEMPLATE_PATH);
         } else {
-            String buildTemplateFileName = null;
-            String settingsTemplateFileName = null;
-            if (GradleType.GROOVY.equals(projectProperties.getGradleType())) {
-                buildTemplateFileName = "gradle/groovy/master_build.gradle.ftl";
-                settingsTemplateFileName = "gradle/groovy/master_settings.gradle.ftl";
-            }
+            createRootGradleConfigFile(rootConfigFile, "master");
+        }
+    }
+
+    /**
+     * 创建根项目的 Gradle 构建脚本（build 脚本 + settings 脚本），按 gradleType 选择模板：
+     * groovy 生成 build.gradle + settings.gradle，kotlin 生成 build.gradle.kts + settings.gradle.kts
+     *
+     * @param templatePrefix 构建脚本模板前缀：master（多模块根项目）/ single（单体）/ micro_prd（微服务产品层）
+     */
+    private void createRootGradleConfigFile(Map<String, String> rootConfigFile, String templatePrefix) throws Exception {
+        // single 与 micro_prd 共用同一个 settings 模板
+        String settingsTemplatePrefix = "master".equals(templatePrefix) ? "master" : "single";
+        if (GradleType.GROOVY.equals(projectProperties.getGradleType())) {
             //创建根配置文件
-            CreateFileUtil.createOnNotExistFile(buildTemplateFileName, rootConfigFile.get("rootGroovyBuild"), projectProperties, BASE_TEMPLATE_PATH);
-            CreateFileUtil.createOnNotExistFile(settingsTemplateFileName, rootConfigFile.get("groovySettings"), projectProperties, BASE_TEMPLATE_PATH);
+            CreateFileUtil.createOnNotExistFile("gradle/groovy/" + templatePrefix + "_build.gradle.ftl",
+                    rootConfigFile.get("rootGroovyBuild"), projectProperties, BASE_TEMPLATE_PATH);
+            CreateFileUtil.createOnNotExistFile("gradle/groovy/" + settingsTemplatePrefix + "_settings.gradle.ftl",
+                    rootConfigFile.get("groovySettings"), projectProperties, BASE_TEMPLATE_PATH);
+        } else {
+            CreateFileUtil.createOnNotExistFile("gradle/kotlin/" + templatePrefix + "_build.gradle.kts.ftl",
+                    rootConfigFile.get("rootKotlinBuild"), projectProperties, BASE_TEMPLATE_PATH);
+            CreateFileUtil.createOnNotExistFile("gradle/kotlin/" + settingsTemplatePrefix + "_settings.gradle.kts.ftl",
+                    rootConfigFile.get("kotlinSettings"), projectProperties, BASE_TEMPLATE_PATH);
         }
     }
 
@@ -337,7 +337,7 @@ public class ProjectGenerator {
             if (GradleType.GROOVY.equals(projectProperties.getGradleType())) {
                 templateFileName = "gradle/groovy/sc_api_build.gradle.ftl";
             } else {
-                templateFileName = "gradle/kotlin/sc_client_build.gradle.kts.ftl";
+                templateFileName = "gradle/kotlin/sc_api_build.gradle.kts.ftl";
             }
         }
         rootConfigFile.put("pomFile", scApiProjectRoot + File.separator + "pom.xml");

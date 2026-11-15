@@ -21,6 +21,8 @@ easyfk:
         project-type: single
         # 构建工具: maven / gradle
         build-type: maven
+        # Gradle DSL 类型，仅 build-type: gradle 时生效: groovy(build.gradle) / kotlin(build.gradle.kts)
+        gradle-type: groovy
         # ORM 框架: NONE / MYBATIS / MYBATIS_FLEX / HIBERNATE
         orm-type: MYBATIS
         # PRD 层策略: none(不生成) / single(单一) / separation(分离: client + bms)
